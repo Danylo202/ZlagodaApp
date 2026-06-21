@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/extras/spring-security">
 <head>
     <title th:text="${mode == 'edit' ? 'ZLAGODA - Редагувати категорію' : 'ZLAGODA - Нова категорія'}">ZLAGODA - Категорія</title>
     <meta charset="UTF-8">
@@ -11,7 +11,8 @@
     <div class="container-fluid">
         <a class="navbar-brand fw-bold" th:href="@{/}">ZLAGODA</a>
         <div class="d-flex align-items-center gap-3 text-white">
-            <span>Працівник: <strong th:text="${employeeId}">E01</strong></span>
+            <span sec:authorize="hasRole('MANAGER')">Менеджер: <strong th:text="${employeeId}">E01</strong></span>
+            <span sec:authorize="hasRole('CASHIER')">Касир: <strong th:text="${employeeId}">E02</strong></span>
             <form th:action="@{/logout}" method="post" class="m-0">
                 <button type="submit" class="btn btn-outline-light btn-sm">Вийти</button>
             </form>

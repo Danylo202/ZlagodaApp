@@ -11,7 +11,8 @@
     <div class="container-fluid">
         <span class="navbar-brand fw-bold">ZLAGODA</span>
         <div class="d-flex align-items-center gap-3 text-white">
-            <span>Працівник: <strong th:text="${employeeId}">E01</strong></span>
+            <span sec:authorize="hasRole('MANAGER')">Менеджер: <strong th:text="${employeeId}">E01</strong></span>
+            <span sec:authorize="hasRole('CASHIER')">Касир: <strong th:text="${employeeId}">E02</strong></span>
             <span class="badge bg-light text-primary" sec:authentication="principal.authorities">ROLE</span>
             <form th:action="@{/logout}" method="post" class="m-0">
                 <button type="submit" class="btn btn-outline-light btn-sm">Вийти</button>
