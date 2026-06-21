@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>ZLAGODA - Головна</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="container mt-5">
+    <h1>Вітаємо у ZLAGODA!</h1>
+    <h3>Список категорій товарів:</h3>
+    <table class="table table-striped">
+        <thead>
+            <tr><th>ID</th><th>Назва</th></tr>
+        </thead>
+        <tbody>
+            <tr th:each="cat : ${categories}">
+                <td th:text="${cat.category_number}"></td>
+                <td th:text="${cat.category_name}"></td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>
