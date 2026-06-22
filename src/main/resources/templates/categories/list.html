@@ -35,7 +35,10 @@
                                 <td sec:authorize="hasRole('MANAGER')" class="text-end">
                                     <a th:href="@{/categories/{id}/edit(id=${cat.categoryNumber})}" class="btn btn-warning btn-sm">Редагувати</a>
                                     <form th:action="@{/categories/{id}/delete(id=${cat.categoryNumber})}" method="get" class="d-inline">
-                                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Видалити цю категорію?')">Видалити</button>
+                                        <button type="submit" class="btn btn-danger btn-sm"
+                                                data-zl-confirm="Видалити цю категорію?"
+                                                data-zl-confirm-title="Видалити категорію"
+                                                data-zl-confirm-ok="Видалити">Видалити</button>
                                     </form>
                                 </td>
                             </tr>
@@ -50,5 +53,6 @@
         </section>
     </div>
 </main>
+<div th:replace="~{fragments/layout :: confirm-modal}"></div>
 </body>
 </html>

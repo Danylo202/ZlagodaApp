@@ -50,7 +50,9 @@
                                            class="btn btn-sm btn-warning">Редагувати</a>
                                         <a th:href="@{'/products/delete/' + ${product.idProduct}}"
                                            class="btn btn-sm btn-danger"
-                                           onclick="return confirm('Ви впевнені?')">Видалити</a>
+                                           data-zl-confirm="Ви впевнені, що хочете видалити цей товар?"
+                                           data-zl-confirm-title="Видалити товар"
+                                           data-zl-confirm-ok="Видалити">Видалити</a>
                                     </div>
                                 </td>
                             </tr>
@@ -65,5 +67,6 @@
         </section>
     </div>
 </main>
+<div th:replace="~{fragments/layout :: confirm-modal}"></div>
 </body>
 </html>
