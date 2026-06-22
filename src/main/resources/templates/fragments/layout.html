@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/extras/spring-security">
+
+<!-- ============ Shared <head> deps ============ -->
+<head th:fragment="head(title)" th:remove="tag">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title th:text="${title}">ZLAGODA</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/zlagoda.css}">
+</head>
+
+<!-- ============ Navbar ============ -->
+<nav class="navbar navbar-expand-lg zl-navbar" th:fragment="navbar">
+    <div class="container-fluid">
+        <a class="navbar-brand" th:href="@{/}">
+            <img th:src="@{/img/zlagoda_logo.png}" alt="Zlagoda">
+        </a>
+        <div class="nav-meta ms-auto">
+            <span sec:authorize="hasRole('MANAGER')">Менеджер: <strong th:text="${employeeId}">E01</strong></span>
+            <span sec:authorize="hasRole('CASHIER')">Касир: <strong th:text="${employeeId}">E02</strong></span>
+            <span class="role-badge" sec:authorize="hasRole('MANAGER')">MANAGER</span>
+            <span class="role-badge" sec:authorize="hasRole('CASHIER')">CASHIER</span>
+            <form th:action="@{/logout}" method="post" class="m-0">
+                <button type="submit" class="btn btn-logout">Вийти</button>
+            </form>
+        </div>
+    </div>
+</nav>
+
+<!-- ============ Sidebar ============
+     active: one of 'home','products','categories','receipts','customers','employees','reports' -->
+<aside class="zl-sidebar" th:fragment="sidebar(active)">
+    <div class="zl-side-head">Меню</div>
+    <a th:href="@{/}" class="zl-side-link"
+       th:classappend="${active == 'home'} ? 'active' : ''">Головна</a>
+    <a th:href="@{/products}" class="zl-side-link"
+       th:classappend="${active == 'products'} ? 'active' : ''">Товари</a>
+    <a th:href="@{/categories}" class="zl-side-link"
+       th:classappend="${active == 'categories'} ? 'active' : ''">Категорії</a>
+    <a href="#" class="zl-side-link"
+       sec:authorize="hasAnyRole('MANAGER','CASHIER')"
+       th:classappend="${active == 'receipts'} ? 'active' : ''">Чеки</a>
+    <a href="#" class="zl-side-link"
+       sec:authorize="hasAnyRole('MANAGER','CASHIER')"
+       th:classappend="${active == 'customers'} ? 'active' : ''">Клієнти</a>
+    <a href="#" class="zl-side-link"
+       sec:authorize="hasRole('MANAGER')"
+       th:classappend="${active == 'employees'} ? 'active' : ''">Працівники</a>
+    <a href="#" class="zl-side-link"
+       sec:authorize="hasRole('MANAGER')"
+       th:classappend="${active == 'reports'} ? 'active' : ''">Звіти</a>
+</aside>
+
+<!-- ============ Minimal navbar for sub-pages (back button instead of role info) ============ -->
+<nav class="navbar zl-navbar" th:fragment="navbar-back(backUrl, backLabel)">
+    <div class="container-fluid">
+        <a class="navbar-brand" th:href="@{/}">
+            <img th:src="@{/img/zlagoda_logo.png}" alt="Zlagoda">
+        </a>
+        <a th:href="${backUrl}" class="btn btn-logout" th:text="${backLabel}">Назад</a>
+    </div>
+</nav>
