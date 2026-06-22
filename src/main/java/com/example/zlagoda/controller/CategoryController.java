@@ -1,6 +1,7 @@
 package com.example.zlagoda.controller;
 
 import com.example.zlagoda.model.Category;
+import com.example.zlagoda.model.Product;
 import com.example.zlagoda.repository.CategoryRepository;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -34,11 +35,19 @@ public class CategoryController {
         return "categories/form";
     }
 
-    @PostMapping("/categories")
-    public String createCategory(@ModelAttribute Category category, RedirectAttributes redirectAttributes) {
-        categoryRepository.save(category);
-        redirectAttributes.addFlashAttribute("success", "Категорію додано.");
-        return "redirect:/categories";
+    @PostMapping("/categories/save")
+    public String saveProduct(@ModelAttribute Category category, RedirectAttributes redirectAttributes) {
+        Integer ex = categoryRepository.findByName(category.getCategoryName());
+        if(ex==null) {
+            categoryRepository.save(category);
+            redirectAttributes.addFlashAttribute("success", "Категорію додано.");
+            return "redirect:/categories";
+        }
+        else {
+            redirectAttributes.addFlashAttribute("error", 
+            "Категорія з назвою '" + category.getCategoryName() + "' вже існує!");
+            return "redirect:/categories/new";
+        }
     }
 
     @GetMapping("/categories/{id}/edit")
@@ -49,17 +58,7 @@ public class CategoryController {
         return "categories/form";
     }
 
-    @PostMapping("/categories/{id}")
-    public String updateCategory(@PathVariable Integer id,
-                                 @ModelAttribute Category category,
-                                 RedirectAttributes redirectAttributes) {
-        category.setCategoryNumber(id);
-        categoryRepository.update(category);
-        redirectAttributes.addFlashAttribute("success", "Категорію оновлено.");
-        return "redirect:/categories";
-    }
-
-    @PostMapping("/categories/{id}/delete")
+    @GetMapping("/categories/{id}/delete")
     public String deleteCategory(@PathVariable Integer id, RedirectAttributes redirectAttributes) {
         categoryRepository.deleteById(id);
         redirectAttributes.addFlashAttribute("success", "Категорію видалено.");

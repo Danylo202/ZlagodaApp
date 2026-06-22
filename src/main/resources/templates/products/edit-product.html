@@ -24,19 +24,8 @@
                     Параметри
                 </div>
                 <div class="card-body">
-                    <!-- Універсальний екшн /products/save -->
                     <form th:action="@{/products/save}" th:object="${product}" method="post">
-                        
-                        <!-- Поле ID -->
-                        <div class="mb-3">
-                            <label class="form-label text-muted small fw-bold">ID товару (Первинний ключ)</label>
-                            <!-- Якщо ми створюємо (create), дозволяємо вводити ID. 
-                                 Якщо редагуємо, ставимо readonly, щоб не змінити ключ -->
-                            <input type="number" th:field="*{idProduct}" class="form-control" 
-                                   th:readonly="${mode != 'create'}" 
-                                   placeholder="Введіть унікальний номер" required>
-                            <div class="form-text" th:if="${mode != 'create'}">ID неможливо змінити після створення.</div>
-                        </div>
+                        <input type="hidden" th:field="*{idProduct}"> <!--невидиме користувачу ID -->
 
                         <div class="mb-3">
                             <label class="form-label text-muted small fw-bold">Назва товару</label>
@@ -65,7 +54,6 @@
                         </div>
 
                         <div class="d-grid gap-2 mt-4">
-                            <!-- Текст кнопки теж міняється -->
                             <button type="submit" class="btn btn-primary" 
                                     th:text="${mode == 'create' ? 'Додати товар' : 'Зберегти зміни'}">
                                 Дія

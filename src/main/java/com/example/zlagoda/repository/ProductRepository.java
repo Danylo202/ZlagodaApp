@@ -1,6 +1,8 @@
 package com.example.zlagoda.repository;
 
 import com.example.zlagoda.model.Product;
+
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -20,7 +22,7 @@ public class ProductRepository {
                 SELECT id_product, category_number, c.category_name, product_name, producer, characteristics
                 FROM Product
                 INNER JOIN Category AS c ON Product.category_number = c.category_number
-                ORDER BY product_name
+                ORDER BY c.category_name ASC
                 """;
         return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Product.class));
     }
@@ -31,8 +33,8 @@ public class ProductRepository {
     }
 
     public void save(Product p) {
-        jdbcTemplate.update("INSERT INTO Product (id_product, category_number, product_name, characteristics, producer) VALUES (?, ?, ?, ?, ?)",
-            p.getIdProduct(), p.getCategoryNumber(), p.getProductName(), p.getCharacteristics(), p.getProducer());
+        jdbcTemplate.update("INSERT INTO Product (category_number, product_name, characteristics, producer) VALUES (?, ?, ?, ?)",
+            p.getCategoryNumber(), p.getProductName(), p.getCharacteristics(), p.getProducer());
     }
 
     public void update(Product p) {
@@ -48,14 +50,18 @@ public class ProductRepository {
         );
     }
 
-    public boolean exists(Integer idProduct) {
+    public Integer exists(String name, String producer) {
         String query = """
-                SELECT COUNT(*)
+                SELECT id_product
                 FROM Product
-                WHERE id_product = ?
+                WHERE product_name = ? AND producer = ?
                 """;
-        int res = jdbcTemplate.queryForObject(query, Integer.class, idProduct);
-        return (res>0);
+        try {
+            return jdbcTemplate.queryForObject(query, Integer.class, name, producer);
+        }
+        catch (EmptyResultDataAccessException e) {
+            return null;
+        }
     }
 
     public void delete(Integer id) {

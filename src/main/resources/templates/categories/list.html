@@ -36,18 +36,16 @@
             <table class="table table-striped table-hover align-middle mb-0">
                 <thead>
                 <tr>
-                    <th style="width: 140px;">ID</th>
                     <th>Назва</th>
                     <th sec:authorize="hasRole('MANAGER')" class="text-end" style="width: 220px;">Дії</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr th:each="cat : ${categories}">
-                    <td th:text="${cat.categoryNumber}">1</td>
                     <td th:text="${cat.categoryName}">Назва</td>
                     <td sec:authorize="hasRole('MANAGER')" class="text-end">
                         <a th:href="@{/categories/{id}/edit(id=${cat.categoryNumber})}" class="btn btn-warning btn-sm">Редагувати</a>
-                        <form th:action="@{/categories/{id}/delete(id=${cat.categoryNumber})}" method="post" class="d-inline">
+                        <form th:action="@{/categories/{id}/delete(id=${cat.categoryNumber})}" method="get" class="d-inline">
                             <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Видалити цю категорію?')">Видалити</button>
                         </form>
                     </td>

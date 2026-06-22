@@ -1,6 +1,8 @@
 package com.example.zlagoda.repository;
 
 import com.example.zlagoda.model.Category;
+
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -15,7 +17,7 @@ public class CategoryRepository {
     }
 
     public List<Category> findAll() {
-        String sql = "SELECT category_number, category_name FROM Category ORDER BY category_name";
+        String sql = "SELECT category_number, category_name FROM Category ORDER BY category_name ASC";
         return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Category.class));
     }
 
@@ -24,9 +26,23 @@ public class CategoryRepository {
         return jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<>(Category.class), id);
     }
 
+    public Integer findByName(String categoryName) {
+        String query = """
+                SELECT category_number
+                FROM Category
+                WHERE category_name = ?
+                """;
+        try {
+            return jdbcTemplate.queryForObject(query, Integer.class, categoryName);
+        }
+        catch (EmptyResultDataAccessException e) {
+            return null;
+        }
+    }
+
     public void save(Category category) {
-        String sql = "INSERT INTO Category (category_number, category_name) VALUES (?, ?)";
-        jdbcTemplate.update(sql, category.getCategoryNumber(), category.getCategoryName());
+        String sql = "INSERT INTO Category (category_name) VALUES (?)";
+        jdbcTemplate.update(sql, category.getCategoryName());
     }
 
     public void update(Category category) {

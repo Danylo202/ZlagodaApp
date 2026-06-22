@@ -44,7 +44,9 @@ public class ProductController {
     // збереження створеного товару
     @PostMapping("/products/save")
     public String saveProduct(@ModelAttribute Product product) {
-        if (productRepository.exists(product.getIdProduct())) {
+        Integer ex = productRepository.exists(product.getProductName(), product.getProducer());
+        if (ex!=null) {
+            product.setIdProduct(ex);
             productRepository.update(product); // якщо такий товар вже є
         }
         else {
@@ -53,7 +55,7 @@ public class ProductController {
         return "redirect:/products";
     }
 
-    
+
     // відкриваємо для редагування
     @GetMapping("/products/edit/{id}")
     public String editForm(@PathVariable Integer id, Model model) {
