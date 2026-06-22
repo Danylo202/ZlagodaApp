@@ -50,7 +50,7 @@
                                       placeholder="Опис товару..."></textarea>
                         </div>
 
-                        <div th:replace="~{fragments/layout :: form-actions(${mode == 'create' ? 'Додати товар' : 'Зберегти зміни'}, @{/products})}"></div>
+                        <div th:replace="~{fragments/layout :: form-actions(${mode == 'create' ? 'Додати товар' : 'Зберегти зміни'}, @{/products}, false)}"></div>
                     </form>
                 </div>
             </div>

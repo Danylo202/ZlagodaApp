@@ -17,13 +17,25 @@ public class EmployeeRepository {
 
     // пошук усіх працівників
     public List<Employee> findAll() {
-        String sql = "SELECT * FROM Employee ORDER BY empl_surname";
+        String sql = """
+                SELECT id_employee, empl_surname, empl_name, empl_patronymic, empl_role, salary,
+                       date_of_birth AS dateBirth, date_of_start AS dateStart,
+                       phone_number AS phoneNumber, city, street, zip_code, password_hash AS password
+                FROM Employee
+                ORDER BY empl_surname
+                """;
         return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Employee.class));
     }
 
     // пошук працівника за ID
     public Employee findById(String id) {
-        String sql = "SELECT * FROM Employee WHERE id_employee = ?";
+        String sql = """
+                SELECT id_employee, empl_surname, empl_name, empl_patronymic, empl_role, salary,
+                       date_of_birth AS dateBirth, date_of_start AS dateStart,
+                       phone_number AS phoneNumber, city, street, zip_code, password_hash AS password
+                FROM Employee
+                WHERE id_employee = ?
+                """;
         return jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<>(Employee.class), id);
     }
 
@@ -31,7 +43,7 @@ public class EmployeeRepository {
     public void save(Employee e) {
         String sql = """
                     INSERT INTO Employee (id_employee, empl_surname, empl_name, empl_patronymic, empl_role, salary,
-                    date_of_birth, date_of_start, phoneNumber, city, street, zip_code, password_hash)
+                    date_of_birth, date_of_start, phone_number, city, street, zip_code, password_hash)
                     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                 """;
 
@@ -59,7 +71,10 @@ public class EmployeeRepository {
     // запит№2: працівники, що продали товари всіх категорій
     public List<Employee> findSuperEmployees() {
         String sql = """
-                    SELECT E.* FROM Employee AS E
+                    SELECT E.id_employee, E.empl_surname, E.empl_name, E.empl_patronymic, E.empl_role, E.salary,
+                           E.date_of_birth AS dateBirth, E.date_of_start AS dateStart,
+                           E.phone_number AS phoneNumber, E.city, E.street, E.zip_code, E.password_hash AS password
+                    FROM Employee AS E
                     WHERE NOT EXISTS (
                     SELECT Category.category_number FROM Category
                     WHERE NOT EXISTS (
