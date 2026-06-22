@@ -64,16 +64,23 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/css/**", "/js/**", "/images/**").permitAll()
-                        .requestMatchers("/manager/**").hasRole("MANAGER")
-                        .requestMatchers("/cashier/**").hasRole("CASHIER")
+                        .requestMatchers("/css/**", "/js/**", "/images/**", "/img/**", "/fonts/**").permitAll()
+                        .requestMatchers("/employees/**").hasRole("MANAGER")
+                        .requestMatchers("/store-products/**").hasRole("MANAGER")
+                        .requestMatchers("/reports/**").hasRole("MANAGER")
+                        .requestMatchers(HttpMethod.GET, "/receipts", "/receipts/**").hasAnyRole("MANAGER", "CASHIER")
+                        .requestMatchers(HttpMethod.POST, "/receipts", "/receipts/**").hasRole("CASHIER")
+                        .requestMatchers(HttpMethod.GET, "/receipts/*/delete").hasRole("MANAGER")
+                        .requestMatchers(HttpMethod.GET, "/customers", "/customers/**").hasAnyRole("MANAGER", "CASHIER")
+                        .requestMatchers(HttpMethod.POST, "/customers", "/customers/**").hasAnyRole("MANAGER", "CASHIER")
+                        .requestMatchers(HttpMethod.GET, "/customers/*/delete").hasRole("MANAGER")
                         .requestMatchers(HttpMethod.POST, "/categories", "/categories/*", "/categories/*/delete").hasRole("MANAGER")
                         .requestMatchers("/categories/new", "/categories/*/edit", "/categories/*/delete").hasRole("MANAGER")
                         .requestMatchers("/categories").hasAnyRole("MANAGER", "CASHIER")
                         .requestMatchers("/products").hasAnyRole("MANAGER", "CASHIER")
                         .anyRequest().authenticated()
                 )
-                .formLogin(form -> form.defaultSuccessUrl("/", true).permitAll())
+                .formLogin(form -> form.loginPage("/login").defaultSuccessUrl("/", true).permitAll())
                 .logout(logout -> logout.permitAll())
                 .build();
     }

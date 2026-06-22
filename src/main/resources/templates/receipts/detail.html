@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments/layout :: head('ZLAGODA - Чек')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar-back(@{/receipts}, 'Назад до списку')}"></nav>
+
+<main class="zl-main container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card zl-card">
+                <div class="card-header">Перегляд чеку</div>
+                <div class="card-body">
+                    <div class="zl-title">
+                        <h1>Чек #<span class="text-muted">—</span></h1>
+                        <p>Інформація про чек та придбані товари.</p>
+                    </div>
+
+                    <div th:replace="~{fragments/layout :: placeholder-banner('За номером чеку виводиться: назва, к-сть та ціна товарів, загальна сума, ПДВ.')}"></div>
+
+                    <div class="table-responsive mb-3">
+                        <table class="table zl-table">
+                            <thead><tr><th>Товар</th><th>К-сть</th><th>Ціна</th><th>Сума</th></tr></thead>
+                            <tbody><tr><td colspan="4" class="zl-empty">Дані з'являться після реалізації</td></tr></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+</body>
+</html>

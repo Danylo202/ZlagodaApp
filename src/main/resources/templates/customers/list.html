@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments/layout :: head('ZLAGODA - Клієнти')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+
+<main class="zl-main container-fluid">
+    <div class="zl-layout">
+        <div th:replace="~{fragments/layout :: sidebar('customers')}"></div>
+
+        <section>
+            <div class="card zl-card">
+                <div class="card-body">
+                    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+                        <div class="zl-title mb-0">
+                            <h1>Постійні клієнти</h1>
+                            <p>Карти клієнтів із відсотком знижки.</p>
+                        </div>
+                        <a th:href="@{/customers/new}" class="btn btn-primary">Додати клієнта</a>
+                    </div>
+
+                    <div th:replace="~{fragments/layout :: placeholder-banner('Поля: номер карти, ПІБ, телефон, адреса (за бажанням), відсоток знижки. Менеджер і касир можуть додавати/редагувати.')}"></div>
+
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0 zl-table">
+                            <thead>
+                            <tr>
+                                <th>Номер карти</th>
+                                <th>ПІБ</th>
+                                <th>Телефон</th>
+                                <th>Знижка %</th>
+                                <th class="text-end">Дії</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr><td colspan="5" class="zl-empty">Дані з'являться після реалізації</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</main>
+</body>
+</html>

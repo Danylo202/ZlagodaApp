@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments/layout :: head('ZLAGODA - Помилка')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar-brand-only}"></nav>
+
+<main class="zl-main container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <!-- Spring Boot default error attributes: status, error, message, path, timestamp -->
+            <div th:replace="~{fragments/layout :: error-card(
+                ${status != null ? status : 'Помилка'},
+                ${error != null ? error : 'Щось пішло не так'},
+                ${message != null and #strings.length(message) > 0 ? message : 'Сталася неочікувана помилка. Спробуйте повернутися на головну.'}
+            )}"></div>
+        </div>
+    </div>
+</main>
+</body>
+</html>

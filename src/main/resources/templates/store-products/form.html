@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('ZLAGODA - Товар у магазині')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar-back(@{/store-products}, 'Назад до списку')}"></nav>
+
+<main class="zl-main container">
+    <div class="row justify-content-center">
+        <div class="col-md-7">
+            <div class="card zl-card">
+                <div class="card-header">Картка товару у магазині</div>
+                <div class="card-body">
+                    <div class="zl-title">
+                        <h1>Новий товар у магазині</h1>
+                        <p>Введіть відомості про товар у магазині.</p>
+                    </div>
+
+                    <div th:replace="~{fragments/layout :: placeholder-banner('ПДВ складає 20% від ціни. Акційна ціна = ціна × 0,8.')}"></div>
+
+                    <form>
+                        <div class="mb-3"><label class="form-label">UPC</label><input class="form-control" disabled placeholder="UPC товару"></div>
+                        <div class="mb-3"><label class="form-label">Товар</label><select class="form-select" disabled><option>Оберіть товар...</option></select></div>
+                        <div class="mb-3"><label class="form-label">Ціна продажу (з ПДВ)</label><input class="form-control" disabled placeholder="0.00"></div>
+                        <div class="mb-3"><label class="form-label">Кількість одиниць</label><input class="form-control" disabled placeholder="0"></div>
+                        <div class="mb-3"><label class="form-label">Тип товару</label><select class="form-select" disabled><option>Звичайний</option><option>Акційний</option></select></div>
+                        <div th:replace="~{fragments/layout :: form-actions('Зберегти', @{/store-products}, true)}"></div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+</body>
+</html>

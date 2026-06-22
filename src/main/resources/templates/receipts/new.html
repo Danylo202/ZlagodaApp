@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments/layout :: head('ZLAGODA - Новий чек')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar-back(@{/receipts}, 'Назад до списку')}"></nav>
+
+<main class="zl-main container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card zl-card">
+                <div class="card-header">Продаж товарів</div>
+                <div class="card-body">
+                    <div class="zl-title">
+                        <h1>Новий чек</h1>
+                        <p>Додайте товари та їх кількість для оформлення продажу.</p>
+                    </div>
+
+                    <div th:replace="~{fragments/layout :: placeholder-banner('Можливість обрати клієнтську карту для знижки. ПДВ нараховується на всі товари (20%).')}"></div>
+
+                    <form>
+                        <div class="mb-3"><label class="form-label">Карта клієнта (необов'язково)</label><select class="form-select" disabled><option>Без карти</option></select></div>
+                        <div class="table-responsive mb-3">
+                            <table class="table zl-table">
+                                <thead><tr><th>UPC / Товар</th><th>Ціна</th><th>К-сть</th><th>Сума</th></tr></thead>
+                                <tbody><tr><td colspan="4" class="zl-empty">Товари з'являться після реалізації</td></tr></tbody>
+                            </table>
+                        </div>
+                        <div th:replace="~{fragments/layout :: form-actions('Оформити чек', @{/receipts}, true)}"></div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+</body>
+</html>

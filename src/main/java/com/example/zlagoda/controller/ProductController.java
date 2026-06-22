@@ -27,13 +27,6 @@ public class ProductController {
         this.categoryRepository = c;
     }
 
-    // @GetMapping("/products")
-    // public String products(Model model, Authentication authentication) {
-    //     model.addAttribute("products", productRepository.findAll());
-    //     model.addAttribute("categories", categoryRepository.findAll());
-    //     return "products/products";
-    // }
-
     // створення нового товару
     @GetMapping("/products/new")
     public String showNewProductForm(Model model) {

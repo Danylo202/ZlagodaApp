@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments/layout :: head('ZLAGODA - Вхід')}"></head>
+<body class="zl-login-body">
+<nav th:replace="~{fragments/layout :: navbar-brand-only}"></nav>
+
+<main class="zl-login-main">
+    <div class="zl-login-card">
+        <img th:src="@{/img/zlagoda_logo.png}" alt="Zlagoda" class="zl-login-logo">
+        <h1 class="zl-login-title">Вхід до системи</h1>
+        <p class="zl-login-sub">Введіть ваш ID працівника та пароль.</p>
+
+        <div th:if="${param.error}" class="alert alert-danger" role="alert">
+            Невірний ID працівника або пароль.
+        </div>
+        <div th:if="${param.logout}" class="alert alert-success" role="alert">
+            Ви вийшли з системи.
+        </div>
+
+        <form th:action="@{/login}" method="post" class="zl-login-form">
+            <div class="mb-3">
+                <label for="username" class="form-label">ID працівника</label>
+                <input type="text" id="username" name="username"
+                       class="form-control" placeholder="Наприклад: E01" required autofocus>
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label">Пароль</label>
+                <input type="password" id="password" name="password"
+                       class="form-control" placeholder="••••••••" required>
+            </div>
+            <button type="submit" class="btn btn-primary w-100">Увійти</button>
+        </form>
+    </div>
+</main>
+</body>
+</html>

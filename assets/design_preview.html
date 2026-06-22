@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Zlagoda — Design Options Preview</title>
+
+<!-- Local fonts (relative to this file in assets/) -->
+<style>
+  @font-face {
+    font-family: 'Comfortaa';
+    src: url('./fonts/Comfortaa/static/Comfortaa-SemiBold.ttf') format('truetype');
+    font-weight: 600; font-style: normal; font-display: swap;
+  }
+  @font-face {
+    font-family: 'Comfortaa';
+    src: url('./fonts/Comfortaa/static/Comfortaa-Bold.ttf') format('truetype');
+    font-weight: 700; font-style: normal; font-display: swap;
+  }
+  @font-face {
+    font-family: 'Comfortaa';
+    src: url('./fonts/Comfortaa/static/Comfortaa-Regular.ttf') format('truetype');
+    font-weight: 400; font-style: normal; font-display: swap;
+  }
+  @font-face {
+    font-family: 'Manrope';
+    src: url('./fonts/Manrope/static/Manrope-Regular.ttf') format('truetype');
+    font-weight: 400; font-style: normal; font-display: swap;
+  }
+  @font-face {
+    font-family: 'Manrope';
+    src: url('./fonts/Manrope/static/Manrope-Medium.ttf') format('truetype');
+    font-weight: 500; font-style: normal; font-display: swap;
+  }
+  @font-face {
+    font-family: 'Manrope';
+    src: url('./fonts/Manrope/static/Manrope-SemiBold.ttf') format('truetype');
+    font-weight: 600; font-style: normal; font-display: swap;
+  }
+  @font-face {
+    font-family: 'Manrope';
+    src: url('./fonts/Manrope/static/Manrope-Bold.ttf') format('truetype');
+    font-weight: 700; font-style: normal; font-display: swap;
+  }
+</style>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<style>
+  :root {
+    --brand: #00a93a;
+    --brand-accent: #43ff00;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body {
+    font-family: 'Manrope', system-ui, sans-serif;
+    background: #ecefe9;
+    color: #15201a;
+  }
+  h1, h2, h3, h4, .brand-font { font-family: 'Comfortaa', 'Manrope', sans-serif; }
+
+  /* Page chrome */
+  .preview-wrap { max-width: 1400px; margin: 0 auto; padding: 32px 24px 80px; }
+  .preview-header { text-align: center; margin-bottom: 40px; }
+  .preview-header .logo { height: 56px; margin-bottom: 12px; }
+  .preview-header h1 { margin: 0 0 6px; font-size: 28px; }
+  .preview-header p { color: #6b7780; margin: 0; }
+  .swatches { display: flex; gap: 10px; justify-content: center; margin-top: 14px; }
+  .swatch { width: 44px; height: 44px; border-radius: 10px; border: 1px solid rgba(0,0,0,.08); }
+
+  .option { margin-bottom: 64px; }
+  .option-label {
+    display: flex; align-items: baseline; gap: 10px; margin-bottom: 14px;
+  }
+  .option-label .num {
+    font-family: 'Comfortaa'; font-weight: 700; font-size: 18px;
+    color: var(--brand);
+  }
+  .option-label .title { font-size: 22px; font-weight: 700; }
+  .option-label .sub { color: #6b7780; font-size: 14px; }
+  .option-label .tag {
+    margin-left: auto; font-size: 12px; font-weight: 600; letter-spacing: .04em;
+    text-transform: uppercase; padding: 4px 10px; border-radius: 999px;
+    background: #eaf7ee; color: var(--brand);
+  }
+
+  /* Each option rendered as a framed "screen" */
+  .screen {
+    border-radius: 18px; overflow: hidden; border: 1px solid rgba(0,0,0,.08);
+    box-shadow: 0 10px 40px rgba(20,40,30,.08);
+    background: #fff;
+  }
+  .screen .browser-bar {
+    display: flex; gap: 6px; padding: 10px 14px; background: #f0f3f1;
+    border-bottom: 1px solid rgba(0,0,0,.06);
+  }
+  .screen .browser-bar i {
+    width: 11px; height: 11px; border-radius: 50%; display: inline-block;
+  }
+  .screen .browser-bar .url {
+    margin-left: 12px; font-size: 12px; color: #8a958e;
+    font-family: 'Manrope'; align-self: center;
+  }
+
+  /* ---------- Shared mock content pieces ---------- */
+  .mock-nav {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 12px 22px;
+  }
+  .mock-brand { display: flex; align-items: center; gap: 10px; font-family: 'Comfortaa'; font-weight: 700; font-size: 20px; }
+  .mock-brand img { height: 30px; }
+  .mock-nav .right { display: flex; align-items: center; gap: 14px; font-size: 14px; }
+  .mock-btn {
+    font-family: 'Manrope'; font-weight: 600; font-size: 13px;
+    border: 1px solid transparent; padding: 6px 14px; border-radius: 8px;
+    cursor: default; background: transparent;
+  }
+
+  .mock-main { padding: 22px; }
+  .mock-title h2 { margin: 0 0 4px; font-size: 22px; }
+  .mock-title p { margin: 0; font-size: 14px; }
+
+  .mock-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 18px; }
+  .mock-card {
+    border-radius: 14px; padding: 18px; background: #fff;
+    border: 1px solid rgba(0,0,0,.06);
+  }
+  .mock-card h3 { margin: 0 0 6px; font-size: 17px; }
+  .mock-card p { margin: 0; font-size: 13px; }
+
+  .mock-layout { display: grid; grid-template-columns: 220px 1fr; gap: 18px; }
+  .mock-side { border-radius: 14px; padding: 12px; }
+  .mock-side .side-head {
+    font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em;
+    padding: 6px 10px 10px; opacity: .6;
+  }
+  .mock-side a {
+    display: block; padding: 9px 12px; border-radius: 8px; text-decoration: none;
+    font-size: 14px; font-weight: 500; color: inherit;
+  }
+  .mock-side a.active { font-weight: 700; }
+
+  .mock-panel { border-radius: 14px; padding: 18px; background: #fff; border: 1px solid rgba(0,0,0,.06); }
+  .mock-panel .panel-head { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 14px; }
+  .mock-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .mock-table th { text-align: left; font-weight: 600; padding: 8px 10px; border-bottom: 1px solid rgba(0,0,0,.1); font-size: 12px; text-transform: uppercase; letter-spacing: .04em; opacity: .7; }
+  .mock-table td { padding: 10px; border-bottom: 1px solid rgba(0,0,0,.06); }
+  .mock-table tr:last-child td { border-bottom: none; }
+
+  .badge-pill { font-size: 11px; font-weight: 700; padding: 3px 9px; border-radius: 999px; }
+  .btn-row { display: flex; gap: 6px; }
+
+  /* ============================================================
+     OPTION A — Fresh Market (warm, organic, rounded, green)
+     ============================================================ */
+  .opt-a { --bg: #f4f9ee; --surface: #fff; --ink: #1c3a23; --muted: #6b7d6f;
+           --brand: #00a93a; --accent: #43ff00; --warn: #ffb627; --danger: #e0492a; }
+  .opt-a .screen { background: var(--bg); }
+  .opt-a .mock-nav { background: var(--brand); color: #fff; }
+  .opt-a .mock-brand { color: #fff; }
+  .opt-a .mock-nav .right .mock-btn { border-color: rgba(255,255,255,.6); color: #fff; border-radius: 999px; }
+  .opt-a .mock-main { background: var(--bg); }
+  .opt-a .mock-title h2 { color: var(--ink); }
+  .opt-a .mock-title p { color: var(--muted); }
+  .opt-a .mock-card { border-radius: 16px; box-shadow: 0 2px 10px rgba(0,80,30,.06); border-left: 4px solid var(--accent); }
+  .opt-a .mock-card:hover { box-shadow: 0 6px 18px rgba(0,80,30,.12); }
+  .opt-a .mock-card h3 { color: var(--ink); }
+  .opt-a .mock-card p { color: var(--muted); }
+  .opt-a .mock-side { background: #fff; border: 1px solid rgba(0,80,30,.08); }
+  .opt-a .mock-side a.active { background: var(--brand); color: #fff; border-left: 3px solid var(--accent); }
+  .opt-a .mock-side a:not(.active) { color: var(--ink); }
+  .opt-a .mock-side a:not(.active):hover { background: #eaf7ee; }
+  .opt-a .mock-panel { border-radius: 16px; }
+  .opt-a .btn-primary-a { background: var(--brand); color: #fff; border-radius: 999px; box-shadow: 0 0 0 0 rgba(67,255,0,.5); }
+  .opt-a .btn-warn-a { background: var(--warn); color: #3a2a00; border-radius: 999px; }
+  .opt-a .btn-danger-a { background: var(--danger); color: #fff; border-radius: 999px; }
+  .opt-a .badge-a { background: #eaf7ee; color: var(--brand); }
+  .opt-a .mock-table tr:hover td { background: #f6fbef; }
+
+  /* ============================================================
+     OPTION B — Neon Terminal (dark chrome, neon accent)
+     ============================================================ */
+  .opt-b { --chrome: #0f1a14; --surface: #14181a; --surface2: #1b2320;
+           --brand: #00a93a; --accent: #43ff00; --cyan: #00e5ff; --danger: #ff3b5c;
+           --ink: #15201a; --muted: #6b7780; --line: #2a3a2e; }
+  .opt-b .screen { background: #f6f8f5; }
+  .opt-b .mock-nav { background: var(--chrome); color: #e8f5e6; border-bottom: 1px solid var(--line); }
+  .opt-b .mock-brand { color: #fff; }
+  .opt-b .mock-nav .right { color: #cfe6cf; }
+  .opt-b .mock-nav .right .mock-btn { border-color: var(--accent); color: var(--accent); border-radius: 6px; }
+  .opt-b .mock-layout { grid-template-columns: 220px 1fr; }
+  .opt-b .mock-main { background: #f6f8f5; padding: 0; }
+  .opt-b .mock-side {
+    background: var(--chrome); color: #cfe6cf; border-radius: 0; min-height: 360px;
+    padding: 14px 10px;
+  }
+  .opt-b .mock-side .side-head { color: #6b8a72; }
+  .opt-b .mock-side a { color: #cfe6cf; }
+  .opt-b .mock-side a.active {
+    background: rgba(67,255,0,.12); color: var(--accent);
+    box-shadow: inset 3px 0 0 var(--accent), 0 0 12px rgba(67,255,0,.25);
+  }
+  .opt-b .mock-side a:not(.active):hover { background: rgba(255,255,255,.04); }
+  .opt-b .mock-panel-wrap { padding: 22px; }
+  .opt-b .mock-panel { background: #fff; border: 1px solid var(--line); border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,.18); }
+  .opt-b .mock-title h2 { color: var(--ink); }
+  .opt-b .mock-title p { color: var(--muted); }
+  .opt-b .mock-cards { display: none; } /* keep option B focused on the table shell */
+  .opt-b .btn-primary-b { background: var(--brand); color: #fff; border-radius: 6px; }
+  .opt-b .btn-cyan-b { background: transparent; color: var(--cyan); border: 1px solid var(--cyan); border-radius: 6px; }
+  .opt-b .btn-danger-b { background: transparent; color: var(--danger); border: 1px solid var(--danger); border-radius: 6px; }
+  .opt-b .badge-b { background: rgba(67,255,0,.15); color: var(--accent); }
+  .opt-b .mock-table th { color: var(--muted); }
+  .opt-b .mock-table tr { position: relative; }
+  .opt-b .mock-table tr:hover td { background: #f0f7ec; }
+  .opt-b .mono { font-variant-numeric: tabular-nums; font-feature-settings: 'tnum'; }
+
+  /* ============================================================
+     OPTION C — Clean SaaS (light, minimal, modern)
+     ============================================================ */
+  .opt-c { --brand: #00a93a; --accent: #43ff00; --bg: #f7f9f8; --surface: #fff;
+           --ink: #15201a; --muted: #6b7780; --line: #eef2ee; --indigo: #4f5bd5;
+           --danger: #e5484d; --warn: #f5a623; }
+  .opt-c .screen { background: var(--bg); }
+  .opt-c .mock-nav { background: #fff; border-bottom: 2px solid var(--brand); color: var(--ink); }
+  .opt-c .mock-brand { color: var(--brand); }
+  .opt-c .mock-nav .right { color: var(--ink); }
+  .opt-c .mock-nav .right .mock-btn { border-color: var(--line); color: var(--ink); border-radius: 10px; }
+  .opt-c .mock-main { background: var(--bg); }
+  .opt-c .mock-title h2 { color: var(--ink); }
+  .opt-c .mock-title p { color: var(--muted); }
+  .opt-c .mock-card {
+    border-radius: 14px; border: 1px solid var(--line); box-shadow: 0 1px 2px rgba(20,40,30,.04);
+  }
+  .opt-c .mock-card:hover { box-shadow: 0 6px 16px rgba(20,40,30,.08); }
+  .opt-c .mock-card h3 { color: var(--ink); }
+  .opt-c .mock-card p { color: var(--muted); }
+  .opt-c .mock-side { background: #fff; border: 1px solid var(--line); }
+  .opt-c .mock-side .side-head { color: var(--muted); }
+  .opt-c .mock-side a.active {
+    background: #eaf7ee; color: var(--brand); border-left: 3px solid var(--accent);
+  }
+  .opt-c .mock-side a:not(.active) { color: var(--ink); }
+  .opt-c .mock-side a:not(.active):hover { background: #f4f9f5; }
+  .opt-c .mock-panel { border-radius: 14px; border: 1px solid var(--line); box-shadow: 0 1px 2px rgba(20,40,30,.04); }
+  .opt-c .btn-primary-c { background: var(--brand); color: #fff; border-radius: 10px; }
+  .opt-c .btn-secondary-c { background: transparent; color: var(--indigo); border: 1px solid var(--indigo); border-radius: 10px; }
+  .opt-c .btn-warn-c { background: transparent; color: var(--warn); border: 1px solid var(--warn); border-radius: 10px; }
+  .opt-c .btn-danger-c { background: transparent; color: var(--danger); border: 1px solid var(--danger); border-radius: 10px; }
+  .opt-c .badge-c { background: #eaf7ee; color: var(--brand); }
+  .opt-c .mock-table th { color: var(--muted); }
+  .opt-c .mock-table tr:hover td { background: #f7fbf6; }
+
+  /* responsive */
+  @media (max-width: 900px) {
+    .mock-cards { grid-template-columns: 1fr; }
+    .mock-layout { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="preview-wrap">
+
+  <header class="preview-header">
+    <img class="logo" src="./zlagoda_logo_draft.png" alt="Zlagoda logo">
+    <h1>Zlagoda — Варіанти дизайну</h1>
+    <p>Comfortaa (заголовки / лого) + Manrope (текст) · бренд <strong>#00a93a</strong> · акцент <strong>#43ff00</strong></p>
+    <div class="swatches">
+      <div class="swatch" style="background:#00a93a" title="#00a93a brand"></div>
+      <div class="swatch" style="background:#43ff00" title="#43ff00 accent"></div>
+      <div class="swatch" style="background:#1c3a23" title="#1c3a23 ink"></div>
+      <div class="swatch" style="background:#f4f9ee" title="cream"></div>
+      <div class="swatch" style="background:#0f1a14" title="chrome"></div>
+    </div>
+  </header>
+
+  <!-- ============ OPTION A ============ -->
+  <section class="option opt-a">
+    <div class="option-label">
+      <span class="num">A</span>
+      <span class="title">Fresh Market</span>
+      <span class="sub">— тепла, органічна, продуктовий бренд</span>
+      <span class="tag">friendly</span>
+    </div>
+    <div class="screen">
+      <div class="browser-bar"><i style="background:#ff5f56"></i><i style="background:#ffbd2e"></i><i style="background:#27c93f"></i><span class="url">localhost/zlagoda</span></div>
+      <nav class="mock-nav">
+        <div class="mock-brand"><img src="./zlagoda_logo_draft.png" alt=""> <span>Zlagoda</span></div>
+        <div class="right">
+          <span>Касир: <strong>E02</strong></span>
+          <button class="mock-btn">Вийти</button>
+        </div>
+      </nav>
+      <div class="mock-main">
+        <div class="mock-title"><h2>Панель працівника</h2><p>Оберіть потрібний розділ.</p></div>
+        <div class="mock-cards">
+          <div class="mock-card"><h3>Товари</h3><p>Перегляд списку товарів.</p></div>
+          <div class="mock-card"><h3>Категорії</h3><p>Перегляд категорій товарів.</p></div>
+          <div class="mock-card"><h3>Чеки</h3><p>Скоро буде доступно.</p></div>
+        </div>
+        <div style="margin-top:18px">
+          <div class="mock-layout">
+            <aside class="mock-side">
+              <div class="side-head">Меню</div>
+              <a href="#">Головна</a>
+              <a href="#" class="active">Товари</a>
+              <a href="#">Категорії</a>
+              <a href="#">Чеки</a>
+              <a href="#">Клієнти</a>
+            </aside>
+            <div class="mock-panel">
+              <div class="panel-head">
+                <div class="mock-title"><h2 style="font-size:18px">Товари</h2><p>Список товарів із бази даних.</p></div>
+                <button class="mock-btn btn-primary-a">Додати новий</button>
+              </div>
+              <table class="mock-table">
+                <thead><tr><th>Назва</th><th>Виробник</th><th>Категорія</th><th>Дії</th></tr></thead>
+                <tbody>
+                  <tr><td>Молоко 3.2%</td><td>Галактон</td><td><span class="badge-pill badge-a">Молочне</span></td><td><div class="btn-row"><button class="mock-btn btn-warn-a">Ред.</button><button class="mock-btn btn-danger-a">Вид.</button></div></td></tr>
+                  <tr><td>Хліб бородинський</td><td>Київхліб</td><td><span class="badge-pill badge-a">Випічка</span></td><td><div class="btn-row"><button class="mock-btn btn-warn-a">Ред.</button><button class="mock-btn btn-danger-a">Вид.</button></div></td></tr>
+                  <tr><td>Кава Jacobs</td><td>Jacobs</td><td><span class="badge-pill badge-a">Напої</span></td><td><div class="btn-row"><button class="mock-btn btn-warn-a">Ред.</button><button class="mock-btn btn-danger-a">Вид.</button></div></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ OPTION B ============ -->
+  <section class="option opt-b">
+    <div class="option-label">
+      <span class="num">B</span>
+      <span class="title">Neon Terminal</span>
+      <span class="sub">— темна оболонка, неоновий акцент, data-tool</span>
+      <span class="tag">pro / dense</span>
+    </div>
+    <div class="screen">
+      <div class="browser-bar"><i style="background:#ff5f56"></i><i style="background:#ffbd2e"></i><i style="background:#27c93f"></i><span class="url">localhost/zlagoda/products</span></div>
+      <nav class="mock-nav">
+        <div class="mock-brand"><img src="./zlagoda_logo_draft.png" alt="" style="filter:brightness(0) invert(1); height:26px"></div>
+        <div class="right">
+          <span>Менеджер: <strong style="color:#43ff00">E01</strong></span>
+          <button class="mock-btn">Вийти</button>
+        </div>
+      </nav>
+      <div class="mock-main">
+        <div class="mock-layout">
+          <aside class="mock-side">
+            <div class="side-head">Меню</div>
+            <a href="#">Головна</a>
+            <a href="#" class="active">Товари</a>
+            <a href="#">Категорії</a>
+            <a href="#">Чеки</a>
+            <a href="#">Клієнти</a>
+            <a href="#">Працівники</a>
+            <a href="#">Звіти</a>
+          </aside>
+          <div class="mock-panel-wrap">
+            <div class="mock-panel">
+              <div class="panel-head">
+                <div class="mock-title"><h2 style="font-size:18px">Товари</h2><p>Список товарів із бази даних.</p></div>
+                <div class="btn-row"><button class="mock-btn btn-cyan-b">Пошук</button><button class="mock-btn btn-primary-b">Додати новий</button></div>
+              </div>
+              <table class="mock-table">
+                <thead><tr><th>Назва</th><th>Виробник</th><th>Категорія</th><th class="mono">ID</th><th>Дії</th></tr></thead>
+                <tbody>
+                  <tr><td>Молоко 3.2%</td><td>Галактон</td><td><span class="badge-pill badge-b">Молочне</span></td><td class="mono">0001</td><td><div class="btn-row"><button class="mock-btn btn-primary-b">Ред.</button><button class="mock-btn btn-danger-b">Вид.</button></div></td></tr>
+                  <tr><td>Хліб бородинський</td><td>Київхліб</td><td><span class="badge-pill badge-b">Випічка</span></td><td class="mono">0002</td><td><div class="btn-row"><button class="mock-btn btn-primary-b">Ред.</button><button class="mock-btn btn-danger-b">Вид.</button></div></td></tr>
+                  <tr><td>Кава Jacobs</td><td>Jacobs</td><td><span class="badge-pill badge-b">Напої</span></td><td class="mono">0003</td><td><div class="btn-row"><button class="mock-btn btn-primary-b">Ред.</button><button class="mock-btn btn-danger-b">Вид.</button></div></td></tr>
+                  <tr><td>Сир пармезан</td><td>President</td><td><span class="badge-pill badge-b">Молочне</span></td><td class="mono">0004</td><td><div class="btn-row"><button class="mock-btn btn-primary-b">Ред.</button><button class="mock-btn btn-danger-b">Вид.</button></div></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ OPTION C ============ -->
+  <section class="option opt-c">
+    <div class="option-label">
+      <span class="num">C</span>
+      <span class="title">Clean SaaS</span>
+      <span class="sub">— світла, мінімальна, сучасна (рекомендовано)</span>
+      <span class="tag">safe / modern</span>
+    </div>
+    <div class="screen">
+      <div class="browser-bar"><i style="background:#ff5f56"></i><i style="background:#ffbd2e"></i><i style="background:#27c93f"></i><span class="url">localhost/zlagoda</span></div>
+      <nav class="mock-nav">
+        <div class="mock-brand"><img src="./zlagoda_logo_draft.png" alt="" style="height:34px"></div>
+        <div class="right">
+          <span>Менеджер: <strong>E01</strong></span>
+          <span class="badge-pill" style="background:#eef2ee;color:#6b7780">ROLE_MANAGER</span>
+          <button class="mock-btn">Вийти</button>
+        </div>
+      </nav>
+      <div class="mock-main">
+        <div class="mock-title"><h2>Панель працівника</h2><p>Оберіть потрібний розділ.</p></div>
+        <div class="mock-cards">
+          <div class="mock-card"><h3>Товари</h3><p>Перегляд списку товарів.</p></div>
+          <div class="mock-card"><h3>Категорії</h3><p>Перегляд категорій товарів.</p></div>
+          <div class="mock-card"><h3>Чеки</h3><p>Скоро буде доступно.</p></div>
+        </div>
+        <div style="margin-top:18px">
+          <div class="mock-layout">
+            <aside class="mock-side">
+              <div class="side-head">Меню</div>
+              <a href="#">Головна</a>
+              <a href="#" class="active">Товари</a>
+              <a href="#">Категорії</a>
+              <a href="#">Чеки</a>
+              <a href="#">Клієнти</a>
+            </aside>
+            <div class="mock-panel">
+              <div class="panel-head">
+                <div class="mock-title"><h2 style="font-size:18px">Товари</h2><p>Список товарів із бази даних.</p></div>
+                <div class="btn-row">
+                  <button class="mock-btn btn-secondary-c">Пошук</button>
+                  <button class="mock-btn btn-primary-c">Додати новий</button>
+                </div>
+              </div>
+              <table class="mock-table">
+                <thead><tr><th>Назва</th><th>Виробник</th><th>Категорія</th><th>Дії</th></tr></thead>
+                <tbody>
+                  <tr><td>Молоко 3.2%</td><td>Галактон</td><td><span class="badge-pill badge-c">Молочне</span></td><td><div class="btn-row"><button class="mock-btn btn-warn-c">Ред.</button><button class="mock-btn btn-danger-c">Вид.</button></div></td></tr>
+                  <tr><td>Хліб бородинський</td><td>Київхліб</td><td><span class="badge-pill badge-c">Випічка</span></td><td><div class="btn-row"><button class="mock-btn btn-warn-c">Ред.</button><button class="mock-btn btn-danger-c">Вид.</button></div></td></tr>
+                  <tr><td>Кава Jacobs</td><td>Jacobs</td><td><span class="badge-pill badge-c">Напої</span></td><td><div class="btn-row"><button class="mock-btn btn-warn-c">Ред.</button><button class="mock-btn btn-danger-c">Вид.</button></div></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments/layout :: head('ZLAGODA - Чеки')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+
+<main class="zl-main container-fluid">
+    <div class="zl-layout">
+        <div th:replace="~{fragments/layout :: sidebar('receipts')}"></div>
+
+        <section>
+            <div class="card zl-card">
+                <div class="card-body">
+                    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+                        <div class="zl-title mb-0">
+                            <h1>Чеки</h1>
+                            <p>Історія продажів. Касир створює чеки, менеджер може їх видаляти.</p>
+                        </div>
+                        <a th:href="@{/receipts/new}" class="btn btn-primary" sec:authorize="hasRole('CASHIER')">Новий чек</a>
+                    </div>
+
+                    <div th:replace="~{fragments/layout :: placeholder-banner('Поля: номер, дата, загальна сума, ПДВ. Можливий перегляд товарів у чеку (назва, к-сть, ціна). Зберігаються 3 роки.')}"></div>
+
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0 zl-table">
+                            <thead>
+                            <tr>
+                                <th>Номер</th>
+                                <th>Дата</th>
+                                <th>Касир</th>
+                                <th>Сума</th>
+                                <th>ПДВ</th>
+                                <th class="text-end">Дії</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr><td colspan="6" class="zl-empty">Дані з'являться після реалізації</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</main>
+</body>
+</html>

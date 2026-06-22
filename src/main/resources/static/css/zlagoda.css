@@ -1,0 +1,376 @@
+/* ============================================================
+   Zlagoda — Clean SaaS theme (Option C)
+   Brand: #00a93a · Accent: #43ff00
+   Fonts: Comfortaa (headings/wordmark) + Manrope (body)
+   ============================================================ */
+
+@font-face {
+  font-family: 'Comfortaa';
+  src: url('../fonts/Comfortaa-Regular.ttf') format('truetype');
+  font-weight: 400; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'Comfortaa';
+  src: url('../fonts/Comfortaa-Medium.ttf') format('truetype');
+  font-weight: 500; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'Comfortaa';
+  src: url('../fonts/Comfortaa-SemiBold.ttf') format('truetype');
+  font-weight: 600; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'Comfortaa';
+  src: url('../fonts/Comfortaa-Bold.ttf') format('truetype');
+  font-weight: 700; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'Manrope';
+  src: url('../fonts/Manrope-Regular.ttf') format('truetype');
+  font-weight: 400; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'Manrope';
+  src: url('../fonts/Manrope-Medium.ttf') format('truetype');
+  font-weight: 500; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'Manrope';
+  src: url('../fonts/Manrope-SemiBold.ttf') format('truetype');
+  font-weight: 600; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'Manrope';
+  src: url('../fonts/Manrope-Bold.ttf') format('truetype');
+  font-weight: 700; font-style: normal; font-display: swap;
+}
+
+:root {
+  --zl-brand: #00a93a;
+  --zl-brand-dark: #008a30;
+  --zl-accent: #43ff00;
+  --zl-bg: #f7f9f8;
+  --zl-surface: #ffffff;
+  --zl-ink: #15201a;
+  --zl-muted: #6b7780;
+  --zl-line: #eef2ee;
+  --zl-warn: #f5a623;
+  --zl-danger: #e5484d;
+
+  --bs-primary: var(--zl-brand);
+  --bs-primary-rgb: 0, 169, 58;
+  --bs-body-bg: var(--zl-bg);
+  --bs-body-color: var(--zl-ink);
+  --bs-body-font-family: 'Manrope', system-ui, -apple-system, sans-serif;
+  --bs-border-color: var(--zl-line);
+  --bs-link-color: var(--zl-brand);
+  --bs-link-hover-color: var(--zl-brand-dark);
+}
+
+/* Base */
+body {
+  font-family: 'Manrope', system-ui, -apple-system, sans-serif;
+  background: var(--zl-bg);
+  color: var(--zl-ink);
+  -webkit-font-smoothing: antialiased;
+}
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Comfortaa', 'Manrope', sans-serif;
+  color: var(--zl-ink);
+  letter-spacing: -0.01em;
+}
+.text-muted { color: var(--zl-muted) !important; }
+
+/* ---------- Navbar ---------- */
+.zl-navbar {
+  background: #fafdf8;
+  border-bottom: 1px solid #e9f3e8;
+  border-radius: 0 0 16px 16px;
+  box-shadow: 0 2px 10px rgba(20, 80, 40, 0.04);
+}
+.zl-navbar .navbar-brand {
+  font-family: 'Comfortaa', sans-serif;
+  font-weight: 700;
+  color: var(--zl-brand);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.zl-navbar .navbar-brand img { height: 32px; }
+.zl-navbar .nav-meta {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  color: var(--zl-ink);
+  font-size: 0.9rem;
+}
+.zl-navbar .role-badge {
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  padding: 5px 12px;
+  border-radius: 999px;
+  background: #eaf7ee;
+  color: var(--zl-brand);
+  border: 1px solid #d3eedb;
+}
+.zl-navbar .btn-logout {
+  border: 1px solid var(--zl-line);
+  color: var(--zl-ink);
+  border-radius: 10px;
+  font-weight: 600;
+  padding: 5px 14px;
+  font-size: 0.85rem;
+  background: transparent;
+}
+.zl-navbar .btn-logout:hover {
+  border-color: var(--zl-danger);
+  color: var(--zl-danger);
+  background: rgba(229, 72, 77, 0.06);
+}
+
+/* ---------- Layout shell ---------- */
+.zl-main { padding: 1.75rem 0; }
+.zl-layout { display: grid; grid-template-columns: 220px 1fr; gap: 1.25rem; }
+@media (max-width: 991.98px) { .zl-layout { grid-template-columns: 1fr; } }
+
+/* ---------- Sidebar ---------- */
+.zl-sidebar {
+  background: var(--zl-surface);
+  border: 1px solid var(--zl-line);
+  border-radius: 14px;
+  padding: 10px;
+  height: fit-content;
+  box-shadow: 0 1px 2px rgba(20, 40, 30, 0.04);
+}
+.zl-sidebar .zl-side-head {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--zl-muted);
+  padding: 10px 12px 8px;
+}
+.zl-sidebar .zl-side-link {
+  display: block;
+  padding: 9px 12px;
+  border-radius: 8px;
+  text-decoration: none;
+  color: var(--zl-ink);
+  font-weight: 500;
+  font-size: 0.93rem;
+  border-left: 3px solid transparent;
+  margin-bottom: 2px;
+}
+.zl-sidebar .zl-side-link:hover { background: #f4f9f5; }
+.zl-sidebar .zl-side-link.active {
+  background: #eaf7ee;
+  color: var(--zl-brand);
+  font-weight: 700;
+  border-left-color: var(--zl-accent);
+}
+
+/* ---------- Cards ---------- */
+.zl-card {
+  background: var(--zl-surface);
+  border: 1px solid var(--zl-line);
+  border-radius: 14px;
+  box-shadow: 0 1px 2px rgba(20, 40, 30, 0.04);
+  transition: box-shadow 0.18s ease, transform 0.18s ease;
+}
+.zl-card-hover:hover {
+  box-shadow: 0 6px 16px rgba(20, 40, 30, 0.08);
+  transform: translateY(-2px);
+}
+.zl-card .card-header {
+  background: var(--zl-surface);
+  border-bottom: 1px solid var(--zl-line);
+  font-family: 'Comfortaa', sans-serif;
+  font-weight: 600;
+  color: var(--zl-ink);
+  border-radius: 14px 14px 0 0 !important;
+}
+
+/* ---------- Buttons ---------- */
+.btn { border-radius: 10px; font-weight: 600; font-family: 'Manrope'; }
+.btn-primary {
+  --bs-btn-bg: var(--zl-brand);
+  --bs-btn-border-color: var(--zl-brand);
+  --bs-btn-hover-bg: var(--zl-brand-dark);
+  --bs-btn-hover-border-color: var(--zl-brand-dark);
+  --bs-btn-active-bg: var(--zl-brand-dark);
+  --bs-btn-active-border-color: var(--zl-brand-dark);
+  --bs-btn-disabled-bg: var(--zl-brand);
+  --bs-btn-disabled-border-color: var(--zl-brand);
+  color: #fff;
+}
+.btn-outline-primary {
+  --bs-btn-color: var(--zl-brand);
+  --bs-btn-border-color: var(--zl-brand);
+  --bs-btn-hover-bg: var(--zl-brand);
+  --bs-btn-hover-border-color: var(--zl-brand);
+  --bs-btn-active-bg: var(--zl-brand);
+  --bs-btn-active-border-color: var(--zl-brand);
+}
+.btn-warning {
+  --bs-btn-bg: transparent;
+  --bs-btn-border-color: var(--zl-warn);
+  --bs-btn-color: var(--zl-warn);
+  --bs-btn-hover-bg: var(--zl-warn);
+  --bs-btn-hover-border-color: var(--zl-warn);
+  --bs-btn-hover-color: #3a2a00;
+  --bs-btn-active-bg: var(--zl-warn);
+}
+.btn-danger {
+  --bs-btn-bg: transparent;
+  --bs-btn-border-color: var(--zl-danger);
+  --bs-btn-color: var(--zl-danger);
+  --bs-btn-hover-bg: var(--zl-danger);
+  --bs-btn-hover-border-color: var(--zl-danger);
+  --bs-btn-hover-color: #fff;
+}
+.btn-outline-secondary {
+  --bs-btn-color: var(--zl-muted);
+  --bs-btn-border-color: var(--zl-line);
+  --bs-btn-hover-bg: #f4f9f5;
+  --bs-btn-hover-border-color: var(--zl-line);
+  --bs-btn-hover-color: var(--zl-ink);
+}
+
+/* ---------- Badges ---------- */
+.badge.zl-badge {
+  background: #eaf7ee;
+  color: var(--zl-brand);
+  font-weight: 700;
+  font-size: 0.72rem;
+  padding: 4px 10px;
+  border-radius: 999px;
+}
+
+/* ---------- Tables ---------- */
+.zl-table {
+  --bs-table-bg: var(--zl-surface);
+  --bs-table-hover-bg: #f7fbf6;
+}
+.zl-table thead th {
+  font-family: 'Manrope';
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--zl-muted);
+  font-weight: 700;
+  border-bottom: 1px solid var(--zl-line);
+}
+.zl-table td { border-bottom: 1px solid var(--zl-line); }
+.zl-table tbody tr:last-child td { border-bottom: none; }
+
+/* ---------- Forms ---------- */
+.form-control, .form-select {
+  border-radius: 10px;
+  border-color: var(--zl-line);
+  font-family: 'Manrope';
+}
+.form-control:focus, .form-select:focus {
+  border-color: var(--zl-brand);
+  box-shadow: 0 0 0 0.2rem rgba(67, 255, 0, 0.18);
+}
+.form-label { font-weight: 600; color: var(--zl-ink); }
+
+/* ---------- Alerts ---------- */
+.alert-success {
+  --bs-alert-bg: #eaf7ee;
+  --bs-alert-color: #155a2a;
+  --bs-alert-border-color: #cfe9d6;
+}
+.alert-danger {
+  --bs-alert-bg: #fdecec;
+  --bs-alert-color: #a01a1f;
+  --bs-alert-border-color: #f5c9cb;
+}
+
+/* ---------- Misc ---------- */
+.zl-title { margin-bottom: 1.25rem; }
+.zl-title h1 { font-size: 1.5rem; margin: 0 0 4px; }
+.zl-title p { margin: 0; color: var(--zl-muted); }
+
+.zl-empty {
+  text-align: center;
+  color: var(--zl-muted);
+  padding: 2.5rem 1rem;
+}
+
+.zl-error-code {
+  font-family: 'Comfortaa';
+  font-weight: 700;
+  font-size: 5rem;
+  color: var(--zl-danger);
+  line-height: 1;
+}
+
+/* ---------- Placeholder banner ---------- */
+.zl-placeholder {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  background: #f4f9f5;
+  border: 1px dashed #bfe0c9;
+  border-radius: 12px;
+  padding: 16px 18px;
+  margin-bottom: 1.25rem;
+}
+.zl-placeholder-icon { font-size: 1.6rem; line-height: 1; }
+.zl-placeholder-title {
+  font-family: 'Comfortaa', sans-serif;
+  font-weight: 600;
+  color: var(--zl-brand-dark);
+  margin-bottom: 2px;
+}
+.zl-placeholder-text { color: var(--zl-muted); font-size: 0.9rem; }
+
+/* ---------- Confirm modal ---------- */
+.zl-modal .modal-content {
+  border: 1px solid var(--zl-line);
+  border-radius: 16px;
+  box-shadow: 0 12px 40px rgba(20, 80, 40, 0.14);
+}
+.zl-modal .modal-header {
+  border-bottom: 1px solid var(--zl-line);
+  padding: 1.1rem 1.25rem;
+}
+.zl-modal .modal-title { font-family: 'Comfortaa', sans-serif; font-weight: 600; }
+.zl-modal .modal-body { padding: 1.25rem; }
+.zl-modal .modal-footer {
+  border-top: 1px solid var(--zl-line);
+  padding: 1rem 1.25rem;
+  gap: 0.5rem;
+}
+.modal-backdrop.show { opacity: 0.4; }
+
+/* ---------- Login page ---------- */
+.zl-login-body { min-height: 100vh; }
+.zl-login-main {
+  min-height: calc(100vh - 73px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1rem;
+}
+.zl-login-card {
+  width: 100%;
+  max-width: 420px;
+  background: var(--zl-surface);
+  border: 1px solid var(--zl-line);
+  border-radius: 18px;
+  box-shadow: 0 8px 30px rgba(20, 80, 40, 0.08);
+  padding: 2.5rem 2.25rem;
+  text-align: center;
+}
+.zl-login-logo { height: 52px; margin-bottom: 1rem; }
+.zl-login-title {
+  font-size: 1.4rem;
+  margin: 0 0 4px;
+}
+.zl-login-sub { color: var(--zl-muted); margin: 0 0 1.5rem; font-size: 0.92rem; }
+.zl-login-form { text-align: left; }
+.zl-login-form .form-label { font-size: 0.85rem; }
+.zl-login-form .btn-primary { padding: 0.6rem 1rem; font-size: 0.95rem; margin-top: 0.5rem; }
