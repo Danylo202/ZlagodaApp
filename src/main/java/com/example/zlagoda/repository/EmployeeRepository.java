@@ -31,7 +31,7 @@ public class EmployeeRepository {
     public void save(Employee e) {
         String sql = """
                     INSERT INTO Employee (id_employee, empl_surname, empl_name, empl_patronymic, empl_role, salary,
-                    date_of_birth, date_of_start, phoneNumber, city, street, zip_code, password)
+                    date_of_birth, date_of_start, phoneNumber, city, street, zip_code, password_hash)
                     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                 """;
 
