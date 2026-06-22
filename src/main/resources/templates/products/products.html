@@ -46,9 +46,7 @@
                             <p class="text-muted mb-0">Список товарів із бази даних.</p>
                         </div>
                         <div class="btn-group" sec:authorize="hasRole('MANAGER')">
-                            <button type="button" class="btn btn-success">Додати</button>
-                            <button type="button" class="btn btn-warning">Редагувати</button>
-                            <button type="button" class="btn btn-danger">Видалити</button>
+                            <a th:href="@{/products/new}" class="btn btn-success">Додати новий</a>
                         </div>
                     </div>
 
@@ -66,18 +64,29 @@
                                 <th>Виробник</th>
                                 <th>Характеристики</th>
                                 <th>Категорія</th>
+                                <th sec:authorize="hasRole('MANAGER')">Дії</th>
                             </tr>
                             </thead>
                             <tbody>
                             <tr th:each="product : ${products}">
-                                <td th:text="${product.id_product}">1</td>
-                                <td th:text="${product.product_name}">Назва</td>
+                                <td th:text="${product.idProduct}">1</td>
+                                <td th:text="${product.productName}">Назва</td>
                                 <td th:text="${product.producer}">Виробник</td>
                                 <td th:text="${product.characteristics}">Опис</td>
-                                <td th:text="${product.category_number}">1</td>
+                                <td th:text="${product.categoryName}">Категорія</td>
+                                
+                                <td sec:authorize="hasRole('MANAGER')">
+                                    <div class="btn-group">
+                                        <a th:href="@{'/products/edit/' + ${product.idProduct}}" 
+                                           class="btn btn-sm btn-outline-warning">Редагувати</a>
+                                        <a th:href="@{'/products/delete/' + ${product.idProduct}}" 
+                                           class="btn btn-sm btn-outline-danger"
+                                           onclick="return confirm('Ви впевнені?')">Видалити</a>
+                                    </div>
+                                </td>
                             </tr>
                             <tr th:if="${#lists.isEmpty(products)}">
-                                <td colspan="5" class="text-center text-muted py-4">Товарів не знайдено</td>
+                                <td colspan="6" class="text-center text-muted py-4">Товарів не знайдено</td>
                             </tr>
                             </tbody>
                         </table>

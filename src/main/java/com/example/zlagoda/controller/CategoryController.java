@@ -53,7 +53,7 @@ public class CategoryController {
     public String updateCategory(@PathVariable Integer id,
                                  @ModelAttribute Category category,
                                  RedirectAttributes redirectAttributes) {
-        category.setCategory_number(id);
+        category.setCategoryNumber(id);
         categoryRepository.update(category);
         redirectAttributes.addFlashAttribute("success", "Категорію оновлено.");
         return "redirect:/categories";

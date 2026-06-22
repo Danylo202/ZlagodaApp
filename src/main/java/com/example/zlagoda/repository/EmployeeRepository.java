@@ -36,8 +36,24 @@ public class EmployeeRepository {
                 """;
 
         jdbcTemplate.update(sql, e.getIdEmployee(), e.getEmplSurname(), e.getEmplName(), e.getEmplPatronymic(),
-                           e.getEmplRole(), e.getSalary(), e.getDateBirth(), e.getDateStart(), e.getPhone(),
-                           e.getCity(), e.getStreet(), e.getZip(), e.getPassword());
+                           e.getEmplRole(), e.getSalary(), e.getDateBirth(), e.getDateStart(), e.getPhoneNumber(),
+                           e.getCity(), e.getStreet(), e.getZipCode(), e.getPassword());
+    }
+
+    // зміна інформації про працівника
+    public void update(Employee e) {
+        String sql = """
+                    UPDATE Employee SET
+                    empl_surname = ?, empl_name = ?, empl_patronymic = ?, empl_role = ?, salary = ?, date_of_birth = ?, date_of_start = ?, phone_number = ?, city = ?, street = ?, zip_code = ?
+                    WHERE id_employee = ?
+                """;
+
+        jdbcTemplate.update(sql, 
+            e.getEmplSurname(), e.getEmplName(), e.getEmplPatronymic(),
+            e.getEmplRole(), e.getSalary(), e.getDateBirth(), e.getDateStart(),
+            e.getPhoneNumber(), e.getCity(), e.getStreet(), e.getZipCode(),
+            e.getIdEmployee()
+        );
     }
 
     // запит№2: працівники, що продали товари всіх категорій

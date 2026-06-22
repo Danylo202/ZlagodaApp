@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="${mode == 'create' ? 'ZLAGODA - Додати товар' : 'ZLAGODA - Редагувати товар'}">ZLAGODA</title>
+    <meta charset="UTF-8">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+
+<nav class="navbar navbar-dark bg-primary mb-4">
+    <div class="container-fluid">
+        <!-- Динамічний заголовок в набарі -->
+        <span class="navbar-brand" th:text="${mode == 'create' ? 'Новий товар' : 'Редагування товару'}">Товар</span>
+        <a th:href="@{/products}" class="btn btn-outline-light btn-sm">Назад до списку</a>
+    </div>
+</nav>
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+                <div class="card-header bg-white fw-bold text-primary" 
+                     th:text="${mode == 'create' ? 'Створення картки товару' : 'Зміна даних товару'}">
+                    Параметри
+                </div>
+                <div class="card-body">
+                    <!-- Універсальний екшн /products/save -->
+                    <form th:action="@{/products/save}" th:object="${product}" method="post">
+                        
+                        <!-- Поле ID -->
+                        <div class="mb-3">
+                            <label class="form-label text-muted small fw-bold">ID товару (Первинний ключ)</label>
+                            <!-- Якщо ми створюємо (create), дозволяємо вводити ID. 
+                                 Якщо редагуємо, ставимо readonly, щоб не змінити ключ -->
+                            <input type="number" th:field="*{idProduct}" class="form-control" 
+                                   th:readonly="${mode != 'create'}" 
+                                   placeholder="Введіть унікальний номер" required>
+                            <div class="form-text" th:if="${mode != 'create'}">ID неможливо змінити після створення.</div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label text-muted small fw-bold">Назва товару</label>
+                            <input type="text" th:field="*{productName}" class="form-control" placeholder="Наприклад: Молоко 2.5%" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label text-muted small fw-bold">Виробник</label>
+                            <input type="text" th:field="*{producer}" class="form-control" placeholder="Наприклад: Галичина" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label text-muted small fw-bold">Категорія</label>
+                            <select th:field="*{categoryNumber}" class="form-select" required>
+                                <option value="" th:disabled="${mode != 'create'}">Оберіть категорію...</option>
+                                <option th:each="cat : ${categories}" 
+                                        th:value="${cat.categoryNumber}" 
+                                        th:text="${cat.categoryName}">
+                                </option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label text-muted small fw-bold">Характеристики</label>
+                            <textarea th:field="*{characteristics}" class="form-control" rows="3" placeholder="Опис товару..."></textarea>
+                        </div>
+
+                        <div class="d-grid gap-2 mt-4">
+                            <!-- Текст кнопки теж міняється -->
+                            <button type="submit" class="btn btn-primary" 
+                                    th:text="${mode == 'create' ? 'Додати товар' : 'Зберегти зміни'}">
+                                Дія
+                            </button>
+                            <a th:href="@{/products}" class="btn btn-light">Скасувати</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

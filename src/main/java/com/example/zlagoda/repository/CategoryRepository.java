@@ -26,12 +26,12 @@ public class CategoryRepository {
 
     public void save(Category category) {
         String sql = "INSERT INTO Category (category_number, category_name) VALUES (?, ?)";
-        jdbcTemplate.update(sql, category.getCategory_number(), category.getCategory_name());
+        jdbcTemplate.update(sql, category.getCategoryNumber(), category.getCategoryName());
     }
 
     public void update(Category category) {
         String sql = "UPDATE Category SET category_name = ? WHERE category_number = ?";
-        jdbcTemplate.update(sql, category.getCategory_name(), category.getCategory_number());
+        jdbcTemplate.update(sql, category.getCategoryName(), category.getCategoryNumber());
     }
 
     public void deleteById(Integer id) {

@@ -1,9 +1,11 @@
 package com.example.zlagoda.model;
 
-import lombok.Data;
+import lombok.*;
 
 @Data
+@NoArgsConstructor 
+@AllArgsConstructor
 public class Category {
-    private Integer category_number;
-    private String category_name;
+    private Integer categoryNumber;
+    private String categoryName;
 }

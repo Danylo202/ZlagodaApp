@@ -26,13 +26,13 @@
             <h1 class="h3 mb-3" th:text="${mode == 'edit' ? 'Редагувати категорію' : 'Додати категорію'}">Категорія</h1>
 
             <form th:object="${category}"
-                  th:action="${mode == 'edit'} ? @{/categories/{id}(id=${category.category_number})} : @{/categories}"
+                  th:action="${mode == 'edit'} ? @{/categories/{id}(id=${category.categoryNumber})} : @{/categories}"
                   method="post">
                 <div class="mb-3">
-                    <label for="category_number" class="form-label">Номер категорії</label>
-                    <input id="category_number"
-                           name="category_number"
-                           th:field="*{category_number}"
+                    <label for="categoryNumber" class="form-label">Номер категорії</label>
+                    <input id="categoryNumber"
+                           name="categoryNumber"
+                           th:field="*{categoryNumber}"
                            type="number"
                            min="1"
                            class="form-control"
@@ -42,10 +42,10 @@
                 </div>
 
                 <div class="mb-3">
-                    <label for="category_name" class="form-label">Назва категорії</label>
-                    <input id="category_name"
-                           name="category_name"
-                           th:field="*{category_name}"
+                    <label for="categoryName" class="form-label">Назва категорії</label>
+                    <input id="categoryName"
+                           name="categoryName"
+                           th:field="*{categoryName}"
                            type="text"
                            maxlength="50"
                            class="form-control"

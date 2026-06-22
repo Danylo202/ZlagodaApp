@@ -1,8 +1,11 @@
 package com.example.zlagoda.controller;
 
+import com.example.zlagoda.model.Category;
 import com.example.zlagoda.model.Product;
 import com.example.zlagoda.repository.CategoryRepository;
 import com.example.zlagoda.repository.ProductRepository;
+
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 public class ProductController {
@@ -25,12 +29,49 @@ public class ProductController {
     public String products(Model model, Authentication authentication) {
         model.addAttribute("products", productRepository.findAll());
         model.addAttribute("categories", categoryRepository.findAll());
-        return "products";
+        return "products/products";
     }
 
-    @PostMapping("/products/add")
-    public String add(@ModelAttribute Product product) {
-        productRepository.save(product);
+    // створення нового товару
+    @GetMapping("/products/new")
+    public String showNewProductForm(Model model) {
+        model.addAttribute("product", new Product());
+        model.addAttribute("categories", categoryRepository.findAll());
+        model.addAttribute("mode", "create");
+        return "products/edit-product"; 
+    }
+
+    // збереження створеного товару
+    @PostMapping("/products/save")
+    public String saveProduct(@ModelAttribute Product product) {
+        if (productRepository.exists(product.getIdProduct())) {
+            productRepository.update(product); // якщо такий товар вже є
+        }
+        else {
+            productRepository.save(product);
+        }
+        return "redirect:/products";
+    }
+
+    
+    // відкриваємо для редагування
+    @GetMapping("/products/edit/{id}")
+    public String editForm(@PathVariable Integer id, Model model) {
+        try {
+            Product product = productRepository.findById(id);
+            model.addAttribute("product", product);
+            model.addAttribute("categories", categoryRepository.findAll());
+            return "products/edit-product";
+        }
+        catch(EmptyResultDataAccessException e) {
+            return "redirect:/products?error=notfound";
+        }
+    }
+
+    // оброблюємо зміни
+    @PostMapping("/products/update")
+    public String update(@ModelAttribute Product product) {
+        productRepository.update(product);
         return "redirect:/products";
     }
 

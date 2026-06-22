@@ -43,11 +43,11 @@
                 </thead>
                 <tbody>
                 <tr th:each="cat : ${categories}">
-                    <td th:text="${cat.category_number}">1</td>
-                    <td th:text="${cat.category_name}">Назва</td>
+                    <td th:text="${cat.categoryNumber}">1</td>
+                    <td th:text="${cat.categoryName}">Назва</td>
                     <td sec:authorize="hasRole('MANAGER')" class="text-end">
-                        <a th:href="@{/categories/{id}/edit(id=${cat.category_number})}" class="btn btn-warning btn-sm">Редагувати</a>
-                        <form th:action="@{/categories/{id}/delete(id=${cat.category_number})}" method="post" class="d-inline">
+                        <a th:href="@{/categories/{id}/edit(id=${cat.categoryNumber})}" class="btn btn-warning btn-sm">Редагувати</a>
+                        <form th:action="@{/categories/{id}/delete(id=${cat.categoryNumber})}" method="post" class="d-inline">
                             <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Видалити цю категорію?')">Видалити</button>
                         </form>
                     </td>
