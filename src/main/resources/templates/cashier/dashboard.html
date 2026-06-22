@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/extras/spring-security">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>ZLAGODA - Головна</title>
+    <title>ZLAGODA - Панель касира</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -11,9 +11,7 @@
     <div class="container-fluid">
         <span class="navbar-brand fw-bold">ZLAGODA</span>
         <div class="d-flex align-items-center gap-3 text-white">
-            <span sec:authorize="hasRole('MANAGER')">Менеджер: <strong th:text="${employeeId}">E01</strong></span>
-            <span sec:authorize="hasRole('CASHIER')">Касир: <strong th:text="${employeeId}">E02</strong></span>
-            <span class="badge bg-light text-primary" sec:authentication="principal.authorities">ROLE</span>
+            <span>Касир: <strong th:text="${employeeId}">E02</strong></span>
             <form th:action="@{/logout}" method="post" class="m-0">
                 <button type="submit" class="btn btn-outline-light btn-sm">Вийти</button>
             </form>
@@ -22,21 +20,26 @@
 </nav>
 
 <main class="container py-4">
-    <div class="mb-4">
-        <h1 class="h3 mb-1">Панель працівника</h1>
-        <p class="text-muted mb-0">Оберіть потрібний розділ.</p>
-    </div>
+    <h1 class="h3 mb-1">Панель касира</h1>
+    <p class="text-muted">Касир створює чеки, переглядає товари та працює з картами клієнтів.</p>
 
     <div class="row g-3">
+        <div class="col-12 col-md-6 col-xl-4">
+            <div class="card shadow-sm h-100 border-secondary-subtle">
+                <div class="card-body">
+                    <h2 class="h5">Новий чек</h2>
+                    <p class="text-muted mb-0">Скоро: продаж товарів.</p>
+                </div>
+            </div>
+        </div>
         <div class="col-12 col-md-6 col-xl-4">
             <a th:href="@{/products}" class="card shadow-sm text-decoration-none text-dark h-100">
                 <div class="card-body">
                     <h2 class="h5">Товари</h2>
-                    <p class="text-muted mb-0">Перегляд списку товарів.</p>
+                    <p class="text-muted mb-0">Перегляд і пошук товарів.</p>
                 </div>
             </a>
         </div>
-
         <div class="col-12 col-md-6 col-xl-4">
             <a th:href="@{/categories}" class="card shadow-sm text-decoration-none text-dark h-100">
                 <div class="card-body">
@@ -45,39 +48,27 @@
                 </div>
             </a>
         </div>
-
-        <div class="col-12 col-md-6 col-xl-4" sec:authorize="hasAnyRole('MANAGER','CASHIER')">
-            <div class="card shadow-sm h-100 border-secondary-subtle">
-                <div class="card-body">
-                    <h2 class="h5">Чеки</h2>
-                    <p class="text-muted mb-0">Скоро буде доступно.</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-12 col-md-6 col-xl-4" sec:authorize="hasAnyRole('MANAGER','CASHIER')">
+        <div class="col-12 col-md-6 col-xl-4">
             <div class="card shadow-sm h-100 border-secondary-subtle">
                 <div class="card-body">
                     <h2 class="h5">Клієнти</h2>
-                    <p class="text-muted mb-0">Скоро буде доступно.</p>
+                    <p class="text-muted mb-0">Скоро: додавання/редагування карт клієнта.</p>
                 </div>
             </div>
         </div>
-
-        <div class="col-12 col-md-6 col-xl-4" sec:authorize="hasRole('MANAGER')">
+        <div class="col-12 col-md-6 col-xl-4">
             <div class="card shadow-sm h-100 border-secondary-subtle">
                 <div class="card-body">
-                    <h2 class="h5">Працівники</h2>
-                    <p class="text-muted mb-0">Скоро буде доступно.</p>
+                    <h2 class="h5">Мої чеки</h2>
+                    <p class="text-muted mb-0">Скоро: чеки за сьогодні або період.</p>
                 </div>
             </div>
         </div>
-
-        <div class="col-12 col-md-6 col-xl-4" sec:authorize="hasRole('MANAGER')">
+        <div class="col-12 col-md-6 col-xl-4">
             <div class="card shadow-sm h-100 border-secondary-subtle">
                 <div class="card-body">
-                    <h2 class="h5">Звіти</h2>
-                    <p class="text-muted mb-0">Скоро буде доступно.</p>
+                    <h2 class="h5">Мій профіль</h2>
+                    <p class="text-muted mb-0">Скоро: інформація про себе.</p>
                 </div>
             </div>
         </div>

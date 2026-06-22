@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/extras/spring-security">
+<head>
+    <title>ZLAGODA - Товари</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <div class="container-fluid">
+        <a class="navbar-brand fw-bold" th:href="@{/}">ZLAGODA</a>
+        <div class="d-flex align-items-center gap-3 text-white">
+            <span sec:authorize="hasRole('MANAGER')">Менеджер: <strong th:text="${employeeId}">E01</strong></span>
+            <span sec:authorize="hasRole('CASHIER')">Касир: <strong th:text="${employeeId}">E02</strong></span>
+            <form th:action="@{/logout}" method="post" class="m-0">
+                <button type="submit" class="btn btn-outline-light btn-sm">Вийти</button>
+            </form>
+        </div>
+    </div>
+</nav>
+
+<main class="container-fluid py-4">
+    <div class="row g-4">
+        <aside class="col-12 col-lg-3 col-xl-2">
+            <div class="card shadow-sm">
+                <div class="card-header fw-semibold">Меню управління</div>
+                <div class="list-group list-group-flush">
+                    <a th:href="@{/}" class="list-group-item list-group-item-action">Головна</a>
+                    <a th:href="@{/products}" class="list-group-item list-group-item-action active">Товари</a>
+                    <a th:href="@{/categories}" class="list-group-item list-group-item-action">Категорії</a>
+                    <a href="#" class="list-group-item list-group-item-action" sec:authorize="hasAnyRole('MANAGER','CASHIER')">Чеки</a>
+                    <a href="#" class="list-group-item list-group-item-action" sec:authorize="hasAnyRole('MANAGER','CASHIER')">Клієнти</a>
+                    <a href="#" class="list-group-item list-group-item-action" sec:authorize="hasRole('MANAGER')">Працівники</a>
+                    <a href="#" class="list-group-item list-group-item-action" sec:authorize="hasRole('MANAGER')">Звіти</a>
+                </div>
+            </div>
+        </aside>
+
+        <section class="col-12 col-lg-9 col-xl-10">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+                        <div>
+                            <h1 class="h3 mb-1">Товари</h1>
+                            <p class="text-muted mb-0">Список товарів із бази даних.</p>
+                        </div>
+                        <div class="btn-group" sec:authorize="hasRole('MANAGER')">
+                            <button type="button" class="btn btn-success">Додати</button>
+                            <button type="button" class="btn btn-warning">Редагувати</button>
+                            <button type="button" class="btn btn-danger">Видалити</button>
+                        </div>
+                    </div>
+
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" placeholder="Пошук товарів...">
+                        <button class="btn btn-outline-primary" type="button">Пошук</button>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover align-middle mb-0">
+                            <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Назва</th>
+                                <th>Виробник</th>
+                                <th>Характеристики</th>
+                                <th>Категорія</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="product : ${products}">
+                                <td th:text="${product.id_product}">1</td>
+                                <td th:text="${product.product_name}">Назва</td>
+                                <td th:text="${product.producer}">Виробник</td>
+                                <td th:text="${product.characteristics}">Опис</td>
+                                <td th:text="${product.category_number}">1</td>
+                            </tr>
+                            <tr th:if="${#lists.isEmpty(products)}">
+                                <td colspan="5" class="text-center text-muted py-4">Товарів не знайдено</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</main>
+</body>
+</html>

@@ -7,12 +7,15 @@ import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestBuilders.formLogin;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.authenticated;
 import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.unauthenticated;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -89,5 +92,57 @@ class SecurityLoginTests {
     void loginFailsForUnknownEmployee() throws Exception {
         mockMvc.perform(formLogin().user("NO_SUCH_USER").password("whatever"))
                 .andExpect(unauthenticated());
+    }
+
+    @Test
+    @WithMockUser(username = "E01", roles = "MANAGER")
+    void managerCanAccessManagerDashboard() throws Exception {
+        mockMvc.perform(get("/manager"))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    @WithMockUser(username = "E02", roles = "CASHIER")
+    void cashierCannotAccessManagerDashboard() throws Exception {
+        mockMvc.perform(get("/manager"))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    @WithMockUser(username = "E02", roles = "CASHIER")
+    void cashierCanAccessCashierDashboard() throws Exception {
+        mockMvc.perform(get("/cashier"))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    @WithMockUser(username = "E01", roles = "MANAGER")
+    void managerCannotAccessCashierDashboard() throws Exception {
+        mockMvc.perform(get("/cashier"))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    @WithMockUser(username = "E01", roles = "MANAGER")
+    void managerCanOpenCategoryCreateForm() throws Exception {
+        mockMvc.perform(get("/categories/new"))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    @WithMockUser(username = "E02", roles = "CASHIER")
+    void cashierCannotOpenCategoryCreateForm() throws Exception {
+        mockMvc.perform(get("/categories/new"))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    @WithMockUser(username = "E02", roles = "CASHIER")
+    void cashierCannotCreateCategory() throws Exception {
+        mockMvc.perform(post("/categories")
+                        .with(csrf())
+                        .param("category_number", "99")
+                        .param("category_name", "Test category"))
+                .andExpect(status().isForbidden());
     }
 }
