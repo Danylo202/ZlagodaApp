@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments/layout :: head('ZLAGODA - Працівники')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+
+<main class="zl-main container-fluid">
+    <div class="zl-layout">
+        <div th:replace="~{fragments/layout :: sidebar('employees')}"></div>
+
+        <section>
+            <div class="card zl-card">
+                <div class="card-body">
+                    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+                        <div class="zl-title mb-0">
+                            <h1>Працівники</h1>
+                            <p>Облік працівників міні-супермаркету (менеджери та касири).</p>
+                        </div>
+                        <a th:href="@{/employees/new}" class="btn btn-primary">Додати працівника</a>
+                    </div>
+
+                    <div th:replace="~{fragments/layout :: placeholder-banner('Поля: ID, ПІБ, посада, зарплата, дата початку роботи, дата народження, телефон, адреса.')}"></div>
+
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0 zl-table">
+                            <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>ПІБ</th>
+                                <th>Посада</th>
+                                <th>Зарплата</th>
+                                <th>Телефон</th>
+                                <th class="text-end">Дії</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr><td colspan="6" class="zl-empty">Дані з'являться після реалізації</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</main>
+</body>
+</html>

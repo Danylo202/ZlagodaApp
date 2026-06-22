@@ -34,25 +34,28 @@
 </nav>
 
 <!-- ============ Sidebar ============
-     active: one of 'home','products','categories','receipts','customers','employees','reports' -->
+     active: one of 'home','products','store-products','categories','receipts','customers','employees','reports' -->
 <aside class="zl-sidebar" th:fragment="sidebar(active)">
     <div class="zl-side-head">Меню</div>
     <a th:href="@{/}" class="zl-side-link"
        th:classappend="${active == 'home'} ? 'active' : ''">Головна</a>
     <a th:href="@{/products}" class="zl-side-link"
        th:classappend="${active == 'products'} ? 'active' : ''">Товари</a>
+    <a th:href="@{/store-products}" class="zl-side-link"
+       sec:authorize="hasRole('MANAGER')"
+       th:classappend="${active == 'store-products'} ? 'active' : ''">Товари у магазині</a>
     <a th:href="@{/categories}" class="zl-side-link"
        th:classappend="${active == 'categories'} ? 'active' : ''">Категорії</a>
-    <a href="#" class="zl-side-link"
+    <a th:href="@{/receipts}" class="zl-side-link"
        sec:authorize="hasAnyRole('MANAGER','CASHIER')"
        th:classappend="${active == 'receipts'} ? 'active' : ''">Чеки</a>
-    <a href="#" class="zl-side-link"
+    <a th:href="@{/customers}" class="zl-side-link"
        sec:authorize="hasAnyRole('MANAGER','CASHIER')"
        th:classappend="${active == 'customers'} ? 'active' : ''">Клієнти</a>
-    <a href="#" class="zl-side-link"
+    <a th:href="@{/employees}" class="zl-side-link"
        sec:authorize="hasRole('MANAGER')"
        th:classappend="${active == 'employees'} ? 'active' : ''">Працівники</a>
-    <a href="#" class="zl-side-link"
+    <a th:href="@{/reports}" class="zl-side-link"
        sec:authorize="hasRole('MANAGER')"
        th:classappend="${active == 'reports'} ? 'active' : ''">Звіти</a>
 </aside>
@@ -86,6 +89,20 @@
         <div class="d-flex justify-content-center gap-2">
             <a th:href="@{/}" class="btn btn-primary">На головну панель</a>
             <button type="button" class="btn btn-outline-secondary" onclick="history.back()">Назад</button>
+        </div>
+    </div>
+</div>
+
+<!-- ============ Placeholder banner (DRY: used by not-yet-implemented pages) ============
+     Params: note (optional extra detail) -->
+<div class="zl-placeholder" th:fragment="placeholder-banner(note)">
+    <div class="zl-placeholder-icon">🚧</div>
+    <div>
+        <div class="zl-placeholder-title">Заповнювач сторінки</div>
+        <div class="zl-placeholder-text">
+            Ця сторінка ще не реалізована. Відповідно до специфікації АІС «Zlagoda»
+            вона буде доповнена функціоналом.
+            <span th:if="${note != null and #strings.length(note) > 0}" th:text="${note}"></span>
         </div>
     </div>
 </div>

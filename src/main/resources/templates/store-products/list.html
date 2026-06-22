@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments/layout :: head('ZLAGODA - Товари у магазині')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+
+<main class="zl-main container-fluid">
+    <div class="zl-layout">
+        <div th:replace="~{fragments/layout :: sidebar('store-products')}"></div>
+
+        <section>
+            <div class="card zl-card">
+                <div class="card-body">
+                    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+                        <div class="zl-title mb-0">
+                            <h1>Товари у магазині</h1>
+                            <p>Запаси товарів: UPC, ціна, кількість, акційний/звичайний.</p>
+                        </div>
+                        <a th:href="@{/store-products/new}" class="btn btn-primary">Додати товар у магазині</a>
+                    </div>
+
+                    <div th:replace="~{fragments/layout :: placeholder-banner('Поля: UPC, ціна продажу (з ПДВ), кількість, акційний товар. Акційна ціна = ціна × 0,8.')}"></div>
+
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0 zl-table">
+                            <thead>
+                            <tr>
+                                <th>UPC</th>
+                                <th>Товар</th>
+                                <th>Ціна</th>
+                                <th>К-сть</th>
+                                <th>Тип</th>
+                                <th class="text-end">Дії</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr><td colspan="6" class="zl-empty">Дані з'являться після реалізації</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</main>
+</body>
+</html>

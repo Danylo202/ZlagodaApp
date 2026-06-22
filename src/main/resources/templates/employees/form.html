@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('ZLAGODA - Працівник')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar-back(@{/employees}, 'Назад до списку')}"></nav>
+
+<main class="zl-main container">
+    <div class="row justify-content-center">
+        <div class="col-md-7">
+            <div class="card zl-card">
+                <div class="card-header">Картка працівника</div>
+                <div class="card-body">
+                    <div class="zl-title">
+                        <h1>Новий працівник</h1>
+                        <p>Введіть відомості про працівника.</p>
+                    </div>
+
+                    <div th:replace="~{fragments/layout :: placeholder-banner('')}"></div>
+
+                    <form>
+                        <div class="row g-3">
+                            <div class="col-md-6"><label class="form-label">ID працівника</label><input class="form-control" disabled placeholder="E01"></div>
+                            <div class="col-md-6"><label class="form-label">Посада</label><input class="form-control" disabled placeholder="Менеджер / Касир"></div>
+                            <div class="col-12"><label class="form-label">ПІБ</label><input class="form-control" disabled placeholder="Прізвище Ім'я По батькові"></div>
+                            <div class="col-md-6"><label class="form-label">Зарплата</label><input class="form-control" disabled placeholder="0.00"></div>
+                            <div class="col-md-6"><label class="form-label">Дата початку роботи</label><input class="form-control" disabled placeholder="дд.мм.рррр"></div>
+                            <div class="col-md-6"><label class="form-label">Дата народження</label><input class="form-control" disabled placeholder="дд.мм.рррр"></div>
+                            <div class="col-md-6"><label class="form-label">Телефон</label><input class="form-control" disabled placeholder="+380..."></div>
+                            <div class="col-12"><label class="form-label">Адреса</label><input class="form-control" disabled placeholder="Місто, вулиця, індекс"></div>
+                        </div>
+                        <div class="d-flex gap-2 mt-4">
+                            <button class="btn btn-primary" disabled>Зберегти</button>
+                            <a th:href="@{/employees}" class="btn btn-outline-secondary">Скасувати</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+</body>
+</html>
