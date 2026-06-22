@@ -12,6 +12,8 @@ public class StoreProduct {
     private Integer productsNumber;
     private boolean promotional;
 
+    private String productName; // joined data
+
     public StoreProduct(String UPC, String UPCProm, Integer idProduct, Double sellingPrice, Integer productsNumber, boolean promotional) {
         if((UPCProm==null && promotional==false) || (UPCProm!=null && promotional==true)) {
             this.UPC = UPC;

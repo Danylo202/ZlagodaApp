@@ -19,7 +19,9 @@ public class StoreProductRepository {
 
     public List<StoreProduct> findAll() {
         String sql = """
-                SELECT SP.*, P.product_name FROM Store_Product AS SP
+                SELECT SP.UPC, SP.UPC_prom AS UPCProm, SP.id_product, SP.selling_price,
+                       SP.products_number, SP.promotional_product AS promotional, P.product_name
+                FROM Store_Product AS SP
                 INNER JOIN Product AS P ON SP.id_product = P.id_product
                 ORDER BY SP.products_number DESC
                 """;
@@ -27,42 +29,66 @@ public class StoreProductRepository {
     }
 
     public StoreProduct findByUPC(String UPC) {
-        String sql = "SELECT * FROM Store_Product WHERE UPC = ?";
+        String sql = """
+                SELECT UPC, UPC_prom AS UPCProm, id_product, selling_price,
+                       products_number, promotional_product AS promotional
+                FROM Store_Product
+                WHERE UPC = ?
+                """;
         return jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<>(StoreProduct.class), UPC);
     }
 
     public void save(StoreProduct sp) {
+        normalize(sp);
+        validate(sp);
+
+        String sql = "INSERT INTO Store_Product (UPC, UPC_prom, id_product, selling_price, products_number, promotional_product) " +
+                     "VALUES (?, ?, ?, ?, ?, ?)";
+        jdbcTemplate.update(sql, sp.getUPC(), sp.getUPCProm(), sp.getIdProduct(), sp.getSellingPrice(),
+                    sp.getProductsNumber(), sp.isPromotional());
+    }
+
+    public void update(StoreProduct sp) {
+        normalize(sp);
+        validate(sp);
+
+        String sql = """
+            UPDATE Store_Product SET
+            UPC_prom = ?, id_product = ?, selling_price = ?, products_number = ?, promotional_product = ?
+            WHERE UPC = ?
+            """;
+
+        jdbcTemplate.update(sql,
+                sp.getUPCProm(), sp.getIdProduct(), sp.getSellingPrice(), sp.getProductsNumber(), sp.isPromotional(),
+                sp.getUPC());
+    }
+
+    private void normalize(StoreProduct sp) {
+        if (sp.getUPCProm() != null && sp.getUPCProm().trim().isEmpty()) {
+            sp.setUPCProm(null);
+        }
+    }
+
+    private void validate(StoreProduct sp) {
         if (!sp.isValid()) {
-            throw new IllegalArgumentException("Помилка логіки: акційний статус не збігається з наявністю UPCProm!");
+            throw new IllegalArgumentException("Помилка логіки: акційний статус не збігається з наявністю UPC акційного товару!");
+        }
+        if (sp.getSellingPrice() == null || sp.getSellingPrice() < 0) {
+            throw new IllegalArgumentException("Ціна продажу не може бути від’ємною.");
+        }
+        if (sp.getProductsNumber() == null || sp.getProductsNumber() < 0) {
+            throw new IllegalArgumentException("Кількість товару не може бути від’ємною.");
         }
         if (sp.isPromotional()) {
             StoreProduct parent = findByUPC(sp.getUPCProm());
 
-            // акція на акцію - заборонено
             if (parent.isPromotional()) {
                 throw new RuntimeException("Не можна створювати акцію на акційний товар!");
             }
-
-            // перевірка випадку, коли "батько" посилається на інший ID товару
             if (!parent.getIdProduct().equals(sp.getIdProduct())) {
                 throw new RuntimeException("Акція має посилатися на той самий вид товару!");
             }
         }
-        
-        String sql = "INSERT INTO Store_Product (UPC, UPC_prom, id_product, selling_price, products_number, promotional) " +
-                     "VALUES (?, ?, ?, ?, ?, ?)";
-        jdbcTemplate.update(sql, sp.getUPC(), sp.getUPCProm(), sp.getIdProduct(), sp.getSellingPrice(), 
-                    sp.getProductsNumber(), sp.isPromotional());
-}
-
-    public void update(StoreProduct sp) {
-        String sql = """
-            UPDATE Store_Product SET
-            selling_price = ?, products_number = ?
-            WHERE UPC = ?
-            """;
-
-        jdbcTemplate.update(sql, sp.getSellingPrice(), sp.getProductsNumber(), sp.getUPC());
     }
 
     public boolean exists(String UPC) {

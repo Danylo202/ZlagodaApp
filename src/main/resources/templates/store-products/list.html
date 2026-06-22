@@ -16,10 +16,17 @@
                             <h1>Товари у магазині</h1>
                             <p>Запаси товарів: UPC, ціна, кількість, акційний/звичайний.</p>
                         </div>
-                        <a th:href="@{/store-products/new}" class="btn btn-primary">Додати товар у магазині</a>
+                        <a th:href="@{/store-products/new}" class="btn btn-primary" sec:authorize="hasRole('MANAGER')">Додати товар у магазині</a>
                     </div>
 
-                    <div th:replace="~{fragments/layout :: placeholder-banner('Поля: UPC, ціна продажу (з ПДВ), кількість, акційний товар. Акційна ціна = ціна × 0,8.')}"></div>
+                    <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
+                    <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+
+                    <form th:action="@{/store-products}" method="get" class="input-group mb-3">
+                        <input type="text" name="searchUPC" class="form-control" placeholder="Пошук за UPC..." th:value="${param.searchUPC}">
+                        <button class="btn btn-outline-primary" type="submit">Пошук</button>
+                        <a th:href="@{/store-products}" class="btn btn-outline-secondary">Скинути</a>
+                    </form>
 
                     <div class="table-responsive">
                         <table class="table table-hover align-middle mb-0 zl-table">
@@ -30,11 +37,37 @@
                                 <th>Ціна</th>
                                 <th>К-сть</th>
                                 <th>Тип</th>
-                                <th class="text-end">Дії</th>
+                                <th>Базовий UPC</th>
+                                <th class="text-end" sec:authorize="hasRole('MANAGER')">Дії</th>
                             </tr>
                             </thead>
                             <tbody>
-                            <tr><td colspan="6" class="zl-empty">Дані з'являться після реалізації</td></tr>
+                            <tr th:each="sp : ${storeProducts}">
+                                <td th:text="${sp.UPC}">UPC</td>
+                                <td th:text="${sp.productName != null ? sp.productName : sp.idProduct}">Товар</td>
+                                <td th:text="${#numbers.formatDecimal(sp.sellingPrice, 1, 2)}">0.00</td>
+                                <td th:text="${sp.productsNumber}">0</td>
+                                <td>
+                                    <span class="badge zl-badge" th:if="${sp.promotional}">Акційний</span>
+                                    <span class="badge text-bg-secondary" th:unless="${sp.promotional}">Звичайний</span>
+                                </td>
+                                <td th:text="${sp.UPCProm ?: '—'}">—</td>
+                                <td class="text-end" sec:authorize="hasRole('MANAGER')">
+                                    <div class="btn-group">
+                                        <a th:href="@{/store-products/edit/{upc}(upc=${sp.UPC})}" class="btn btn-sm btn-warning">Редагувати</a>
+                                        <form th:action="@{/store-products/delete/{upc}(upc=${sp.UPC})}" method="post" class="d-inline">
+                                            <button type="submit"
+                                                    class="btn btn-sm btn-danger"
+                                                    data-zl-confirm="Ви впевнені, що хочете видалити цей товар у магазині?"
+                                                    data-zl-confirm-title="Видалити товар у магазині"
+                                                    data-zl-confirm-ok="Видалити">Видалити</button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr th:if="${#lists.isEmpty(storeProducts)}">
+                                <td colspan="7" class="zl-empty">Товарів у магазині не знайдено</td>
+                            </tr>
                             </tbody>
                         </table>
                     </div>
@@ -43,5 +76,6 @@
         </section>
     </div>
 </main>
+<div th:replace="~{fragments/layout :: confirm-modal}"></div>
 </body>
 </html>

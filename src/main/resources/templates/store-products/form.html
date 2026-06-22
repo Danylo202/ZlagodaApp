@@ -11,19 +11,67 @@
                 <div class="card-header">Картка товару у магазині</div>
                 <div class="card-body">
                     <div class="zl-title">
-                        <h1>Новий товар у магазині</h1>
+                        <h1 th:text="${mode == 'edit' ? 'Редагувати товар у магазині' : 'Новий товар у магазині'}">Новий товар у магазині</h1>
                         <p>Введіть відомості про товар у магазині.</p>
                     </div>
 
-                    <div th:replace="~{fragments/layout :: placeholder-banner('ПДВ складає 20% від ціни. Акційна ціна = ціна × 0,8.')}"></div>
+                    <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+                    <div class="alert alert-info">
+                        ПДВ входить у ціну. Для акційного товару оберіть базовий неакційний UPC того самого товару.
+                    </div>
 
-                    <form>
-                        <div class="mb-3"><label class="form-label">UPC</label><input class="form-control" disabled placeholder="UPC товару"></div>
-                        <div class="mb-3"><label class="form-label">Товар</label><select class="form-select" disabled><option>Оберіть товар...</option></select></div>
-                        <div class="mb-3"><label class="form-label">Ціна продажу (з ПДВ)</label><input class="form-control" disabled placeholder="0.00"></div>
-                        <div class="mb-3"><label class="form-label">Кількість одиниць</label><input class="form-control" disabled placeholder="0"></div>
-                        <div class="mb-3"><label class="form-label">Тип товару</label><select class="form-select" disabled><option>Звичайний</option><option>Акційний</option></select></div>
-                        <div th:replace="~{fragments/layout :: form-actions('Зберегти', @{/store-products}, true)}"></div>
+                    <form th:action="@{/store-products/save}" th:object="${storeProduct}" method="post">
+                        <div class="mb-3">
+                            <label for="upc" class="form-label">UPC</label>
+                            <input id="upc" type="text" th:field="*{UPC}" class="form-control" required th:readonly="${mode == 'edit'}" placeholder="UPC товару">
+                            <div class="form-text" th:if="${mode == 'edit'}">UPC є ключем запису, тому під час редагування не змінюється.</div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="product" class="form-label">Товар</label>
+                            <select id="product" th:field="*{idProduct}" class="form-select" required>
+                                <option value="">Оберіть товар...</option>
+                                <option th:each="p : ${allBaseProducts}"
+                                        th:value="${p.idProduct}"
+                                        th:text="${p.productName + ' · ' + p.producer}">
+                                    Товар
+                                </option>
+                            </select>
+                        </div>
+
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label for="price" class="form-label">Ціна продажу</label>
+                                <input id="price" type="number" step="0.01" min="0" th:field="*{sellingPrice}" class="form-control" required placeholder="0.00">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="qty" class="form-label">Кількість одиниць</label>
+                                <input id="qty" type="number" min="0" th:field="*{productsNumber}" class="form-control" required placeholder="0">
+                            </div>
+                        </div>
+
+                        <div class="mb-3 mt-3">
+                            <label for="promotional" class="form-label">Тип товару</label>
+                            <select id="promotional" th:field="*{promotional}" class="form-select">
+                                <option th:value="false">Звичайний</option>
+                                <option th:value="true">Акційний</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="upcProm" class="form-label">Базовий UPC для акційного товару</label>
+                            <select id="upcProm" th:field="*{UPCProm}" class="form-select">
+                                <option value="">Не застосовується</option>
+                                <option th:each="base : ${baseStoreProducts}"
+                                        th:value="${base.UPC}"
+                                        th:text="${base.UPC + ' · ' + (base.productName != null ? base.productName : base.idProduct)}">
+                                    UPC
+                                </option>
+                            </select>
+                            <div class="form-text">Для звичайного товару залиште порожнім. Для акційного — оберіть неакційний UPC.</div>
+                        </div>
+
+                        <div th:replace="~{fragments/layout :: form-actions('Зберегти', @{/store-products}, false)}"></div>
                     </form>
                 </div>
             </div>
