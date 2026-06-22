@@ -6,13 +6,16 @@ import com.example.zlagoda.repository.CategoryRepository;
 import com.example.zlagoda.repository.ProductRepository;
 
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import java.util.List;
 
 @Controller
 public class ProductController {
@@ -22,13 +25,6 @@ public class ProductController {
     public ProductController(ProductRepository p, CategoryRepository c) {
         this.productRepository = p;
         this.categoryRepository = c;
-    }
-
-    @GetMapping("/products")
-    public String products(Model model) {
-        model.addAttribute("products", productRepository.findAll());
-        model.addAttribute("categories", categoryRepository.findAll());
-        return "products/products";
     }
 
     // створення нового товару
@@ -80,5 +76,21 @@ public class ProductController {
     public String delete(@PathVariable Integer id) {
         productRepository.delete(id);
         return "redirect:/products";
+    }
+
+    @GetMapping("/products")
+    public String list(@RequestParam(required = false) String catName, Model model, Authentication authentication) {
+        List<Product> products;
+
+        if (catName != null && !catName.trim().isEmpty()) {
+            products = productRepository.findByCategoryName(catName);
+        } 
+        else {
+            products = productRepository.findAll();
+        }
+
+        model.addAttribute("products", products);
+        model.addAttribute("categories", categoryRepository.findAll());
+        return "products/products";
     }
 }

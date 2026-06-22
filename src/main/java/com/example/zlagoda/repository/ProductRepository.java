@@ -64,6 +64,18 @@ public class ProductRepository {
         }
     }
 
+    public List<Product> findByCategoryName(String categoryName) {
+        String sql = """
+                SELECT P.*, C.category_name
+                FROM Product AS P
+                INNER JOIN Category AS C ON P.category_number = C.category_number
+                WHERE C.category_name LIKE ?
+                ORDER BY P.product_name ASC
+                """;
+        
+        return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Product.class), "%" + categoryName + "%");
+}
+
     public void delete(Integer id) {
         jdbcTemplate.update("DELETE FROM Product WHERE id_product = ?", id);
     }

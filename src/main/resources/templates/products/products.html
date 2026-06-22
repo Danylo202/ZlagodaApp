@@ -23,8 +23,11 @@
 
                     <!-- TODO: wire up product search (input + button currently inert) -->
                     <div class="input-group mb-3">
-                        <input type="text" class="form-control" placeholder="Пошук товарів...">
-                        <button class="btn btn-outline-primary" type="button">Пошук</button>
+                        <form th:action="@{/products}" method="get" class="input-group">
+                            <input type="text" name="catName" class="form-control" placeholder="Пошук товарів...">
+                            <button class="btn btn-outline-primary" type="submit">Пошук</button>
+                            <a th:href="@{/products}" class="btn btn-outline-secondary">Скинути</a>
+                        </form>
                     </div>
 
                     <div class="table-responsive">
