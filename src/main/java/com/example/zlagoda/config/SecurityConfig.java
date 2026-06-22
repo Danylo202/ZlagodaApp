@@ -65,19 +65,24 @@ public class SecurityConfig {
         return http
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/css/**", "/js/**", "/images/**", "/img/**", "/fonts/**").permitAll()
-                        .requestMatchers("/employees/**").hasRole("MANAGER")
-                        .requestMatchers("/store-products/**").hasRole("MANAGER")
-                        .requestMatchers("/reports/**").hasRole("MANAGER")
+
+                        // Manager-only maintenance screens/actions.
+                        .requestMatchers("/employees/**", "/reports/**").hasRole("MANAGER")
+                        .requestMatchers(HttpMethod.GET, "/store-products/new", "/store-products/edit/**").hasRole("MANAGER")
+                        .requestMatchers(HttpMethod.POST, "/store-products/**").hasRole("MANAGER")
+                        .requestMatchers(HttpMethod.GET, "/products/new", "/products/edit/**", "/products/delete/**").hasRole("MANAGER")
+                        .requestMatchers(HttpMethod.POST, "/products/**").hasRole("MANAGER")
+                        .requestMatchers(HttpMethod.GET, "/categories/new", "/categories/*/edit", "/categories/*/delete").hasRole("MANAGER")
+                        .requestMatchers(HttpMethod.POST, "/categories/**").hasRole("MANAGER")
+                        .requestMatchers(HttpMethod.GET, "/receipts/*/delete").hasRole("MANAGER")
+                        .requestMatchers(HttpMethod.GET, "/customers/*/delete").hasRole("MANAGER")
+
+                        // Shared read/use screens.
+                        .requestMatchers(HttpMethod.GET, "/products", "/categories", "/store-products").hasAnyRole("MANAGER", "CASHIER")
                         .requestMatchers(HttpMethod.GET, "/receipts", "/receipts/**").hasAnyRole("MANAGER", "CASHIER")
                         .requestMatchers(HttpMethod.POST, "/receipts", "/receipts/**").hasRole("CASHIER")
-                        .requestMatchers(HttpMethod.GET, "/receipts/*/delete").hasRole("MANAGER")
                         .requestMatchers(HttpMethod.GET, "/customers", "/customers/**").hasAnyRole("MANAGER", "CASHIER")
                         .requestMatchers(HttpMethod.POST, "/customers", "/customers/**").hasAnyRole("MANAGER", "CASHIER")
-                        .requestMatchers(HttpMethod.GET, "/customers/*/delete").hasRole("MANAGER")
-                        .requestMatchers(HttpMethod.POST, "/categories", "/categories/*", "/categories/*/delete").hasRole("MANAGER")
-                        .requestMatchers("/categories/new", "/categories/*/edit", "/categories/*/delete").hasRole("MANAGER")
-                        .requestMatchers("/categories").hasAnyRole("MANAGER", "CASHIER")
-                        .requestMatchers("/products").hasAnyRole("MANAGER", "CASHIER")
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form.loginPage("/login").defaultSuccessUrl("/", true).permitAll())

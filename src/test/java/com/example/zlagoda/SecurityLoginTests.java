@@ -96,29 +96,29 @@ class SecurityLoginTests {
 
     @Test
     @WithMockUser(username = "E01", roles = "MANAGER")
-    void managerCanAccessManagerDashboard() throws Exception {
-        mockMvc.perform(get("/manager"))
+    void managerCanAccessReports() throws Exception {
+        mockMvc.perform(get("/reports"))
                 .andExpect(status().isOk());
     }
 
     @Test
     @WithMockUser(username = "E02", roles = "CASHIER")
-    void cashierCannotAccessManagerDashboard() throws Exception {
-        mockMvc.perform(get("/manager"))
+    void cashierCannotAccessReports() throws Exception {
+        mockMvc.perform(get("/reports"))
                 .andExpect(status().isForbidden());
     }
 
     @Test
     @WithMockUser(username = "E02", roles = "CASHIER")
-    void cashierCanAccessCashierDashboard() throws Exception {
-        mockMvc.perform(get("/cashier"))
+    void cashierCanOpenReceiptCreateForm() throws Exception {
+        mockMvc.perform(get("/receipts/new"))
                 .andExpect(status().isOk());
     }
 
     @Test
     @WithMockUser(username = "E01", roles = "MANAGER")
-    void managerCannotAccessCashierDashboard() throws Exception {
-        mockMvc.perform(get("/cashier"))
+    void managerCannotCreateReceipt() throws Exception {
+        mockMvc.perform(post("/receipts/save").with(csrf()))
                 .andExpect(status().isForbidden());
     }
 
@@ -139,10 +139,31 @@ class SecurityLoginTests {
     @Test
     @WithMockUser(username = "E02", roles = "CASHIER")
     void cashierCannotCreateCategory() throws Exception {
-        mockMvc.perform(post("/categories")
+        mockMvc.perform(post("/categories/save")
                         .with(csrf())
-                        .param("category_number", "99")
-                        .param("category_name", "Test category"))
+                        .param("categoryNumber", "99")
+                        .param("categoryName", "Test category"))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    @WithMockUser(username = "E02", roles = "CASHIER")
+    void cashierCannotOpenProductCreateForm() throws Exception {
+        mockMvc.perform(get("/products/new"))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    @WithMockUser(username = "E02", roles = "CASHIER")
+    void cashierCannotDeleteReceipt() throws Exception {
+        mockMvc.perform(get("/receipts/R001/delete"))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    @WithMockUser(username = "E02", roles = "CASHIER")
+    void cashierCannotDeleteCustomerCard() throws Exception {
+        mockMvc.perform(get("/customers/C001/delete"))
                 .andExpect(status().isForbidden());
     }
 }
