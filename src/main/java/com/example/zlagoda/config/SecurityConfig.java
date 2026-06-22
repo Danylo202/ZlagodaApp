@@ -65,9 +65,6 @@ public class SecurityConfig {
         return http
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/css/**", "/js/**", "/images/**", "/img/**", "/fonts/**").permitAll()
-                        .requestMatchers("/manager/**").hasRole("MANAGER")
-                        .requestMatchers("/cashier/**").hasRole("CASHIER")
-                        // Placeholder entity routes (per AIS spec)
                         .requestMatchers("/employees/**").hasRole("MANAGER")
                         .requestMatchers("/store-products/**").hasRole("MANAGER")
                         .requestMatchers("/reports/**").hasRole("MANAGER")
