@@ -6,7 +6,6 @@ import com.example.zlagoda.repository.CategoryRepository;
 import com.example.zlagoda.repository.ProductRepository;
 
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,7 +25,7 @@ public class ProductController {
     }
 
     @GetMapping("/products")
-    public String products(Model model, Authentication authentication) {
+    public String products(Model model) {
         model.addAttribute("products", productRepository.findAll());
         model.addAttribute("categories", categoryRepository.findAll());
         return "products/products";

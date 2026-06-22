@@ -30,39 +30,48 @@
         </div>
 
         <div class="col-12 col-md-6 col-xl-4" sec:authorize="hasAnyRole('MANAGER','CASHIER')">
-            <div class="card zl-card h-100">
+            <a th:href="@{/receipts}" class="card zl-card zl-card-hover text-decoration-none text-dark h-100">
                 <div class="card-body">
-                    <h2 class="h5 text-muted">Чеки</h2>
-                    <p class="text-muted mb-0">Скоро буде доступно.</p>
+                    <h2 class="h5">Чеки</h2>
+                    <p class="text-muted mb-0">Історія продажів та створення чеків.</p>
                 </div>
-            </div>
+            </a>
         </div>
 
         <div class="col-12 col-md-6 col-xl-4" sec:authorize="hasAnyRole('MANAGER','CASHIER')">
-            <div class="card zl-card h-100">
+            <a th:href="@{/customers}" class="card zl-card zl-card-hover text-decoration-none text-dark h-100">
                 <div class="card-body">
-                    <h2 class="h5 text-muted">Клієнти</h2>
-                    <p class="text-muted mb-0">Скоро буде доступно.</p>
+                    <h2 class="h5">Клієнти</h2>
+                    <p class="text-muted mb-0">Карти постійних клієнтів.</p>
                 </div>
-            </div>
+            </a>
         </div>
 
         <div class="col-12 col-md-6 col-xl-4" sec:authorize="hasRole('MANAGER')">
-            <div class="card zl-card h-100">
+            <a th:href="@{/employees}" class="card zl-card zl-card-hover text-decoration-none text-dark h-100">
                 <div class="card-body">
-                    <h2 class="h5 text-muted">Працівники</h2>
-                    <p class="text-muted mb-0">Скоро буде доступно.</p>
+                    <h2 class="h5">Працівники</h2>
+                    <p class="text-muted mb-0">Облік менеджерів та касирів.</p>
                 </div>
-            </div>
+            </a>
         </div>
 
         <div class="col-12 col-md-6 col-xl-4" sec:authorize="hasRole('MANAGER')">
-            <div class="card zl-card h-100">
+            <a th:href="@{/reports}" class="card zl-card zl-card-hover text-decoration-none text-dark h-100">
                 <div class="card-body">
-                    <h2 class="h5 text-muted">Звіти</h2>
-                    <p class="text-muted mb-0">Скоро буде доступно.</p>
+                    <h2 class="h5">Звіти</h2>
+                    <p class="text-muted mb-0">Звіти та запити згідно з вимогами.</p>
                 </div>
-            </div>
+            </a>
+        </div>
+
+        <div class="col-12 col-md-6 col-xl-4" sec:authorize="hasRole('MANAGER')">
+            <a th:href="@{/store-products}" class="card zl-card zl-card-hover text-decoration-none text-dark h-100">
+                <div class="card-body">
+                    <h2 class="h5">Товари у магазині</h2>
+                    <p class="text-muted mb-0">Запаси, ціни, акційні товари.</p>
+                </div>
+            </a>
         </div>
     </div>
 </main>

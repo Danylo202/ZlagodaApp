@@ -24,8 +24,8 @@
             <img th:src="@{/img/zlagoda_logo.png}" alt="Zlagoda">
         </a>
         <div class="nav-meta ms-auto">
-            <span class="role-badge" sec:authorize="hasRole('MANAGER')" th:text="'Менеджер · ' + ${employeeId}">Менеджер · E01</span>
-            <span class="role-badge" sec:authorize="hasRole('CASHIER')" th:text="'Касир · ' + ${employeeId}">Касир · E02</span>
+            <span class="role-badge" sec:authorize="hasRole('MANAGER')" th:text="'Менеджер · ' + ${#authentication.name}">Менеджер · E01</span>
+            <span class="role-badge" sec:authorize="hasRole('CASHIER')" th:text="'Касир · ' + ${#authentication.name}">Касир · E02</span>
             <form th:action="@{/logout}" method="post" class="m-0">
                 <button type="submit" class="btn btn-logout">Вийти</button>
             </form>
