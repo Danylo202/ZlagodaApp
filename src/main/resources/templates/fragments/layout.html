@@ -83,7 +83,7 @@
      Params: status (big number/text), title, message, showHome (bool, default true) -->
 <div class="card zl-card text-center" th:fragment="error-card(status, title, message)">
     <div class="card-body p-5">
-        <div class="zl-403 mb-2" th:text="${status}">404</div>
+        <div class="zl-error-code mb-2" th:text="${status}">404</div>
         <h1 class="h3 mb-3" th:text="${title}">Заголовок</h1>
         <p class="text-muted mb-4" th:text="${message}">Повідомлення.</p>
         <div class="d-flex justify-content-center gap-2">
@@ -127,4 +127,11 @@
             </div>
         </div>
     </div>
+</div>
+
+<!-- ============ Form actions (Save + Cancel button row) ============
+     Params: saveLabel (button text), cancelUrl (link), disabled (bool, optional) -->
+<div class="d-flex gap-2 mt-4" th:fragment="form-actions(saveLabel, cancelUrl, disabled)">
+    <button type="submit" class="btn btn-primary" th:text="${saveLabel}" th:disabled="${disabled}">Зберегти</button>
+    <a th:href="${cancelUrl}" class="btn btn-outline-secondary">Скасувати</a>
 </div>

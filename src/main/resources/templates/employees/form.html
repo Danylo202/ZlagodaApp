@@ -28,10 +28,7 @@
                             <div class="col-md-6"><label class="form-label">Телефон</label><input class="form-control" disabled placeholder="+380..."></div>
                             <div class="col-12"><label class="form-label">Адреса</label><input class="form-control" disabled placeholder="Місто, вулиця, індекс"></div>
                         </div>
-                        <div class="d-flex gap-2 mt-4">
-                            <button class="btn btn-primary" disabled>Зберегти</button>
-                            <a th:href="@{/employees}" class="btn btn-outline-secondary">Скасувати</a>
-                        </div>
+                        <div th:replace="~{fragments/layout :: form-actions('Зберегти', @{/employees}, true)}"></div>
                     </form>
                 </div>
             </div>

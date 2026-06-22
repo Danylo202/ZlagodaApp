@@ -54,7 +54,6 @@
   --zl-ink: #15201a;
   --zl-muted: #6b7780;
   --zl-line: #eef2ee;
-  --zl-indigo: #4f5bd5;
   --zl-warn: #f5a623;
   --zl-danger: #e5484d;
 
@@ -75,7 +74,7 @@ body {
   color: var(--zl-ink);
   -webkit-font-smoothing: antialiased;
 }
-h1, h2, h3, h4, h5, h6, .zl-heading {
+h1, h2, h3, h4, h5, h6 {
   font-family: 'Comfortaa', 'Manrope', sans-serif;
   color: var(--zl-ink);
   letter-spacing: -0.01em;
@@ -105,7 +104,6 @@ h1, h2, h3, h4, h5, h6, .zl-heading {
   color: var(--zl-ink);
   font-size: 0.9rem;
 }
-.zl-navbar .nav-meta strong { color: var(--zl-brand); }
 .zl-navbar .role-badge {
   font-size: 0.78rem;
   font-weight: 700;
@@ -195,8 +193,7 @@ h1, h2, h3, h4, h5, h6, .zl-heading {
 
 /* ---------- Buttons ---------- */
 .btn { border-radius: 10px; font-weight: 600; font-family: 'Manrope'; }
-.btn-primary,
-.btn-success {
+.btn-primary {
   --bs-btn-bg: var(--zl-brand);
   --bs-btn-border-color: var(--zl-brand);
   --bs-btn-hover-bg: var(--zl-brand-dark);
@@ -253,7 +250,6 @@ h1, h2, h3, h4, h5, h6, .zl-heading {
 /* ---------- Tables ---------- */
 .zl-table {
   --bs-table-bg: var(--zl-surface);
-  --bs-table-striped-bg: #fafdfa;
   --bs-table-hover-bg: #f7fbf6;
 }
 .zl-table thead th {
@@ -303,7 +299,7 @@ h1, h2, h3, h4, h5, h6, .zl-heading {
   padding: 2.5rem 1rem;
 }
 
-.zl-403 {
+.zl-error-code {
   font-family: 'Comfortaa';
   font-weight: 700;
   font-size: 5rem;
@@ -348,7 +344,7 @@ h1, h2, h3, h4, h5, h6, .zl-heading {
   padding: 1rem 1.25rem;
   gap: 0.5rem;
 }
-.zl-modal .modal-backdrop.show { opacity: 0.4; }
+.modal-backdrop.show { opacity: 0.4; }
 
 /* ---------- Login page ---------- */
 .zl-login-body { min-height: 100vh; }

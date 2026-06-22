@@ -50,13 +50,7 @@
                                       placeholder="Опис товару..."></textarea>
                         </div>
 
-                        <div class="d-flex gap-2 mt-4">
-                            <button type="submit" class="btn btn-primary"
-                                    th:text="${mode == 'create' ? 'Додати товар' : 'Зберегти зміни'}">
-                                Дія
-                            </button>
-                            <a th:href="@{/products}" class="btn btn-outline-secondary">Скасувати</a>
-                        </div>
+                        <div th:replace="~{fragments/layout :: form-actions(${mode == 'create' ? 'Додати товар' : 'Зберегти зміни'}, @{/products})}"></div>
                     </form>
                 </div>
             </div>
