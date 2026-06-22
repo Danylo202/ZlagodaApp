@@ -84,9 +84,10 @@ h1, h2, h3, h4, h5, h6, .zl-heading {
 
 /* ---------- Navbar ---------- */
 .zl-navbar {
-  background: var(--zl-surface);
-  border-bottom: 2px solid var(--zl-brand);
-  box-shadow: 0 1px 0 rgba(20, 40, 30, 0.02);
+  background: #f4fbf1;
+  border-bottom: 1px solid #d7ecd2;
+  border-radius: 0 0 16px 16px;
+  box-shadow: 0 2px 12px rgba(20, 80, 40, 0.06);
 }
 .zl-navbar .navbar-brand {
   font-family: 'Comfortaa', sans-serif;

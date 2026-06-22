@@ -4,45 +4,51 @@
 <body>
 <nav th:replace="~{fragments/layout :: navbar}"></nav>
 
-<main class="zl-main container">
-    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
-        <div class="zl-title mb-0">
-            <h1>Категорії товарів</h1>
-            <p>Перегляд доступний менеджеру і касиру. Зміни — лише менеджеру.</p>
-        </div>
-        <a sec:authorize="hasRole('MANAGER')" th:href="@{/categories/new}" class="btn btn-primary">Додати категорію</a>
+<main class="zl-main container-fluid">
+    <div class="zl-layout">
+        <div th:replace="~{fragments/layout :: sidebar('categories')}"></div>
+
+        <section>
+            <div class="card zl-card">
+                <div class="card-body">
+                    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+                        <div class="zl-title mb-0">
+                            <h1>Категорії товарів</h1>
+                            <p>Перегляд доступний менеджеру і касиру. Зміни — лише менеджеру.</p>
+                        </div>
+                        <a sec:authorize="hasRole('MANAGER')" th:href="@{/categories/new}" class="btn btn-primary">Додати категорію</a>
+                    </div>
+
+                    <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
+
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0 zl-table">
+                            <thead>
+                            <tr>
+                                <th>Назва</th>
+                                <th sec:authorize="hasRole('MANAGER')" class="text-end" style="width: 220px;">Дії</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="cat : ${categories}">
+                                <td th:text="${cat.categoryName}">Назва</td>
+                                <td sec:authorize="hasRole('MANAGER')" class="text-end">
+                                    <a th:href="@{/categories/{id}/edit(id=${cat.categoryNumber})}" class="btn btn-warning btn-sm">Редагувати</a>
+                                    <form th:action="@{/categories/{id}/delete(id=${cat.categoryNumber})}" method="get" class="d-inline">
+                                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Видалити цю категорію?')">Видалити</button>
+                                    </form>
+                                </td>
+                            </tr>
+                            <tr th:if="${#lists.isEmpty(categories)}">
+                                <td colspan="3" class="zl-empty">Категорій не знайдено</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
     </div>
-
-    <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
-
-    <div class="card zl-card">
-        <div class="table-responsive">
-            <table class="table table-hover align-middle mb-0 zl-table">
-                <thead>
-                <tr>
-                    <th>Назва</th>
-                    <th sec:authorize="hasRole('MANAGER')" class="text-end" style="width: 220px;">Дії</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:each="cat : ${categories}">
-                    <td th:text="${cat.categoryName}">Назва</td>
-                    <td sec:authorize="hasRole('MANAGER')" class="text-end">
-                        <a th:href="@{/categories/{id}/edit(id=${cat.categoryNumber})}" class="btn btn-warning btn-sm">Редагувати</a>
-                        <form th:action="@{/categories/{id}/delete(id=${cat.categoryNumber})}" method="get" class="d-inline">
-                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Видалити цю категорію?')">Видалити</button>
-                        </form>
-                    </td>
-                </tr>
-                <tr th:if="${#lists.isEmpty(categories)}">
-                    <td colspan="3" class="zl-empty">Категорій не знайдено</td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
-
-    <a th:href="@{/}" class="btn btn-outline-secondary mt-3">Назад на панель</a>
 </main>
 </body>
 </html>
