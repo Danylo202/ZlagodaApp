@@ -73,7 +73,7 @@ public class SecurityConfig {
                         .requestMatchers("/products").hasAnyRole("MANAGER", "CASHIER")
                         .anyRequest().authenticated()
                 )
-                .formLogin(form -> form.defaultSuccessUrl("/", true).permitAll())
+                .formLogin(form -> form.loginPage("/login").defaultSuccessUrl("/", true).permitAll())
                 .logout(logout -> logout.permitAll())
                 .build();
     }

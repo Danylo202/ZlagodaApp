@@ -2,24 +2,12 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{fragments/layout :: head('ZLAGODA - Немає доступу')}"></head>
 <body>
-<nav th:replace="~{fragments/layout :: navbar}"></nav>
+<nav th:replace="~{fragments/layout :: navbar-brand-only}"></nav>
 
 <main class="zl-main container">
     <div class="row justify-content-center">
         <div class="col-md-8">
-            <div class="card zl-card text-center">
-                <div class="card-body p-5">
-                    <div class="zl-403 mb-2">403</div>
-                    <h1 class="h3 mb-3">Немає доступу</h1>
-                    <p class="text-muted mb-4">
-                        У вашої ролі немає прав для перегляду цієї сторінки.
-                    </p>
-                    <div class="d-flex justify-content-center gap-2">
-                        <a th:href="@{/}" class="btn btn-primary">На головну панель</a>
-                        <button type="button" class="btn btn-outline-secondary" onclick="history.back()">Назад</button>
-                    </div>
-                </div>
-            </div>
+            <div th:replace="~{fragments/layout :: error-card('403', 'Немає доступу', 'У вашої ролі немає прав для перегляду цієї сторінки.')}"></div>
         </div>
     </div>
 </main>

@@ -84,10 +84,10 @@ h1, h2, h3, h4, h5, h6, .zl-heading {
 
 /* ---------- Navbar ---------- */
 .zl-navbar {
-  background: #f4fbf1;
-  border-bottom: 1px solid #d7ecd2;
+  background: #fafdf8;
+  border-bottom: 1px solid #e9f3e8;
   border-radius: 0 0 16px 16px;
-  box-shadow: 0 2px 12px rgba(20, 80, 40, 0.06);
+  box-shadow: 0 2px 10px rgba(20, 80, 40, 0.04);
 }
 .zl-navbar .navbar-brand {
   font-family: 'Comfortaa', sans-serif;
@@ -309,3 +309,32 @@ h1, h2, h3, h4, h5, h6, .zl-heading {
   color: var(--zl-danger);
   line-height: 1;
 }
+
+/* ---------- Login page ---------- */
+.zl-login-body { min-height: 100vh; }
+.zl-login-main {
+  min-height: calc(100vh - 73px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1rem;
+}
+.zl-login-card {
+  width: 100%;
+  max-width: 420px;
+  background: var(--zl-surface);
+  border: 1px solid var(--zl-line);
+  border-radius: 18px;
+  box-shadow: 0 8px 30px rgba(20, 80, 40, 0.08);
+  padding: 2.5rem 2.25rem;
+  text-align: center;
+}
+.zl-login-logo { height: 52px; margin-bottom: 1rem; }
+.zl-login-title {
+  font-size: 1.4rem;
+  margin: 0 0 4px;
+}
+.zl-login-sub { color: var(--zl-muted); margin: 0 0 1.5rem; font-size: 0.92rem; }
+.zl-login-form { text-align: left; }
+.zl-login-form .form-label { font-size: 0.85rem; }
+.zl-login-form .btn-primary { padding: 0.6rem 1rem; font-size: 0.95rem; margin-top: 0.5rem; }

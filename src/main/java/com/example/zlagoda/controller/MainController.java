@@ -16,4 +16,9 @@ public class MainController {
         }
         return "redirect:/cashier";
     }
+
+    @GetMapping("/login")
+    public String login() {
+        return "login";
+    }
 }

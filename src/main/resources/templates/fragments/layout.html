@@ -62,3 +62,26 @@
         <a th:href="${backUrl}" class="btn btn-logout" th:text="${backLabel}">Назад</a>
     </div>
 </nav>
+
+<!-- ============ Logo-only navbar (login / error pages, no logged-in user) ============ -->
+<nav class="navbar zl-navbar" th:fragment="navbar-brand-only">
+    <div class="container-fluid">
+        <a class="navbar-brand" th:href="@{/}">
+            <img th:src="@{/img/zlagoda_logo.png}" alt="Zlagoda">
+        </a>
+    </div>
+</nav>
+
+<!-- ============ Error card (DRY: used by 403, 404, 500, generic) ============
+     Params: status (big number/text), title, message, showHome (bool, default true) -->
+<div class="card zl-card text-center" th:fragment="error-card(status, title, message)">
+    <div class="card-body p-5">
+        <div class="zl-403 mb-2" th:text="${status}">404</div>
+        <h1 class="h3 mb-3" th:text="${title}">Заголовок</h1>
+        <p class="text-muted mb-4" th:text="${message}">Повідомлення.</p>
+        <div class="d-flex justify-content-center gap-2">
+            <a th:href="@{/}" class="btn btn-primary">На головну панель</a>
+            <button type="button" class="btn btn-outline-secondary" onclick="history.back()">Назад</button>
+        </div>
+    </div>
+</div>
