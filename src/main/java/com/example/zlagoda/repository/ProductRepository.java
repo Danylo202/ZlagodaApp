@@ -22,9 +22,24 @@ public class ProductRepository {
                 SELECT id_product, category_number, c.category_name, product_name, producer, characteristics
                 FROM Product
                 INNER JOIN Category AS c ON Product.category_number = c.category_number
-                ORDER BY c.category_name ASC
+                ORDER BY Product.product_name ASC
                 """;
         return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Product.class));
+    }
+
+    public List<Product> search(String query) {
+        String sql = """
+                SELECT id_product, P.category_number, C.category_name, product_name, producer, characteristics
+                FROM Product AS P
+                INNER JOIN Category AS C ON P.category_number = C.category_number
+                WHERE LOWER(P.product_name) LIKE LOWER(?)
+                   OR LOWER(P.producer) LIKE LOWER(?)
+                   OR LOWER(P.characteristics) LIKE LOWER(?)
+                   OR LOWER(C.category_name) LIKE LOWER(?)
+                ORDER BY P.product_name ASC
+                """;
+        String pattern = "%" + query + "%";
+        return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Product.class), pattern, pattern, pattern, pattern);
     }
 
     public Product findById(Integer id) {
@@ -74,7 +89,7 @@ public class ProductRepository {
                 """;
         
         return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Product.class), "%" + categoryName + "%");
-}
+    }
 
     public void delete(Integer id) {
         jdbcTemplate.update("DELETE FROM Product WHERE id_product = ?", id);

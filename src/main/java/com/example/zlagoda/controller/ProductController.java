@@ -79,18 +79,26 @@ public class ProductController {
     }
 
     @GetMapping("/products")
-    public String list(@RequestParam(required = false) String catName, Model model, Authentication authentication) {
+    public String list(@RequestParam(required = false) String q,
+                       @RequestParam(required = false) String catName,
+                       Model model,
+                       Authentication authentication) {
         List<Product> products;
 
-        if (catName != null && !catName.trim().isEmpty()) {
-            products = productRepository.findByCategoryName(catName);
-        } 
+        if (q != null && !q.trim().isEmpty()) {
+            products = productRepository.search(q.trim());
+        }
+        else if (catName != null && !catName.trim().isEmpty()) {
+            products = productRepository.findByCategoryName(catName.trim());
+        }
         else {
             products = productRepository.findAll();
         }
 
         model.addAttribute("products", products);
         model.addAttribute("categories", categoryRepository.findAll());
+        model.addAttribute("q", q);
+        model.addAttribute("catName", catName);
         return "products/products";
     }
 }
