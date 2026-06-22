@@ -15,7 +15,26 @@ public class CategoryRepository {
     }
 
     public List<Category> findAll() {
-        String sql = "SELECT category_number, category_name FROM Category";
+        String sql = "SELECT category_number, category_name FROM Category ORDER BY category_name";
         return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Category.class));
+    }
+
+    public Category findById(Integer id) {
+        String sql = "SELECT category_number, category_name FROM Category WHERE category_number = ?";
+        return jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<>(Category.class), id);
+    }
+
+    public void save(Category category) {
+        String sql = "INSERT INTO Category (category_number, category_name) VALUES (?, ?)";
+        jdbcTemplate.update(sql, category.getCategory_number(), category.getCategory_name());
+    }
+
+    public void update(Category category) {
+        String sql = "UPDATE Category SET category_name = ? WHERE category_number = ?";
+        jdbcTemplate.update(sql, category.getCategory_name(), category.getCategory_number());
+    }
+
+    public void deleteById(Integer id) {
+        jdbcTemplate.update("DELETE FROM Category WHERE category_number = ?", id);
     }
 }

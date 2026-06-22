@@ -3,6 +3,7 @@ package com.example.zlagoda.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.http.HttpMethod;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -64,9 +65,15 @@ public class SecurityConfig {
         return http
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/css/**", "/js/**", "/images/**").permitAll()
+                        .requestMatchers("/manager/**").hasRole("MANAGER")
+                        .requestMatchers("/cashier/**").hasRole("CASHIER")
+                        .requestMatchers(HttpMethod.POST, "/categories", "/categories/*", "/categories/*/delete").hasRole("MANAGER")
+                        .requestMatchers("/categories/new", "/categories/*/edit", "/categories/*/delete").hasRole("MANAGER")
+                        .requestMatchers("/categories").hasAnyRole("MANAGER", "CASHIER")
+                        .requestMatchers("/products").hasAnyRole("MANAGER", "CASHIER")
                         .anyRequest().authenticated()
                 )
-                .formLogin(form -> form.permitAll())
+                .formLogin(form -> form.defaultSuccessUrl("/", true).permitAll())
                 .logout(logout -> logout.permitAll())
                 .build();
     }
