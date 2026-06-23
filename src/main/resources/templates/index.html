@@ -12,7 +12,7 @@
 
     <div class="row g-3">
         <div class="col-12 col-md-6 col-xl-4" sec:authorize="hasRole('CASHIER')">
-            <a th:href="@{/receipts/new}" class="card zl-card zl-card-hover text-decoration-none text-dark h-100">
+            <a th:href="@{/checks/new}" class="card zl-card zl-card-hover text-decoration-none text-dark h-100">
                 <div class="card-body">
                     <h2 class="h5">Новий чек</h2>
                     <p class="text-muted mb-0">Оформлення продажу товарів.</p>
@@ -39,7 +39,7 @@
         </div>
 
         <div class="col-12 col-md-6 col-xl-4" sec:authorize="hasAnyRole('MANAGER','CASHIER')">
-            <a th:href="@{/receipts}" class="card zl-card zl-card-hover text-decoration-none text-dark h-100">
+            <a th:href="@{/checks}" class="card zl-card zl-card-hover text-decoration-none text-dark h-100">
                 <div class="card-body">
                     <h2 class="h5">Чеки</h2>
                     <p class="text-muted mb-0">Історія продажів та створення чеків.</p>

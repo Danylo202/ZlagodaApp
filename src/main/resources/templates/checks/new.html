@@ -12,20 +12,34 @@
                 <div class="card-body">
                     <div class="zl-title">
                         <h1>Новий чек</h1>
-                        <p>Додайте товари та їх кількість для оформлення продажу.</p>
+                        <p>Створення запису чеку. ПДВ має становити 20% від загальної суми.</p>
                     </div>
 
-                    <div th:replace="~{fragments/layout :: placeholder-banner('Можливість обрати клієнтську карту для знижки. ПДВ нараховується на всі товари (20%).')}"></div>
+                    <div th:if="${error}" class="alert alert-danger" th:text="${error}">Помилка</div>
 
-                    <form>
-                        <div class="mb-3"><label class="form-label">Карта клієнта (необов'язково)</label><select class="form-select" disabled><option>Без карти</option></select></div>
-                        <div class="table-responsive mb-3">
-                            <table class="table zl-table">
-                                <thead><tr><th>UPC / Товар</th><th>Ціна</th><th>К-сть</th><th>Сума</th></tr></thead>
-                                <tbody><tr><td colspan="4" class="zl-empty">Товари з'являться після реалізації</td></tr></tbody>
-                            </table>
+                    <form th:object="${check}" th:action="@{/checks/save}" method="post">
+                        <input type="hidden" th:field="*{idEmployee}">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label for="cardNumber" class="form-label">Карта клієнта (необов'язково)</label>
+                                <input id="cardNumber" th:field="*{cardNumber}" type="text" maxlength="13" class="form-control">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="printDate" class="form-label zl-required">Дата друку</label>
+                                <input id="printDate" th:field="*{printDate}" type="date" class="form-control" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="sumTotal" class="form-label zl-required">Загальна сума</label>
+                                <input id="sumTotal" th:field="*{sumTotal}" type="number" min="0" step="0.01" class="form-control" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="vat" class="form-label zl-required">ПДВ</label>
+                                <input id="vat" th:field="*{vat}" type="number" min="0" step="0.01" class="form-control" required>
+                                <div class="form-text">Наприклад, для суми 100.00 ПДВ = 20.00.</div>
+                            </div>
                         </div>
-                        <div th:replace="~{fragments/layout :: form-actions('Оформити чек', @{/checks}, true)}"></div>
+
+                        <div th:replace="~{fragments/layout :: form-actions('Оформити чек', @{/checks}, false)}"></div>
                     </form>
                 </div>
             </div>

@@ -29,11 +29,8 @@ public class Check {
     }
 
     public boolean isValid() {
-        if(this.vat == this.sumTotal/5) {
-            return true;
-        }
-        else {
-            return false;
-        }
+        return sumTotal != null
+                && vat != null
+                && Math.abs(vat - (sumTotal * 0.2)) < 0.01;
     }
 }

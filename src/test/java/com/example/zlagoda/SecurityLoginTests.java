@@ -173,14 +173,14 @@ class SecurityLoginTests {
     @Test
     @WithMockUser(username = "E01", roles = "MANAGER")
     void managerCannotOpenReceiptCreateForm() throws Exception {
-        mockMvc.perform(get("/receipts/new"))
+        mockMvc.perform(get("/checks/new"))
                 .andExpect(status().isForbidden());
     }
 
     @Test
     @WithMockUser(username = "E02", roles = "CASHIER")
     void cashierCanOpenReceiptCreateForm() throws Exception {
-        mockMvc.perform(get("/receipts/new"))
+        mockMvc.perform(get("/checks/new"))
                 .andExpect(status().isOk());
     }
 }

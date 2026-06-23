@@ -71,10 +71,10 @@ public class SecurityConfig {
                         .requestMatchers("/employees/**").hasRole("MANAGER")
                         .requestMatchers("/reports/**").hasRole("MANAGER")
 
-                        .requestMatchers(HttpMethod.GET, "/receipts/new").hasRole("CASHIER")
-                        .requestMatchers(HttpMethod.GET, "/receipts/*/delete").hasRole("MANAGER")
-                        .requestMatchers(HttpMethod.GET, "/receipts", "/receipts/**").hasAnyRole("MANAGER", "CASHIER")
-                        .requestMatchers(HttpMethod.POST, "/receipts", "/receipts/**").hasRole("CASHIER")
+                        .requestMatchers(HttpMethod.GET, "/checks/new").hasRole("CASHIER")
+                        .requestMatchers(HttpMethod.GET, "/checks/*/delete").hasRole("MANAGER")
+                        .requestMatchers(HttpMethod.GET, "/checks", "/checks/**").hasAnyRole("MANAGER", "CASHIER")
+                        .requestMatchers(HttpMethod.POST, "/checks", "/checks/**").hasRole("CASHIER")
 
                         .requestMatchers(HttpMethod.GET, "/customers/*/delete").hasRole("MANAGER")
                         .requestMatchers(HttpMethod.GET, "/customers", "/customers/**").hasAnyRole("MANAGER", "CASHIER")
