@@ -65,6 +65,8 @@ public class SecurityConfig {
         return http
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/css/**", "/js/**", "/images/**", "/img/**", "/fonts/**").permitAll()
+                        .requestMatchers("/login", "/error").permitAll()
+                        .requestMatchers("/employees/me").hasAnyRole("MANAGER", "CASHIER")
                         .requestMatchers("/employees/**").hasRole("MANAGER")
                         .requestMatchers("/store-products/**").hasRole("MANAGER")
                         .requestMatchers("/reports/**").hasRole("MANAGER")
@@ -80,7 +82,10 @@ public class SecurityConfig {
                         .requestMatchers("/products").hasAnyRole("MANAGER", "CASHIER")
                         .anyRequest().authenticated()
                 )
-                .formLogin(form -> form.loginPage("/login").defaultSuccessUrl("/", true).permitAll())
+                .formLogin(form -> form
+                        .loginPage("/login")
+                        .successHandler((request, response, authentication) -> response.sendRedirect(request.getContextPath() + "/"))
+                        .permitAll())
                 .logout(logout -> logout.permitAll())
                 .build();
     }
