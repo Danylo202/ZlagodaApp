@@ -74,7 +74,7 @@
             </a>
         </div>
 
-        <div class="col-12 col-md-6 col-xl-4" sec:authorize="hasRole('MANAGER')">
+        <div class="col-12 col-md-6 col-xl-4" sec:authorize="hasAnyRole('MANAGER','CASHIER')">
             <a th:href="@{/store-products}" class="card zl-card zl-card-hover text-decoration-none text-dark h-100">
                 <div class="card-body">
                     <h2 class="h5">Товари у магазині</h2>

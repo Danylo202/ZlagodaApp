@@ -16,10 +16,9 @@
                             <h1>Товари у магазині</h1>
                             <p>Запаси товарів: UPC, ціна, кількість, акційний/звичайний.</p>
                         </div>
-                        <a th:href="@{/store-products/new}" class="btn btn-primary">Додати товар у магазині</a>
+                        <a sec:authorize="hasRole('MANAGER')" th:href="@{/store-products/new}" class="btn btn-primary">Додати товар у магазині</a>
                     </div>
 
-                    <div th:replace="~{fragments/layout :: placeholder-banner('Поля: UPC, ціна продажу (з ПДВ), кількість, акційний товар. Акційна ціна = ціна × 0,8.')}"></div>
 
                     <form th:action="@{/store-products}" method="get" class="row g-3 mb-4 p-3 bg-white shadow-sm rounded">
                         <div class="col-md-3">
@@ -59,7 +58,7 @@
                                 <th>Ціна</th>
                                 <th>К-сть</th>
                                 <th>Тип</th>
-                                <th class="text-end">Дії</th>
+                                <th sec:authorize="hasRole('MANAGER')" class="text-end">Дії</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -74,15 +73,16 @@
                                         <span th:if="${sp.promotionalProduct}" class="badge bg-danger">Акція</span>
                                         <span th:unless="${sp.promotionalProduct}" class="badge bg-secondary">Звичайний</span>
                                     </td>
-                                    <td sec:authorize="hasRole('MANAGER')">
+                                    <td sec:authorize="hasRole('MANAGER')" class="text-end">
                                         <div class="btn-group">
                                             <a th:href="@{'/store-products/edit/' + ${sp.UPC}}"
-                                            class="btn btn-sm btn-warning">Редагувати</a>
-                                            <a th:href="@{'/store-products/delete/' + ${sp.UPC}}"
-                                            class="btn btn-sm btn-danger"
-                                            data-zl-confirm="Ви впевнені, що хочете видалити цей товар?"
-                                            data-zl-confirm-title="Видалити товар"
-                                            data-zl-confirm-ok="Видалити">Видалити</a>
+                                               class="btn btn-sm btn-warning">Редагувати</a>
+                                            <form th:action="@{/store-products/delete/{upc}(upc=${sp.UPC})}" method="post" class="d-inline">
+                                                <button type="submit" class="btn btn-sm btn-danger"
+                                                        data-zl-confirm="Ви впевнені, що хочете видалити цей товар?"
+                                                        data-zl-confirm-title="Видалити товар"
+                                                        data-zl-confirm-ok="Видалити">Видалити</button>
+                                            </form>
                                         </div>
                                     </td>
                                 </tr>
@@ -94,5 +94,6 @@
         </section>
     </div>
 </main>
+<div th:replace="~{fragments/layout :: confirm-modal}"></div>
 </body>
 </html>
