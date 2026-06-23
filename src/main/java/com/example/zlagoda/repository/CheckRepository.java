@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.stereotype.Repository;
 
 import com.example.zlagoda.model.Check;
 import com.example.zlagoda.model.StoreProduct;
@@ -13,6 +14,7 @@ import com.example.zlagoda.model.StoreProduct;
 import java.sql.Date;
 import java.time.LocalDate;
 
+@Repository
 public class CheckRepository {
     private final JdbcTemplate jdbcTemplate;
 
