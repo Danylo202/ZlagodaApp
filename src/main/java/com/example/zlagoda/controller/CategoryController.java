@@ -2,6 +2,7 @@ package com.example.zlagoda.controller;
 
 import com.example.zlagoda.model.Category;
 import com.example.zlagoda.model.Product;
+import com.example.zlagoda.model.StoreProduct;
 import com.example.zlagoda.repository.CategoryRepository;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -37,16 +38,31 @@ public class CategoryController {
 
     @PostMapping("/categories/save")
     public String saveProduct(@ModelAttribute Category category, RedirectAttributes redirectAttributes) {
-        Integer ex = categoryRepository.findByName(category.getCategoryName());
-        if(ex==null) {
-            categoryRepository.save(category);
-            redirectAttributes.addFlashAttribute("success", "Категорію додано.");
-            return "redirect:/categories";
+        if(category.getCategoryNumber() != null) {
+            Integer ex = categoryRepository.findByName(category.getCategoryName());
+            if(ex==null) {
+                categoryRepository.update(category);
+                redirectAttributes.addFlashAttribute("success", "Категорію оновлено.");
+                return "redirect:/categories";
+            }
+            else {
+                redirectAttributes.addFlashAttribute("error", 
+                "Категорія з назвою '" + category.getCategoryName() + "' вже існує!");
+                return "redirect:/categories/new";
+            }
         }
         else {
-            redirectAttributes.addFlashAttribute("error", 
-            "Категорія з назвою '" + category.getCategoryName() + "' вже існує!");
-            return "redirect:/categories/new";
+            Integer ex = categoryRepository.findByName(category.getCategoryName());
+            if(ex==null) {
+                categoryRepository.save(category);
+                redirectAttributes.addFlashAttribute("success", "Категорію додано.");
+                return "redirect:/categories";
+            }
+            else {
+                redirectAttributes.addFlashAttribute("error", 
+                "Категорія з назвою '" + category.getCategoryName() + "' вже існує!");
+                return "redirect:/categories/new";
+            }
         }
     }
 
@@ -56,6 +72,12 @@ public class CategoryController {
         model.addAttribute("employeeId", authentication.getName());
         model.addAttribute("mode", "edit");
         return "categories/form";
+    }
+
+    @PostMapping("/categories/update")
+    public String update(@ModelAttribute Category c) {
+        categoryRepository.update(c);
+        return "redirect:/categories";
     }
 
     @GetMapping("/categories/{id}/delete")
