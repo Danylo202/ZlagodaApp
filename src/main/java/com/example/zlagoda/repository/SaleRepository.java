@@ -51,4 +51,8 @@ public class SaleRepository {
                 """;
         return jdbcTemplate.queryForObject(sql, Integer.class, productId, java.sql.Date.valueOf(date1), java.sql.Date.valueOf(date2));
     }
+
+    public void deleteByCheckNumber(Integer checkNumber) {
+        jdbcTemplate.update("DELETE FROM Sale WHERE check_number = ?", checkNumber);
+    }
 }

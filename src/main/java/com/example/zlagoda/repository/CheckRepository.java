@@ -12,6 +12,7 @@ import com.example.zlagoda.model.Check;
 import com.example.zlagoda.model.StoreProduct;
 
 import java.sql.Date;
+import java.sql.Types;
 import java.time.LocalDate;
 
 @Repository
@@ -47,7 +48,11 @@ public class CheckRepository {
         jdbcTemplate.update(connection -> {
             var ps = connection.prepareStatement(sql, new String[]{"check_number"});
             ps.setString(1, ch.getIdEmployee());
-            ps.setString(2, ch.getCardNumber());
+            if (ch.getCardNumber() == null || ch.getCardNumber().isBlank()) {
+                ps.setNull(2, Types.VARCHAR);
+            } else {
+                ps.setString(2, ch.getCardNumber());
+            }
             ps.setDate(3, java.sql.Date.valueOf(ch.getPrintDate()));
             ps.setDouble(4, ch.getSumTotal());
             ps.setDouble(5, ch.getVat());

@@ -6,37 +6,66 @@
 
 <main class="zl-main container">
     <div class="row justify-content-center">
-        <div class="col-md-8">
+        <div class="col-lg-10">
             <div class="card zl-card">
                 <div class="card-header">Продаж товарів</div>
                 <div class="card-body">
                     <div class="zl-title">
                         <h1>Новий чек</h1>
-                        <p>Створення запису чеку. ПДВ має становити 20% від загальної суми.</p>
+                        <p>Оберіть клієнтську карту (необов’язково) та введіть кількість проданих товарів. Сума та ПДВ розраховуються автоматично.</p>
                     </div>
 
                     <div th:if="${error}" class="alert alert-danger" th:text="${error}">Помилка</div>
 
-                    <form th:object="${check}" th:action="@{/checks/save}" method="post">
-                        <input type="hidden" th:field="*{idEmployee}">
-                        <div class="row g-3">
-                            <div class="col-md-6">
-                                <label for="cardNumber" class="form-label">Карта клієнта (необов'язково)</label>
-                                <input id="cardNumber" th:field="*{cardNumber}" type="text" maxlength="13" class="form-control">
-                            </div>
-                            <div class="col-md-6">
-                                <label for="printDate" class="form-label zl-required">Дата друку</label>
-                                <input id="printDate" th:field="*{printDate}" type="date" class="form-control" required>
-                            </div>
-                            <div class="col-md-6">
-                                <label for="sumTotal" class="form-label zl-required">Загальна сума</label>
-                                <input id="sumTotal" th:field="*{sumTotal}" type="number" min="0" step="0.01" class="form-control" required>
-                            </div>
-                            <div class="col-md-6">
-                                <label for="vat" class="form-label zl-required">ПДВ</label>
-                                <input id="vat" th:field="*{vat}" type="number" min="0" step="0.01" class="form-control" required>
-                                <div class="form-text">Наприклад, для суми 100.00 ПДВ = 20.00.</div>
-                            </div>
+                    <form th:action="@{/checks/save}" method="post">
+                        <div class="mb-3">
+                            <label for="cardNumber" class="form-label">Карта клієнта (необов'язково)</label>
+                            <select id="cardNumber" name="cardNumber" class="form-select">
+                                <option value="">Без карти</option>
+                                <option th:each="customer : ${customers}"
+                                        th:value="${customer.cardNumber}"
+                                        th:text="${customer.cardNumber + ' · ' + customer.custSurname + ' ' + customer.custName + ' · ' + customer.percent + '%'}">
+                                    C001 · Клієнт · 0%
+                                </option>
+                            </select>
+                        </div>
+
+                        <div class="table-responsive mb-3">
+                            <table class="table zl-table align-middle">
+                                <thead>
+                                <tr>
+                                    <th>UPC</th>
+                                    <th>Товар</th>
+                                    <th>Ціна</th>
+                                    <th>Доступно</th>
+                                    <th style="width: 160px;">К-сть</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="sp : ${storeProducts}">
+                                    <td>
+                                        <span th:text="${sp.UPC}">UPC</span>
+                                        <input type="hidden" name="upc" th:value="${sp.UPC}">
+                                    </td>
+                                    <td>
+                                        <strong th:text="${sp.productName}">Назва</strong>
+                                        <span th:if="${sp.promotionalProduct}" class="badge bg-danger ms-1">Акція</span>
+                                    </td>
+                                    <td th:text="${sp.sellingPrice}">0.00</td>
+                                    <td th:text="${sp.productsNumber}">0</td>
+                                    <td>
+                                        <input name="quantity" type="number" min="0" th:max="${sp.productsNumber}" value="0" class="form-control">
+                                    </td>
+                                </tr>
+                                <tr th:if="${#lists.isEmpty(storeProducts)}">
+                                    <td colspan="5" class="zl-empty">Немає товарів у магазині</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="alert alert-info mb-0">
+                            ПДВ становить 20% від фінальної суми чеку та буде показаний після оформлення.
                         </div>
 
                         <div th:replace="~{fragments/layout :: form-actions('Оформити чек', @{/checks}, false)}"></div>
