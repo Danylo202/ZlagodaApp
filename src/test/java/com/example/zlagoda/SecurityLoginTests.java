@@ -145,4 +145,42 @@ class SecurityLoginTests {
                         .param("category_name", "Test category"))
                 .andExpect(status().isForbidden());
     }
+
+    @Test
+    @WithMockUser(username = "E02", roles = "CASHIER")
+    void cashierCannotSaveCategory() throws Exception {
+        mockMvc.perform(post("/categories/save")
+                        .with(csrf())
+                        .param("categoryNumber", "99")
+                        .param("categoryName", "Test category"))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    @WithMockUser(username = "E02", roles = "CASHIER")
+    void cashierCannotOpenProductCreateForm() throws Exception {
+        mockMvc.perform(get("/products/new"))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    @WithMockUser(username = "E02", roles = "CASHIER")
+    void cashierCannotOpenStoreProductCreateForm() throws Exception {
+        mockMvc.perform(get("/store-products/new"))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    @WithMockUser(username = "E01", roles = "MANAGER")
+    void managerCannotOpenReceiptCreateForm() throws Exception {
+        mockMvc.perform(get("/receipts/new"))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    @WithMockUser(username = "E02", roles = "CASHIER")
+    void cashierCanOpenReceiptCreateForm() throws Exception {
+        mockMvc.perform(get("/receipts/new"))
+                .andExpect(status().isOk());
+    }
 }

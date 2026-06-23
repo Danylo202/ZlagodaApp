@@ -68,18 +68,29 @@ public class SecurityConfig {
                         .requestMatchers("/login", "/error").permitAll()
                         .requestMatchers("/employees/me").hasAnyRole("MANAGER", "CASHIER")
                         .requestMatchers("/employees/**").hasRole("MANAGER")
-                        .requestMatchers("/store-products/**").hasRole("MANAGER")
                         .requestMatchers("/reports/**").hasRole("MANAGER")
+
+                        .requestMatchers(HttpMethod.GET, "/receipts/new").hasRole("CASHIER")
                         .requestMatchers(HttpMethod.GET, "/receipts/*/delete").hasRole("MANAGER")
                         .requestMatchers(HttpMethod.GET, "/receipts", "/receipts/**").hasAnyRole("MANAGER", "CASHIER")
                         .requestMatchers(HttpMethod.POST, "/receipts", "/receipts/**").hasRole("CASHIER")
+
                         .requestMatchers(HttpMethod.GET, "/customers/*/delete").hasRole("MANAGER")
                         .requestMatchers(HttpMethod.GET, "/customers", "/customers/**").hasAnyRole("MANAGER", "CASHIER")
                         .requestMatchers(HttpMethod.POST, "/customers", "/customers/**").hasAnyRole("MANAGER", "CASHIER")
-                        .requestMatchers(HttpMethod.POST, "/categories", "/categories/*", "/categories/*/delete").hasRole("MANAGER")
-                        .requestMatchers("/categories/new", "/categories/*/edit", "/categories/*/delete").hasRole("MANAGER")
-                        .requestMatchers("/categories").hasAnyRole("MANAGER", "CASHIER")
-                        .requestMatchers("/products").hasAnyRole("MANAGER", "CASHIER")
+
+                        .requestMatchers(HttpMethod.GET, "/categories/new", "/categories/*/edit", "/categories/*/delete").hasRole("MANAGER")
+                        .requestMatchers(HttpMethod.POST, "/categories", "/categories/**").hasRole("MANAGER")
+                        .requestMatchers(HttpMethod.GET, "/categories").hasAnyRole("MANAGER", "CASHIER")
+
+                        .requestMatchers(HttpMethod.GET, "/products/new", "/products/edit/**", "/products/delete/**").hasRole("MANAGER")
+                        .requestMatchers(HttpMethod.POST, "/products/**").hasRole("MANAGER")
+                        .requestMatchers(HttpMethod.GET, "/products").hasAnyRole("MANAGER", "CASHIER")
+
+                        .requestMatchers(HttpMethod.GET, "/store-products/new", "/store-products/edit/**").hasRole("MANAGER")
+                        .requestMatchers(HttpMethod.POST, "/store-products/**").hasRole("MANAGER")
+                        .requestMatchers(HttpMethod.GET, "/store-products", "/store-products/**").hasAnyRole("MANAGER", "CASHIER")
+
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
