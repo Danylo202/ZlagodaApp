@@ -19,7 +19,14 @@
                         <a sec:authorize="hasRole('MANAGER')" th:href="@{/categories/new}" class="btn btn-primary">Додати категорію</a>
                     </div>
 
-                    <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
+                    <div th:if="${success}" class="alert alert-success alert-dismissible fade show" role="alert">
+                        <span th:text="${success}">Успішно</span>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <span th:text="${error}">Помилка</span>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
 
                     <div class="table-responsive">
                         <table class="table table-hover align-middle mb-0 zl-table">

@@ -19,7 +19,33 @@
                         <a th:href="@{/checks/new}" class="btn btn-primary" sec:authorize="hasRole('CASHIER')">Новий чек</a>
                     </div>
 
-                    <div th:replace="~{fragments/layout :: placeholder-banner('Поля: номер, дата, загальна сума, ПДВ. Можливий перегляд товарів у чеку (назва, к-сть, ціна). Зберігаються 3 роки.')}"></div>
+                    <div th:if="${success}" class="alert alert-success alert-dismissible fade show" role="alert">
+                        <span th:text="${success}">Успішно</span>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <span th:text="${error}">Помилка</span>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+
+                    <form th:action="@{/checks}" method="get" class="row g-2 align-items-end mb-3">
+                        <div class="col-md-3">
+                            <label for="idEmployee" class="form-label">ID касира</label>
+                            <input id="idEmployee" name="idEmployee" type="text" class="form-control" th:value="${idEmployee}" placeholder="E02">
+                        </div>
+                        <div class="col-md-3">
+                            <label for="date1" class="form-label">Дата від</label>
+                            <input id="date1" name="date1" type="date" class="form-control" th:value="${date1}">
+                        </div>
+                        <div class="col-md-3">
+                            <label for="date2" class="form-label">Дата до</label>
+                            <input id="date2" name="date2" type="date" class="form-control" th:value="${date2}">
+                        </div>
+                        <div class="col-md-3 d-flex gap-2">
+                            <button type="submit" class="btn btn-outline-primary">Застосувати</button>
+                            <a th:href="@{/checks}" class="btn btn-outline-secondary">Скинути</a>
+                        </div>
+                    </form>
 
                     <div class="table-responsive">
                         <table class="table table-hover align-middle mb-0 zl-table">
@@ -28,13 +54,32 @@
                                 <th>Номер</th>
                                 <th>Дата</th>
                                 <th>Касир</th>
+                                <th>Карта клієнта</th>
                                 <th>Сума</th>
                                 <th>ПДВ</th>
                                 <th class="text-end">Дії</th>
                             </tr>
                             </thead>
                             <tbody>
-                            <tr><td colspan="6" class="zl-empty">Дані з'являться після реалізації</td></tr>
+                            <tr th:each="check : ${checks}">
+                                <td th:text="${check.checkNumber}">1</td>
+                                <td th:text="${check.printDate}">2026-06-23</td>
+                                <td th:text="${check.idEmployee}">E02</td>
+                                <td th:text="${#strings.isEmpty(check.cardNumber) ? '—' : check.cardNumber}">—</td>
+                                <td th:text="${check.sumTotal}">0.00</td>
+                                <td th:text="${check.vat}">0.00</td>
+                                <td class="text-end">
+                                    <a th:href="@{/checks/{id}/details(id=${check.checkNumber})}" class="btn btn-info btn-sm">Деталі</a>
+                                    <a sec:authorize="hasRole('MANAGER')" th:href="@{/checks/{id}/delete(id=${check.checkNumber})}"
+                                       class="btn btn-danger btn-sm"
+                                       data-zl-confirm="Видалити цей чек?"
+                                       data-zl-confirm-title="Видалити чек"
+                                       data-zl-confirm-ok="Видалити">Видалити</a>
+                                </td>
+                            </tr>
+                            <tr th:if="${#lists.isEmpty(checks)}">
+                                <td colspan="7" class="zl-empty">Чеків не знайдено</td>
+                            </tr>
                             </tbody>
                         </table>
                     </div>
@@ -43,5 +88,6 @@
         </section>
     </div>
 </main>
+<div th:replace="~{fragments/layout :: confirm-modal}"></div>
 </body>
 </html>

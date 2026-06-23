@@ -34,7 +34,7 @@
 </nav>
 
 <!-- ============ Sidebar ============
-     active: one of 'home','products','store-products','categories','receipts','customers','employees','reports' -->
+     active: one of 'home','products','store-products','categories','checks','customers','employees','reports' -->
 <aside class="zl-sidebar" th:fragment="sidebar(active)">
     <div class="zl-side-head">Меню</div>
     <a th:href="@{/}" class="zl-side-link"
@@ -42,13 +42,13 @@
     <a th:href="@{/products}" class="zl-side-link"
        th:classappend="${active == 'products'} ? 'active' : ''">Товари</a>
     <a th:href="@{/store-products}" class="zl-side-link"
-       sec:authorize="hasRole('MANAGER')"
+       sec:authorize="hasAnyRole('MANAGER','CASHIER')"
        th:classappend="${active == 'store-products'} ? 'active' : ''">Товари у магазині</a>
     <a th:href="@{/categories}" class="zl-side-link"
        th:classappend="${active == 'categories'} ? 'active' : ''">Категорії</a>
-    <a th:href="@{/receipts}" class="zl-side-link"
+    <a th:href="@{/checks}" class="zl-side-link"
        sec:authorize="hasAnyRole('MANAGER','CASHIER')"
-       th:classappend="${active == 'receipts'} ? 'active' : ''">Чеки</a>
+       th:classappend="${active == 'checks'} ? 'active' : ''">Чеки</a>
     <a th:href="@{/customers}" class="zl-side-link"
        sec:authorize="hasAnyRole('MANAGER','CASHIER')"
        th:classappend="${active == 'customers'} ? 'active' : ''">Клієнти</a>

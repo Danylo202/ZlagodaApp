@@ -379,3 +379,68 @@ h1, h2, h3, h4, h5, h6 {
 .zl-login-form { text-align: left; }
 .zl-login-form .form-label { font-size: 0.85rem; }
 .zl-login-form .btn-primary { padding: 0.6rem 1rem; font-size: 0.95rem; margin-top: 0.5rem; }
+
+/* ───────── Print styles ───────── */
+@media print {
+  /* Hide all non-content UI */
+  .zl-navbar, .zl-sidebar, .zl-no-print,
+  .btn, .nav-meta, form, .modal, .modal-backdrop,
+  footer, .zl-side-head {
+    display: none !important;
+  }
+
+  /* Full-width layout */
+  .zl-layout {
+    grid-template-columns: 1fr !important;
+    gap: 0 !important;
+  }
+
+  .zl-main {
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  body {
+    background: #fff !important;
+    color: #000 !important;
+    font-size: 11pt !important;
+  }
+
+  .zl-card {
+    border: 1px solid #ccc !important;
+    box-shadow: none !important;
+    page-break-inside: avoid;
+  }
+
+  .zl-table {
+    font-size: 10pt !important;
+  }
+
+  .zl-table thead th {
+    background: #f0f0f0 !important;
+    color: #000 !important;
+    border-bottom: 2px solid #000 !important;
+  }
+
+  .badge.zl-badge {
+    background: #eee !important;
+    color: #000 !important;
+    border: 1px solid #999 !important;
+  }
+
+  /* Report title */
+  .zl-report h1 {
+    font-size: 16pt !important;
+    margin-bottom: 8pt !important;
+  }
+
+  /* Avoid cutting tables across pages */
+  table { page-break-inside: auto; }
+  tr { page-break-inside: avoid; page-break-after: auto; }
+  thead { display: table-header-group; }
+
+  @page {
+    margin: 1.5cm;
+    size: A4;
+  }
+}

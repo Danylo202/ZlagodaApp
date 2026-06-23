@@ -12,6 +12,7 @@ import com.example.zlagoda.model.Check;
 import com.example.zlagoda.model.StoreProduct;
 
 import java.sql.Date;
+import java.sql.Types;
 import java.time.LocalDate;
 
 @Repository
@@ -40,25 +41,25 @@ public class CheckRepository {
         if (!ch.isValid()) {
             throw new IllegalArgumentException("Логічна помилка: ПДВ має становити 20% ціни!");
         }
-        else {
-            String sql = "INSERT INTO [Check] (id_employee, card_number, print_date, sum_total, vat) VALUES (?, ?, ?, ?, ?)";
-            jdbcTemplate.update(sql, ch.getIdEmployee(), ch.getCardNumber(), ch.getPrintDate(),
-            ch.getSumTotal(), ch.getVat());
 
-            GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
-        
-            jdbcTemplate.update(connection -> {
-                var ps = connection.prepareStatement(sql, new String[]{"check_number"});
-                ps.setString(1, ch.getIdEmployee());
+        String sql = "INSERT INTO [Check] (id_employee, card_number, print_date, sum_total, vat) VALUES (?, ?, ?, ?, ?)";
+        GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
+
+        jdbcTemplate.update(connection -> {
+            var ps = connection.prepareStatement(sql, new String[]{"check_number"});
+            ps.setString(1, ch.getIdEmployee());
+            if (ch.getCardNumber() == null || ch.getCardNumber().isBlank()) {
+                ps.setNull(2, Types.VARCHAR);
+            } else {
                 ps.setString(2, ch.getCardNumber());
-                ps.setDate(3, java.sql.Date.valueOf(ch.getPrintDate()));
-                ps.setDouble(4, ch.getSumTotal());
-                ps.setDouble(5, ch.getVat());
-                return ps;
-            }, keyHolder);
+            }
+            ps.setDate(3, java.sql.Date.valueOf(ch.getPrintDate()));
+            ps.setDouble(4, ch.getSumTotal());
+            ps.setDouble(5, ch.getVat());
+            return ps;
+        }, keyHolder);
 
-            return keyHolder.getKey().intValue();
-        }
+        return keyHolder.getKey().intValue();
     }
 
     public List<Check> findWithFilters(String idEmployee, LocalDate date1, LocalDate date2) {
@@ -81,6 +82,16 @@ public class CheckRepository {
         sql.append(" ORDER BY print_date DESC");
 
         return jdbcTemplate.query(sql.toString(), new BeanPropertyRowMapper<>(Check.class));
+    }
+
+    public Double sumByEmployeeAndPeriod(String idEmployee, LocalDate date1, LocalDate date2) {
+        String sql = "SELECT COALESCE(SUM(sum_total), 0) FROM [Check] WHERE id_employee = ? AND print_date BETWEEN ? AND ?";
+        return jdbcTemplate.queryForObject(sql, Double.class, idEmployee, Date.valueOf(date1), Date.valueOf(date2));
+    }
+
+    public Double sumByPeriod(LocalDate date1, LocalDate date2) {
+        String sql = "SELECT COALESCE(SUM(sum_total), 0) FROM [Check] WHERE print_date BETWEEN ? AND ?";
+        return jdbcTemplate.queryForObject(sql, Double.class, Date.valueOf(date1), Date.valueOf(date2));
     }
 
     public void delete(Integer id) {

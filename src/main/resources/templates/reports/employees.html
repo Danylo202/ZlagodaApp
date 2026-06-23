@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('ZLAGODA - Звіт: Працівники')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar-back(@{/reports}, 'Назад до звітів')}"></nav>
+
+<main class="zl-main container-fluid">
+    <section class="zl-report">
+        <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3 zl-no-print">
+            <div class="zl-title mb-0">
+                <h1 th:text="${title}">Звіт</h1>
+            </div>
+            <button class="btn btn-primary" onclick="window.print()">&#x1F5A8; Друк</button>
+        </div>
+
+        <!-- Contact search form -->
+        <div th:if="${showContactForm}" class="card zl-card mb-3 zl-no-print">
+            <div class="card-body">
+                <form th:action="@{/reports/employees}" method="get" class="row g-2 align-items-end">
+                    <div class="col-auto">
+                        <label for="surname" class="form-label">Прізвище працівника</label>
+                        <input type="text" id="surname" name="surname" class="form-control" th:value="${surname}" placeholder="Введіть прізвище...">
+                    </div>
+                    <div class="col-auto">
+                        <button type="submit" class="btn btn-primary">Знайти</button>
+                        <a th:href="@{/reports/employees}" class="btn btn-outline-secondary">Скинути</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="card zl-card">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table zl-table" th:if="${!employees.isEmpty()}">
+                        <thead>
+                            <tr th:if="${contactView}">
+                                <th>Прізвище</th>
+                                <th>Ім'я</th>
+                                <th>По батькові</th>
+                                <th>Телефон</th>
+                                <th>Місто</th>
+                                <th>Вулиця</th>
+                                <th>Індекс</th>
+                            </tr>
+                            <tr th:unless="${contactView}">
+                                <th>ID</th>
+                                <th>Прізвище</th>
+                                <th>Ім'я</th>
+                                <th>По батькові</th>
+                                <th>Посада</th>
+                                <th>Зарплата</th>
+                                <th>Дата народження</th>
+                                <th>Дата прийому</th>
+                                <th>Телефон</th>
+                                <th>Місто</th>
+                                <th>Вулиця</th>
+                                <th>Індекс</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="e : ${employees}">
+                                <th:block th:if="${contactView}">
+                                    <td th:text="${e.emplSurname}"></td>
+                                    <td th:text="${e.emplName}"></td>
+                                    <td th:text="${e.emplPatronymic}"></td>
+                                    <td th:text="${e.phoneNumber}"></td>
+                                    <td th:text="${e.city}"></td>
+                                    <td th:text="${e.street}"></td>
+                                    <td th:text="${e.zipCode}"></td>
+                                </th:block>
+                                <th:block th:unless="${contactView}">
+                                    <td th:text="${e.idEmployee}"></td>
+                                    <td th:text="${e.emplSurname}"></td>
+                                    <td th:text="${e.emplName}"></td>
+                                    <td th:text="${e.emplPatronymic}"></td>
+                                    <td th:text="${e.emplRole}"></td>
+                                    <td th:text="${#numbers.formatDecimal(e.salary, 0, 'COMMA', 2, 'POINT')}"></td>
+                                    <td th:text="${e.dateBirth}"></td>
+                                    <td th:text="${e.dateStart}"></td>
+                                    <td th:text="${e.phoneNumber}"></td>
+                                    <td th:text="${e.city}"></td>
+                                    <td th:text="${e.street}"></td>
+                                    <td th:text="${e.zipCode}"></td>
+                                </th:block>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div th:if="${employees.isEmpty()}" class="zl-empty">Даних не знайдено.</div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+</body>
+</html>

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('ZLAGODA - Звіт: Клієнти')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar-back(@{/reports}, 'Назад до звітів')}"></nav>
+
+<main class="zl-main container-fluid">
+    <section class="zl-report">
+        <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3 zl-no-print">
+            <div class="zl-title mb-0">
+                <h1 th:text="${title}">Звіт</h1>
+            </div>
+            <button class="btn btn-primary" onclick="window.print()">&#x1F5A8; Друк</button>
+        </div>
+
+        <!-- Percent filter form -->
+        <div class="card zl-card mb-3 zl-no-print">
+            <div class="card-body">
+                <form th:action="@{/reports/customers}" method="get" class="row g-2 align-items-end">
+                    <div class="col-auto">
+                        <label for="percent" class="form-label">Відсоток знижки</label>
+                        <input type="number" id="percent" name="percent" class="form-control" th:value="${percent}" placeholder="Напр. 10" min="0" max="100">
+                    </div>
+                    <div class="col-auto">
+                        <button type="submit" class="btn btn-primary">Фільтрувати</button>
+                        <a th:href="@{/reports/customers}" class="btn btn-outline-secondary">Скинути</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="card zl-card">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table zl-table" th:if="${!customers.isEmpty()}">
+                        <thead>
+                            <tr>
+                                <th>Номер карти</th>
+                                <th>Прізвище</th>
+                                <th>Ім'я</th>
+                                <th>По батькові</th>
+                                <th>Телефон</th>
+                                <th>Місто</th>
+                                <th>Вулиця</th>
+                                <th>Індекс</th>
+                                <th>Знижка %</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="c : ${customers}">
+                                <td th:text="${c.cardNumber}"></td>
+                                <td th:text="${c.custSurname}"></td>
+                                <td th:text="${c.custName}"></td>
+                                <td th:text="${c.custPatronymic}"></td>
+                                <td th:text="${c.phoneNumber}"></td>
+                                <td th:text="${c.city}"></td>
+                                <td th:text="${c.street}"></td>
+                                <td th:text="${c.zipCode}"></td>
+                                <td th:text="${c.percent}"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div th:if="${customers.isEmpty()}" class="zl-empty">Даних не знайдено.</div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+</body>
+</html>

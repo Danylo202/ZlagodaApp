@@ -4,6 +4,7 @@ import com.example.zlagoda.model.Sale;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
+import java.time.LocalDate;
 import java.util.List;
 
 @Repository
@@ -38,5 +39,20 @@ public class SaleRepository {
     public List<Sale> findAll() {
         String sql = "SELECT * FROM Sale";
         return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Sale.class));
+    }
+
+    public Integer sumQuantityByProductAndPeriod(Integer productId, LocalDate date1, LocalDate date2) {
+        String sql = """
+                SELECT COALESCE(SUM(S.product_number), 0)
+                FROM (Sale AS S
+                INNER JOIN Store_Product AS SP ON S.UPC = SP.UPC)
+                INNER JOIN [Check] AS CH ON S.check_number = CH.check_number
+                WHERE SP.id_product = ? AND CH.print_date BETWEEN ? AND ?
+                """;
+        return jdbcTemplate.queryForObject(sql, Integer.class, productId, java.sql.Date.valueOf(date1), java.sql.Date.valueOf(date2));
+    }
+
+    public void deleteByCheckNumber(Integer checkNumber) {
+        jdbcTemplate.update("DELETE FROM Sale WHERE check_number = ?", checkNumber);
     }
 }

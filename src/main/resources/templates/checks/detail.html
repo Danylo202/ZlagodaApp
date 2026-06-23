@@ -6,21 +6,38 @@
 
 <main class="zl-main container">
     <div class="row justify-content-center">
-        <div class="col-md-8">
+        <div class="col-lg-9">
             <div class="card zl-card">
                 <div class="card-header">Перегляд чеку</div>
                 <div class="card-body">
                     <div class="zl-title">
-                        <h1>Чек #<span class="text-muted">—</span></h1>
+                        <h1>Чек #<span th:text="${check.checkNumber}">—</span></h1>
                         <p>Інформація про чек та придбані товари.</p>
                     </div>
 
-                    <div th:replace="~{fragments/layout :: placeholder-banner('За номером чеку виводиться: назва, к-сть та ціна товарів, загальна сума, ПДВ.')}"></div>
+                    <dl class="row mb-4">
+                        <dt class="col-sm-3">Дата</dt><dd class="col-sm-9" th:text="${check.printDate}">—</dd>
+                        <dt class="col-sm-3">Касир</dt><dd class="col-sm-9" th:text="${check.idEmployee}">—</dd>
+                        <dt class="col-sm-3">Карта клієнта</dt><dd class="col-sm-9" th:text="${#strings.isEmpty(check.cardNumber) ? '—' : check.cardNumber}">—</dd>
+                        <dt class="col-sm-3">Сума</dt><dd class="col-sm-9" th:text="${check.sumTotal}">0.00</dd>
+                        <dt class="col-sm-3">ПДВ</dt><dd class="col-sm-9" th:text="${check.vat}">0.00</dd>
+                    </dl>
 
                     <div class="table-responsive mb-3">
                         <table class="table zl-table">
-                            <thead><tr><th>Товар</th><th>К-сть</th><th>Ціна</th><th>Сума</th></tr></thead>
-                            <tbody><tr><td colspan="4" class="zl-empty">Дані з'являться після реалізації</td></tr></tbody>
+                            <thead><tr><th>Товар</th><th>UPC</th><th>К-сть</th><th>Ціна</th><th>Сума</th></tr></thead>
+                            <tbody>
+                            <tr th:each="sale : ${sales}">
+                                <td th:text="${sale.productName}">Товар</td>
+                                <td th:text="${sale.UPC}">UPC</td>
+                                <td th:text="${sale.productNumber}">1</td>
+                                <td th:text="${sale.sellingPrice}">0.00</td>
+                                <td th:text="${sale.sellingPrice * sale.productNumber}">0.00</td>
+                            </tr>
+                            <tr th:if="${#lists.isEmpty(sales)}">
+                                <td colspan="5" class="zl-empty">У цьому чеку немає товарних рядків</td>
+                            </tr>
+                            </tbody>
                         </table>
                     </div>
                 </div>

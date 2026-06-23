@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('ZLAGODA - Звіт: Категорії')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar-back(@{/reports}, 'Назад до звітів')}"></nav>
+
+<main class="zl-main container-fluid">
+    <section class="zl-report">
+        <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3 zl-no-print">
+            <div class="zl-title mb-0">
+                <h1 th:text="${title}">Звіт</h1>
+            </div>
+            <button class="btn btn-primary" onclick="window.print()">&#x1F5A8; Друк</button>
+        </div>
+
+        <div class="card zl-card">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table zl-table" th:if="${!categories.isEmpty()}">
+                        <thead>
+                            <tr>
+                                <th>Номер категорії</th>
+                                <th>Назва</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="c : ${categories}">
+                                <td th:text="${c.categoryNumber}"></td>
+                                <td th:text="${c.categoryName}"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div th:if="${categories.isEmpty()}" class="zl-empty">Даних не знайдено.</div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+</body>
+</html>
