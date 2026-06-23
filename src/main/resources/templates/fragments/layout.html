@@ -52,6 +52,9 @@
     <a th:href="@{/customers}" class="zl-side-link"
        sec:authorize="hasAnyRole('MANAGER','CASHIER')"
        th:classappend="${active == 'customers'} ? 'active' : ''">Клієнти</a>
+    <a th:href="@{/employees/me}" class="zl-side-link"
+       sec:authorize="hasRole('CASHIER')"
+       th:classappend="${active == 'employees'} ? 'active' : ''">Моя картка</a>
     <a th:href="@{/employees}" class="zl-side-link"
        sec:authorize="hasRole('MANAGER')"
        th:classappend="${active == 'employees'} ? 'active' : ''">Працівники</a>

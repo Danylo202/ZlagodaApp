@@ -14,12 +14,38 @@
                     <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
                         <div class="zl-title mb-0">
                             <h1>Працівники</h1>
-                            <p>Облік працівників міні-супермаркету (менеджери та касири).</p>
+                            <p>Усі працівники відсортовані за прізвищем. Можна відфільтрувати касирів або знайти телефон та адресу за прізвищем.</p>
                         </div>
                         <a th:href="@{/employees/new}" class="btn btn-primary">Додати працівника</a>
                     </div>
 
-                    <div th:replace="~{fragments/layout :: placeholder-banner('Поля: ID, ПІБ, посада, зарплата, дата початку роботи, дата народження, телефон, адреса.')}"></div>
+                    <div th:if="${success}" class="alert alert-success alert-dismissible fade show" role="alert">
+                        <span th:text="${success}">Успішно</span>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <span th:text="${error}">Помилка</span>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+
+                    <form th:action="@{/employees}" method="get" class="row g-2 align-items-end mb-3">
+                        <div class="col-md-4">
+                            <label for="surname" class="form-label">Пошук за прізвищем</label>
+                            <input id="surname" name="surname" type="text" class="form-control" th:value="${surname}" placeholder="Прізвище">
+                        </div>
+                        <div class="col-md-3">
+                            <label for="role" class="form-label">Посада</label>
+                            <select id="role" name="role" class="form-select">
+                                <option value="all" th:selected="${role == null or role == 'all'}">Усі</option>
+                                <option value="manager" th:selected="${role == 'manager'}">Тільки менеджери</option>
+                                <option value="cashier" th:selected="${role == 'cashier'}">Тільки касири</option>
+                            </select>
+                        </div>
+                        <div class="col-md-5 d-flex gap-2">
+                            <button type="submit" class="btn btn-outline-primary">Застосувати</button>
+                            <a th:href="@{/employees}" class="btn btn-outline-secondary">Скинути</a>
+                        </div>
+                    </form>
 
                     <div class="table-responsive">
                         <table class="table table-hover align-middle mb-0 zl-table">
@@ -29,12 +55,51 @@
                                 <th>ПІБ</th>
                                 <th>Посада</th>
                                 <th>Зарплата</th>
+                                <th>Дати</th>
                                 <th>Телефон</th>
+                                <th>Адреса</th>
                                 <th class="text-end">Дії</th>
                             </tr>
                             </thead>
                             <tbody>
-                            <tr><td colspan="6" class="zl-empty">Дані з'являться після реалізації</td></tr>
+                            <tr th:each="employee : ${employees}">
+                                <td th:text="${employee.idEmployee}">E01</td>
+                                <td>
+                                    <span th:text="${employee.emplSurname}">Прізвище</span>
+                                    <span th:text="${employee.emplName}">Ім'я</span>
+                                    <span th:if="${employee.emplPatronymic}" th:text="${employee.emplPatronymic}">По батькові</span>
+                                </td>
+                                <td th:text="${employee.emplRole}">Касир</td>
+                                <td th:text="${employee.salary != null ? #numbers.formatDecimal(employee.salary, 1, 2) : ''}">0.00</td>
+                                <td>
+                                    <div><small class="text-muted">Початок:</small> <span th:text="${employee.dateStart}">2024-01-01</span></div>
+                                    <div><small class="text-muted">Народження:</small> <span th:text="${employee.dateBirth}">1990-01-01</span></div>
+                                </td>
+                                <td th:text="${employee.phoneNumber}">+380...</td>
+                                <td>
+                                    <span th:if="${#strings.isEmpty(employee.city) and #strings.isEmpty(employee.street) and #strings.isEmpty(employee.zipCode)}" class="text-muted">—</span>
+                                    <th:block th:unless="${#strings.isEmpty(employee.city) and #strings.isEmpty(employee.street) and #strings.isEmpty(employee.zipCode)}">
+                                        <span th:if="${!#strings.isEmpty(employee.city)}" th:text="${employee.city}">Місто</span>
+                                        <span th:if="${!#strings.isEmpty(employee.city) and (!#strings.isEmpty(employee.street) or !#strings.isEmpty(employee.zipCode))}">, </span>
+                                        <span th:if="${!#strings.isEmpty(employee.street)}" th:text="${employee.street}">Вулиця</span>
+                                        <span th:if="${!#strings.isEmpty(employee.street) and !#strings.isEmpty(employee.zipCode)}">, </span>
+                                        <span th:if="${!#strings.isEmpty(employee.zipCode)}" th:text="${employee.zipCode}">Індекс</span>
+                                    </th:block>
+                                </td>
+                                <td class="text-end">
+                                    <a th:href="@{/employees/{id}/edit(id=${employee.idEmployee})}" class="btn btn-warning btn-sm">Редагувати</a>
+                                    <form th:action="@{/employees/{id}/delete(id=${employee.idEmployee})}" method="get" class="d-inline">
+                                        <button type="submit" class="btn btn-danger btn-sm"
+                                                th:disabled="${employee.idEmployee == employeeId}"
+                                                data-zl-confirm="Видалити цього працівника?"
+                                                data-zl-confirm-title="Видалити працівника"
+                                                data-zl-confirm-ok="Видалити">Видалити</button>
+                                    </form>
+                                </td>
+                            </tr>
+                            <tr th:if="${#lists.isEmpty(employees)}">
+                                <td colspan="8" class="zl-empty">Працівників не знайдено</td>
+                            </tr>
                             </tbody>
                         </table>
                     </div>
@@ -43,5 +108,6 @@
         </section>
     </div>
 </main>
+<div th:replace="~{fragments/layout :: confirm-modal}"></div>
 </body>
 </html>

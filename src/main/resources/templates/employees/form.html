@@ -1,34 +1,96 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments/layout :: head('ZLAGODA - Працівник')}"></head>
+<head th:replace="~{fragments/layout :: head(${mode == 'edit' ? 'ZLAGODA - Редагувати працівника' : (mode == 'view' ? 'ZLAGODA - Працівник' : 'ZLAGODA - Новий працівник')})}"></head>
 <body>
-<nav th:replace="~{fragments/layout :: navbar-back(@{/employees}, 'Назад до списку')}"></nav>
+<nav th:replace="~{fragments/layout :: navbar-back(${mode == 'view' ? '/' : '/employees'}, ${mode == 'view' ? 'На головну' : 'Назад до списку'})}"></nav>
 
 <main class="zl-main container">
     <div class="row justify-content-center">
-        <div class="col-md-7">
+        <div class="col-lg-9">
             <div class="card zl-card">
-                <div class="card-header">Картка працівника</div>
                 <div class="card-body">
                     <div class="zl-title">
-                        <h1>Новий працівник</h1>
-                        <p>Введіть відомості про працівника.</p>
+                        <h1 th:text="${mode == 'edit' ? 'Редагувати працівника' : (mode == 'view' ? 'Моя картка працівника' : 'Новий працівник')}">Працівник</h1>
+                        <p>Введіть відомості про працівника. Працівник має бути не молодшим 18 років, телефон — до 13 символів.</p>
                     </div>
 
-                    <div th:replace="~{fragments/layout :: placeholder-banner('')}"></div>
+                    <div th:if="${errors}" class="alert alert-danger" role="alert">
+                        <ul class="mb-0">
+                            <li th:each="err : ${errors}" th:text="${err}">Помилка</li>
+                        </ul>
+                    </div>
 
-                    <form>
+                    <form th:object="${employee}" th:action="@{/employees/save}" method="post">
+                        <input type="hidden" name="mode" th:value="${mode}">
+
                         <div class="row g-3">
-                            <div class="col-md-6"><label class="form-label">ID працівника</label><input class="form-control" disabled placeholder="E01"></div>
-                            <div class="col-md-6"><label class="form-label">Посада</label><input class="form-control" disabled placeholder="Менеджер / Касир"></div>
-                            <div class="col-12"><label class="form-label">ПІБ</label><input class="form-control" disabled placeholder="Прізвище Ім'я По батькові"></div>
-                            <div class="col-md-6"><label class="form-label">Зарплата</label><input class="form-control" disabled placeholder="0.00"></div>
-                            <div class="col-md-6"><label class="form-label">Дата початку роботи</label><input class="form-control" disabled placeholder="дд.мм.рррр"></div>
-                            <div class="col-md-6"><label class="form-label">Дата народження</label><input class="form-control" disabled placeholder="дд.мм.рррр"></div>
-                            <div class="col-md-6"><label class="form-label">Телефон</label><input class="form-control" disabled placeholder="+380..."></div>
-                            <div class="col-12"><label class="form-label">Адреса</label><input class="form-control" disabled placeholder="Місто, вулиця, індекс"></div>
+                            <div class="col-md-4">
+                                <label for="idEmployee" class="form-label zl-required">ID працівника</label>
+                                <input id="idEmployee" th:field="*{idEmployee}" type="text" maxlength="10" class="form-control"
+                                       th:readonly="${mode == 'edit'}" th:disabled="${mode == 'view'}" required>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="emplRole" class="form-label zl-required">Посада</label>
+                                <select id="emplRole" th:field="*{emplRole}" class="form-select" th:disabled="${mode == 'view'}" required>
+                                    <option value="">Оберіть посаду</option>
+                                    <option th:each="roleOption : ${roleOptions}" th:value="${roleOption}" th:text="${roleOption}">Касир</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="salary" class="form-label zl-required">Зарплата</label>
+                                <input id="salary" th:field="*{salary}" type="number" step="0.01" min="0" class="form-control" th:disabled="${mode == 'view'}" required>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label for="emplSurname" class="form-label zl-required">Прізвище</label>
+                                <input id="emplSurname" th:field="*{emplSurname}" type="text" maxlength="50" class="form-control" th:disabled="${mode == 'view'}" required>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="emplName" class="form-label zl-required">Ім'я</label>
+                                <input id="emplName" th:field="*{emplName}" type="text" maxlength="50" class="form-control" th:disabled="${mode == 'view'}" required>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="emplPatronymic" class="form-label">По батькові</label>
+                                <input id="emplPatronymic" th:field="*{emplPatronymic}" type="text" maxlength="50" class="form-control" th:disabled="${mode == 'view'}">
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="dateStart" class="form-label zl-required">Дата початку роботи</label>
+                                <input id="dateStart" th:field="*{dateStart}" type="date" class="form-control" th:disabled="${mode == 'view'}" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="dateBirth" class="form-label zl-required">Дата народження</label>
+                                <input id="dateBirth" th:field="*{dateBirth}" type="date" class="form-control" th:max="${maxBirthDate}" th:disabled="${mode == 'view'}" required>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label for="phoneNumber" class="form-label">Телефон</label>
+                                <input id="phoneNumber" th:field="*{phoneNumber}" type="tel" maxlength="13" class="form-control" th:disabled="${mode == 'view'}" placeholder="+380...">
+                            </div>
+                            <div class="col-md-4">
+                                <label for="city" class="form-label">Місто</label>
+                                <input id="city" th:field="*{city}" type="text" maxlength="50" class="form-control" th:disabled="${mode == 'view'}">
+                            </div>
+                            <div class="col-md-4">
+                                <label for="zipCode" class="form-label">Індекс</label>
+                                <input id="zipCode" th:field="*{zipCode}" type="text" maxlength="10" class="form-control" th:disabled="${mode == 'view'}">
+                            </div>
+                            <div class="col-12">
+                                <label for="street" class="form-label">Вулиця</label>
+                                <input id="street" th:field="*{street}" type="text" maxlength="100" class="form-control" th:disabled="${mode == 'view'}">
+                            </div>
+
+                            <div class="col-md-6" th:if="${mode != 'view'}">
+                                <label for="password" class="form-label" th:classappend="${mode == 'create'} ? ' zl-required' : ''" th:text="${mode == 'edit' ? 'Новий пароль (необов’язково)' : 'Початковий пароль'}">Пароль</label>
+                                <input id="password" th:field="*{password}" type="password" class="form-control" th:required="${mode == 'create'}" autocomplete="new-password">
+                                <div class="form-text" th:if="${mode == 'edit'}">Залиште порожнім, щоб не змінювати пароль.</div>
+                            </div>
                         </div>
-                        <div th:replace="~{fragments/layout :: form-actions('Зберегти', @{/employees}, true)}"></div>
+
+                        <div th:if="${mode != 'view'}" th:replace="~{fragments/layout :: form-actions('Зберегти', @{/employees}, false)}"></div>
+                        <div th:if="${mode == 'view'}" class="d-flex gap-2 mt-4">
+                            <a th:href="@{/}" class="btn btn-outline-secondary">Назад</a>
+                        </div>
                     </form>
                 </div>
             </div>

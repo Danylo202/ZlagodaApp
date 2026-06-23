@@ -96,30 +96,30 @@ class SecurityLoginTests {
 
     @Test
     @WithMockUser(username = "E01", roles = "MANAGER")
-    void managerCanAccessManagerDashboard() throws Exception {
-        mockMvc.perform(get("/manager"))
+    void managerCanOpenEmployeeCreateForm() throws Exception {
+        mockMvc.perform(get("/employees/new"))
                 .andExpect(status().isOk());
     }
 
     @Test
     @WithMockUser(username = "E02", roles = "CASHIER")
-    void cashierCannotAccessManagerDashboard() throws Exception {
-        mockMvc.perform(get("/manager"))
+    void cashierCannotOpenEmployeeCreateForm() throws Exception {
+        mockMvc.perform(get("/employees/new"))
                 .andExpect(status().isForbidden());
     }
 
     @Test
     @WithMockUser(username = "E02", roles = "CASHIER")
-    void cashierCanAccessCashierDashboard() throws Exception {
-        mockMvc.perform(get("/cashier"))
+    void cashierCanAccessHomePage() throws Exception {
+        mockMvc.perform(get("/"))
                 .andExpect(status().isOk());
     }
 
     @Test
     @WithMockUser(username = "E01", roles = "MANAGER")
-    void managerCannotAccessCashierDashboard() throws Exception {
-        mockMvc.perform(get("/cashier"))
-                .andExpect(status().isForbidden());
+    void managerCanAccessHomePage() throws Exception {
+        mockMvc.perform(get("/"))
+                .andExpect(status().isOk());
     }
 
     @Test
