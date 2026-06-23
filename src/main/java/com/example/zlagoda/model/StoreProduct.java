@@ -13,6 +13,8 @@ public class StoreProduct {
     private boolean promotionalProduct;
 
     private String productName; // joined data
+    private String characteristics; // joined data
+    private String producer; // joined data
 
     public StoreProduct(String UPC, String UPCProm, Integer idProduct, Double sellingPrice, Integer productsNumber, boolean promotionalProduct) {
         if((UPCProm==null && promotionalProduct==false) || (UPCProm!=null && promotionalProduct==true)) {

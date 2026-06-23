@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('ZLAGODA - Звіт: Агрегат')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar-back(@{/reports}, 'Назад до звітів')}"></nav>
+
+<main class="zl-main container-fluid">
+    <section class="zl-report">
+        <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3 zl-no-print">
+            <div class="zl-title mb-0">
+                <h1 th:text="${title}">Звіт</h1>
+            </div>
+            <div th:if="${total != null || quantity != null}">
+                <button class="btn btn-primary" onclick="window.print()">&#x1F5A8; Друк</button>
+            </div>
+        </div>
+
+        <!-- Form for checks-sum -->
+        <div class="card zl-card mb-3 zl-no-print" th:if="${reportType == 'checks-sum'}">
+            <div class="card-body">
+                <form th:action="@{/reports/checks-sum}" method="get" class="row g-2 align-items-end">
+                    <div class="col-auto">
+                        <label for="idEmployee" class="form-label">ID касира</label>
+                        <input type="text" id="idEmployee" name="idEmployee" class="form-control" th:value="${idEmployee}" placeholder="Залиште порожнім для всіх">
+                    </div>
+                    <div class="col-auto">
+                        <label for="date1" class="form-label">Дата з</label>
+                        <input type="date" id="date1" name="date1" class="form-control" th:value="${date1}">
+                    </div>
+                    <div class="col-auto">
+                        <label for="date2" class="form-label">Дата по</label>
+                        <input type="date" id="date2" name="date2" class="form-control" th:value="${date2}">
+                    </div>
+                    <div class="col-auto">
+                        <button type="submit" class="btn btn-primary">Розрахувати</button>
+                        <a th:href="@{/reports/checks-sum}" class="btn btn-outline-secondary">Скинути</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Form for product-sold-quantity -->
+        <div class="card zl-card mb-3 zl-no-print" th:if="${reportType == 'product-quantity'}">
+            <div class="card-body">
+                <form th:action="@{/reports/product-sold-quantity}" method="get" class="row g-2 align-items-end">
+                    <div class="col-auto">
+                        <label for="productId" class="form-label">Товар</label>
+                        <select id="productId" name="productId" class="form-select">
+                            <option value="">Оберіть товар...</option>
+                            <option th:each="p : ${products}" th:value="${p.idProduct}" th:text="${p.productName} + ' (' + ${p.producer} + ')'" th:selected="${productId != null && productId.equals(p.idProduct)}"></option>
+                        </select>
+                    </div>
+                    <div class="col-auto">
+                        <label for="date1" class="form-label">Дата з</label>
+                        <input type="date" id="date1" name="date1" class="form-control" th:value="${date1}">
+                    </div>
+                    <div class="col-auto">
+                        <label for="date2" class="form-label">Дата по</label>
+                        <input type="date" id="date2" name="date2" class="form-control" th:value="${date2}">
+                    </div>
+                    <div class="col-auto">
+                        <button type="submit" class="btn btn-primary">Розрахувати</button>
+                        <a th:href="@{/reports/product-sold-quantity}" class="btn btn-outline-secondary">Скинути</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Result display -->
+        <div class="card zl-card" th:if="${total != null || quantity != null}">
+            <div class="card-body text-center p-5">
+                <div th:if="${total != null}">
+                    <div class="text-muted mb-2">Загальна сума продажів</div>
+                    <div class="display-4 fw-bold" style="color:var(--zl-brand)" th:text="${#numbers.formatDecimal(total, 0, 'COMMA', 2, 'POINT') + ' грн'}">0.00 грн</div>
+                </div>
+                <div th:if="${quantity != null}">
+                    <div class="text-muted mb-2">Кількість проданих одиниць</div>
+                    <div class="display-4 fw-bold" style="color:var(--zl-brand)" th:text="${quantity + ' шт.'}">0 шт.</div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+</body>
+</html>

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('ZLAGODA - Звіт: Пошук за UPC')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar-back(@{/reports}, 'Назад до звітів')}"></nav>
+
+<main class="zl-main container-fluid">
+    <section class="zl-report">
+        <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3 zl-no-print">
+            <div class="zl-title mb-0">
+                <h1>Пошук товару за UPC</h1>
+                <p>Ціна продажу, кількість, назва та характеристики товару.</p>
+            </div>
+            <div th:if="${results != null}">
+                <button class="btn btn-primary" onclick="window.print()">&#x1F5A8; Друк</button>
+            </div>
+        </div>
+
+        <!-- UPC search form -->
+        <div class="card zl-card mb-3 zl-no-print">
+            <div class="card-body">
+                <form th:action="@{/reports/store-product-by-upc}" method="get" class="row g-2 align-items-end">
+                    <div class="col-auto">
+                        <label for="upc" class="form-label">UPC товару</label>
+                        <input type="text" id="upc" name="upc" class="form-control" th:value="${upc}" placeholder="Введіть UPC...">
+                    </div>
+                    <div class="col-auto">
+                        <button type="submit" class="btn btn-primary">Знайти</button>
+                        <a th:href="@{/reports/store-product-by-upc}" class="btn btn-outline-secondary">Скинути</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Results -->
+        <div class="card zl-card" th:if="${results != null}">
+            <div class="card-body">
+                <div th:if="${!results.isEmpty()}">
+                    <div class="table-responsive">
+                        <table class="table zl-table">
+                            <thead>
+                                <tr>
+                                    <th>UPC</th>
+                                    <th>Назва товару</th>
+                                    <th>Виробник</th>
+                                    <th>Характеристики</th>
+                                    <th>Ціна продажу</th>
+                                    <th>Кількість</th>
+                                    <th>Акційний</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="sp : ${results}">
+                                    <td th:text="${sp.UPC}"></td>
+                                    <td th:text="${sp.productName}"></td>
+                                    <td th:text="${sp.producer}"></td>
+                                    <td th:text="${sp.characteristics}"></td>
+                                    <td th:text="${#numbers.formatDecimal(sp.sellingPrice, 0, 'COMMA', 2, 'POINT')}"></td>
+                                    <td th:text="${sp.productsNumber}"></td>
+                                    <td>
+                                        <span th:if="${sp.promotionalProduct}" class="badge zl-badge" style="background:#fff3cd;color:#856404">Акція</span>
+                                        <span th:unless="${sp.promotionalProduct}" class="text-muted">—</span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div th:if="${results.isEmpty()}" class="zl-empty">Товар з UPC &laquo;<span th:text="${upc}"></span>&raquo; не знайдено.</div>
+            </div>
+        </div>
+    </section>
+</main>
+</body>
+</html>

@@ -13,113 +13,162 @@
                 <div class="card-body">
                     <div class="zl-title mb-3">
                         <h1>Звіти</h1>
-                        <p>Звіти та запити згідно з вимогами АІС (доступні менеджеру).</p>
+                        <p>Звіти та запити згідно з вимогами АІС (доступні менеджеру). Усі звіти мають можливість друку.</p>
                     </div>
 
-                    <div th:replace="~{fragments/layout :: placeholder-banner('Усі звіти мають можливість друку.')}"></div>
-
                     <div class="row g-3">
+                        <!-- 1. Працівники за прізвищем -->
                         <div class="col-12 col-md-6">
-                            <div class="card zl-card h-100"><div class="card-body">
-                                <h2 class="h6">Працівники за прізвищем</h2>
-                                <p class="text-muted mb-0 small">Усі працівники, відсортовані за прізвищем.</p>
-                            </div></div>
+                            <a th:href="@{/reports/employees}" class="card zl-card zl-card-hover text-decoration-none text-dark h-100">
+                                <div class="card-body">
+                                    <h2 class="h6">Працівники за прізвищем</h2>
+                                    <p class="text-muted mb-0 small">Усі працівники, відсортовані за прізвищем.</p>
+                                </div>
+                            </a>
                         </div>
+                        <!-- 2. Касири за прізвищем -->
                         <div class="col-12 col-md-6">
-                            <div class="card zl-card h-100"><div class="card-body">
-                                <h2 class="h6">Касири за прізвищем</h2>
-                                <p class="text-muted mb-0 small">Працівники на посаді касира, відсортовані за прізвищем.</p>
-                            </div></div>
+                            <a th:href="@{/reports/employees(role=cashier)}" class="card zl-card zl-card-hover text-decoration-none text-dark h-100">
+                                <div class="card-body">
+                                    <h2 class="h6">Касири за прізвищем</h2>
+                                    <p class="text-muted mb-0 small">Працівники на посаді касира, відсортовані за прізвищем.</p>
+                                </div>
+                            </a>
                         </div>
+                        <!-- 3. Клієнти за прізвищем -->
                         <div class="col-12 col-md-6">
-                            <div class="card zl-card h-100"><div class="card-body">
-                                <h2 class="h6">Клієнти за прізвищем</h2>
-                                <p class="text-muted mb-0 small">Усі постійні клієнти, відсортовані за прізвищем.</p>
-                            </div></div>
+                            <a th:href="@{/reports/customers}" class="card zl-card zl-card-hover text-decoration-none text-dark h-100">
+                                <div class="card-body">
+                                    <h2 class="h6">Клієнти за прізвищем</h2>
+                                    <p class="text-muted mb-0 small">Усі постійні клієнти, відсортовані за прізвищем.</p>
+                                </div>
+                            </a>
                         </div>
+                        <!-- 4. Категорії за назвою -->
                         <div class="col-12 col-md-6">
-                            <div class="card zl-card h-100"><div class="card-body">
-                                <h2 class="h6">Категорії за назвою</h2>
-                                <p class="text-muted mb-0 small">Усі категорії, відсортовані за назвою.</p>
-                            </div></div>
+                            <a th:href="@{/reports/categories}" class="card zl-card zl-card-hover text-decoration-none text-dark h-100">
+                                <div class="card-body">
+                                    <h2 class="h6">Категорії за назвою</h2>
+                                    <p class="text-muted mb-0 small">Усі категорії, відсортовані за назвою.</p>
+                                </div>
+                            </a>
                         </div>
+                        <!-- 5. Товари за назвою -->
                         <div class="col-12 col-md-6">
-                            <div class="card zl-card h-100"><div class="card-body">
-                                <h2 class="h6">Товари за назвою</h2>
-                                <p class="text-muted mb-0 small">Усі товари, відсортовані за назвою.</p>
-                            </div></div>
+                            <a th:href="@{/reports/products}" class="card zl-card zl-card-hover text-decoration-none text-dark h-100">
+                                <div class="card-body">
+                                    <h2 class="h6">Товари за назвою</h2>
+                                    <p class="text-muted mb-0 small">Усі товари, відсортовані за назвою.</p>
+                                </div>
+                            </a>
                         </div>
+                        <!-- 6. Товари у магазині за кількістю -->
                         <div class="col-12 col-md-6">
-                            <div class="card zl-card h-100"><div class="card-body">
-                                <h2 class="h6">Товари у магазині за кількістю</h2>
-                                <p class="text-muted mb-0 small">Усі товари у магазині, відсортовані за кількістю.</p>
-                            </div></div>
+                            <a th:href="@{/reports/store-products}" class="card zl-card zl-card-hover text-decoration-none text-dark h-100">
+                                <div class="card-body">
+                                    <h2 class="h6">Товари у магазині за кількістю</h2>
+                                    <p class="text-muted mb-0 small">Усі товари у магазині, відсортовані за кількістю.</p>
+                                </div>
+                            </a>
                         </div>
+                        <!-- 7. Телефон та адреса працівника -->
                         <div class="col-12 col-md-6">
-                            <div class="card zl-card h-100"><div class="card-body">
-                                <h2 class="h6">Телефон та адреса працівника</h2>
-                                <p class="text-muted mb-0 small">За прізвищем працівника знайти контактні дані.</p>
-                            </div></div>
+                            <a th:href="@{/reports/employees}" class="card zl-card zl-card-hover text-decoration-none text-dark h-100">
+                                <div class="card-body">
+                                    <h2 class="h6">Телефон та адреса працівника</h2>
+                                    <p class="text-muted mb-0 small">За прізвищем працівника знайти контактні дані.</p>
+                                </div>
+                            </a>
                         </div>
+                        <!-- 8. Клієнти за відсотком знижки -->
                         <div class="col-12 col-md-6">
-                            <div class="card zl-card h-100"><div class="card-body">
-                                <h2 class="h6">Клієнти за відсотком знижки</h2>
-                                <p class="text-muted mb-0 small">Клієнти з певним відсотком карти, за прізвищем.</p>
-                            </div></div>
+                            <a th:href="@{/reports/customers}" class="card zl-card zl-card-hover text-decoration-none text-dark h-100">
+                                <div class="card-body">
+                                    <h2 class="h6">Клієнти за відсотком знижки</h2>
+                                    <p class="text-muted mb-0 small">Клієнти з певним відсотком карти, за прізвищем.</p>
+                                </div>
+                            </a>
                         </div>
+                        <!-- 9. Товари за категорією -->
                         <div class="col-12 col-md-6">
-                            <div class="card zl-card h-100"><div class="card-body">
-                                <h2 class="h6">Товари за категорією</h2>
-                                <p class="text-muted mb-0 small">Пошук товарів певної категорії, за назвою.</p>
-                            </div></div>
+                            <a th:href="@{/reports/products}" class="card zl-card zl-card-hover text-decoration-none text-dark h-100">
+                                <div class="card-body">
+                                    <h2 class="h6">Товари за категорією</h2>
+                                    <p class="text-muted mb-0 small">Пошук товарів певної категорії, за назвою.</p>
+                                </div>
+                            </a>
                         </div>
+                        <!-- 10. Пошук за UPC -->
                         <div class="col-12 col-md-6">
-                            <div class="card zl-card h-100"><div class="card-body">
-                                <h2 class="h6">Пошук за UPC</h2>
-                                <p class="text-muted mb-0 small">Ціна, кількість, назва та характеристики товару.</p>
-                            </div></div>
+                            <a th:href="@{/reports/store-product-by-upc}" class="card zl-card zl-card-hover text-decoration-none text-dark h-100">
+                                <div class="card-body">
+                                    <h2 class="h6">Пошук за UPC</h2>
+                                    <p class="text-muted mb-0 small">Ціна, кількість, назва та характеристики товару.</p>
+                                </div>
+                            </a>
                         </div>
+                        <!-- 11. Акційні товари -->
                         <div class="col-12 col-md-6">
-                            <div class="card zl-card h-100"><div class="card-body">
-                                <h2 class="h6">Акційні товари</h2>
-                                <p class="text-muted mb-0 small">За кількістю / за назвою.</p>
-                            </div></div>
+                            <a th:href="@{/reports/store-products(promo=true)}" class="card zl-card zl-card-hover text-decoration-none text-dark h-100">
+                                <div class="card-body">
+                                    <h2 class="h6">Акційні товари</h2>
+                                    <p class="text-muted mb-0 small">За кількістю / за назвою.</p>
+                                </div>
+                            </a>
                         </div>
+                        <!-- 12. Неакційні товари -->
                         <div class="col-12 col-md-6">
-                            <div class="card zl-card h-100"><div class="card-body">
-                                <h2 class="h6">Неакційні товари</h2>
-                                <p class="text-muted mb-0 small">За кількістю / за назвою.</p>
-                            </div></div>
+                            <a th:href="@{/reports/store-products(promo=false)}" class="card zl-card zl-card-hover text-decoration-none text-dark h-100">
+                                <div class="card-body">
+                                    <h2 class="h6">Неакційні товари</h2>
+                                    <p class="text-muted mb-0 small">За кількістю / за назвою.</p>
+                                </div>
+                            </a>
                         </div>
+                        <!-- 13. Чеки касира за період -->
                         <div class="col-12 col-md-6">
-                            <div class="card zl-card h-100"><div class="card-body">
-                                <h2 class="h6">Чеки касира за період</h2>
-                                <p class="text-muted mb-0 small">З переглядом куплених товарів.</p>
-                            </div></div>
+                            <a th:href="@{/reports/checks}" class="card zl-card zl-card-hover text-decoration-none text-dark h-100">
+                                <div class="card-body">
+                                    <h2 class="h6">Чеки касира за період</h2>
+                                    <p class="text-muted mb-0 small">З переглядом куплених товарів.</p>
+                                </div>
+                            </a>
                         </div>
+                        <!-- 14. Чеки всіх касирів за період -->
                         <div class="col-12 col-md-6">
-                            <div class="card zl-card h-100"><div class="card-body">
-                                <h2 class="h6">Чеки всіх касирів за період</h2>
-                                <p class="text-muted mb-0 small">З переглядом куплених товарів.</p>
-                            </div></div>
+                            <a th:href="@{/reports/checks}" class="card zl-card zl-card-hover text-decoration-none text-dark h-100">
+                                <div class="card-body">
+                                    <h2 class="h6">Чеки всіх касирів за період</h2>
+                                    <p class="text-muted mb-0 small">З переглядом куплених товарів.</p>
+                                </div>
+                            </a>
                         </div>
+                        <!-- 15. Сума продажів касира за період -->
                         <div class="col-12 col-md-6">
-                            <div class="card zl-card h-100"><div class="card-body">
-                                <h2 class="h6">Сума продажів касира за період</h2>
-                                <p class="text-muted mb-0 small">Загальна сума проданих товарів.</p>
-                            </div></div>
+                            <a th:href="@{/reports/checks-sum}" class="card zl-card zl-card-hover text-decoration-none text-dark h-100">
+                                <div class="card-body">
+                                    <h2 class="h6">Сума продажів касира за період</h2>
+                                    <p class="text-muted mb-0 small">Загальна сума проданих товарів.</p>
+                                </div>
+                            </a>
                         </div>
+                        <!-- 16. Сума продажів всіх касирів -->
                         <div class="col-12 col-md-6">
-                            <div class="card zl-card h-100"><div class="card-body">
-                                <h2 class="h6">Сума продажів всіх касирів</h2>
-                                <p class="text-muted mb-0 small">Загальна сума за період.</p>
-                            </div></div>
+                            <a th:href="@{/reports/checks-sum}" class="card zl-card zl-card-hover text-decoration-none text-dark h-100">
+                                <div class="card-body">
+                                    <h2 class="h6">Сума продажів всіх касирів</h2>
+                                    <p class="text-muted mb-0 small">Загальна сума за період.</p>
+                                </div>
+                            </a>
                         </div>
+                        <!-- 17. Кількість проданого товару -->
                         <div class="col-12 col-md-6">
-                            <div class="card zl-card h-100"><div class="card-body">
-                                <h2 class="h6">Кількість проданого товару</h2>
-                                <p class="text-muted mb-0 small">Загальна к-сть одиниць товару за період.</p>
-                            </div></div>
+                            <a th:href="@{/reports/product-sold-quantity}" class="card zl-card zl-card-hover text-decoration-none text-dark h-100">
+                                <div class="card-body">
+                                    <h2 class="h6">Кількість проданого товару</h2>
+                                    <p class="text-muted mb-0 small">Загальна к-сть одиниць товару за період.</p>
+                                </div>
+                            </a>
                         </div>
                     </div>
                 </div>

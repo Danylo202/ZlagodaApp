@@ -116,6 +116,16 @@ public class StoreProductRepository {
         }
     }
 
+    public List<StoreProduct> findByUPCWithProduct(String UPC) {
+        String sql = """
+                SELECT SP.*, P.product_name, P.characteristics, P.producer
+                FROM Store_Product AS SP
+                INNER JOIN Product AS P ON SP.id_product = P.id_product
+                WHERE SP.UPC = ?
+                """;
+        return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(StoreProduct.class), UPC);
+    }
+
     public void delete(String UPC) {
         jdbcTemplate.update("DELETE FROM Store_Product WHERE UPC = ?", UPC);
     }
