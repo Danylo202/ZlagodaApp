@@ -12,53 +12,75 @@
                 <div class="card-body">
                     <div class="zl-title">
                         <h1>Новий чек</h1>
-                        <p>Оберіть клієнтську карту (необов’язково) та введіть кількість проданих товарів. Сума та ПДВ розраховуються автоматично.</p>
+                        <p>Знайдіть товари та оберіть клієнтську карту (необов'язково). Сума та ПДВ розраховуються автоматично.</p>
                     </div>
 
                     <div th:if="${error}" class="alert alert-danger" th:text="${error}">Помилка</div>
 
-                    <form th:action="@{/checks/save}" method="post">
-                        <div class="mb-3">
-                            <label for="cardNumber" class="form-label">Карта клієнта (необов'язково)</label>
-                            <select id="cardNumber" name="cardNumber" class="form-select">
-                                <option value="">Без карти</option>
-                                <option th:each="customer : ${customers}"
-                                        th:value="${customer.cardNumber}"
-                                        th:text="${customer.cardNumber + ' · ' + customer.custSurname + ' ' + customer.custName + ' · ' + customer.percent + '%'}">
-                                    C001 · Клієнт · 0%
-                                </option>
-                            </select>
+                    <form th:action="@{/checks/save}" method="post" id="checkForm">
+                        <!-- Customer card search -->
+                        <div class="card bg-light mb-3 p-3">
+                            <label for="customerSearch" class="form-label fw-bold">Карта клієнта (необов'язково)</label>
+                            <input id="customerSearch" type="text" class="form-control mb-2"
+                                   placeholder="Пошук за номером карти, прізвищем або телефоном..."
+                                   autocomplete="off">
+                            <ul id="customerResults" class="list-group position-absolute w-100 zl-search-dropdown"
+                                style="display:none; max-height:200px; overflow-y:auto; z-index:1050;"></ul>
+                            <input type="hidden" name="cardNumber" id="selectedCardNumber" value="">
+                            <div id="selectedCustomer" class="text-muted mt-1"></div>
+                        </div>
+
+                        <!-- Product search -->
+                        <div class="card bg-light mb-3 p-3">
+                            <div class="row g-2 align-items-end">
+                                <div class="col-md-8">
+                                    <label for="productSearch" class="form-label fw-bold mb-1">Пошук товару</label>
+                                    <input id="productSearch" type="text" class="form-control"
+                                           placeholder="UPC або назва товару..."
+                                           autocomplete="off">
+                                </div>
+                                <div class="col-md-4 d-flex gap-2">
+                                    <button type="button" id="clearProductSearch" class="btn btn-outline-secondary">Скинути</button>
+                                </div>
+                            </div>
                         </div>
 
                         <div class="table-responsive mb-3">
-                            <table class="table zl-table align-middle">
+                            <table class="table zl-table align-middle" id="productsTable">
                                 <thead>
                                 <tr>
-                                    <th>UPC</th>
+                                    <th style="width:120px;">UPC</th>
                                     <th>Товар</th>
-                                    <th>Ціна</th>
-                                    <th>Доступно</th>
-                                    <th style="width: 160px;">К-сть</th>
+                                    <th style="width:90px;">Ціна</th>
+                                    <th style="width:80px;">Доступно</th>
+                                    <th style="width:140px;">К-сть</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr th:each="sp : ${storeProducts}">
+                                <tr th:each="sp : ${storeProducts}" class="zl-product-row"
+                                    th:attr="data-upc=${sp.UPC}, data-name=${
+                                        #strings.toLowerCase(sp.productName != null ? sp.productName : '')
+                                    }">
                                     <td>
-                                        <span th:text="${sp.UPC}">UPC</span>
+                                        <span class="fw-bold" th:text="${sp.UPC}">UPC</span>
                                         <input type="hidden" name="upc" th:value="${sp.UPC}">
                                     </td>
                                     <td>
                                         <strong th:text="${sp.productName}">Назва</strong>
                                         <span th:if="${sp.promotionalProduct}" class="badge bg-danger ms-1">Акція</span>
                                     </td>
-                                    <td th:text="${sp.sellingPrice}">0.00</td>
-                                    <td th:text="${sp.productsNumber}">0</td>
+                                    <td class="text-end" th:text="${sp.sellingPrice}">0.00</td>
+                                    <td class="text-end" th:text="${sp.productsNumber}">0</td>
                                     <td>
-                                        <input name="quantity" type="number" min="0" th:max="${sp.productsNumber}" value="0" class="form-control">
+                                        <input name="quantity" type="number" min="0" th:max="${sp.productsNumber}"
+                                               value="0" class="form-control zl-qty" style="width:120px;">
                                     </td>
                                 </tr>
-                                <tr th:if="${#lists.isEmpty(storeProducts)}">
+                                <tr th:if="${#lists.isEmpty(storeProducts)}" id="noProductsRow">
                                     <td colspan="5" class="zl-empty">Немає товарів у магазині</td>
+                                </tr>
+                                <tr id="noSearchResults" style="display:none;">
+                                    <td colspan="5" class="zl-empty">Товарів не знайдено</td>
                                 </tr>
                                 </tbody>
                             </table>
@@ -75,5 +97,113 @@
         </div>
     </div>
 </main>
+
+<script th:inline="javascript">
+/*<![CDATA[*/
+(function() {
+    /* ===== Customer search ===== */
+    var customerSearch = document.getElementById('customerSearch');
+    var customerResults = document.getElementById('customerResults');
+    var selectedCard = document.getElementById('selectedCardNumber');
+    var selectedCustomerDiv = document.getElementById('selectedCustomer');
+
+    // index customer data from rendered select
+    var customerData = [];
+    document.querySelectorAll('#customerSearch').forEach(function() {}); // dummy, data below
+    customerData = /*[[${customers}]]*/ [];
+    if (!Array.isArray(customerData)) customerData = [];
+
+    customerSearch.addEventListener('input', function() {
+        var q = this.value.trim().toLowerCase();
+        customerResults.innerHTML = '';
+        customerResults.style.display = 'none';
+
+        if (!q || q.length === 0) {
+            return;
+        }
+
+        var matches = customerData.filter(function(c) {
+            var card = (c.cardNumber || '').toLowerCase();
+            var surname = (c.custSurname || '').toLowerCase();
+            var name = (c.custName || '').toLowerCase();
+            var phone = (c.phoneNumber || '').toLowerCase();
+            return card.indexOf(q) !== -1
+                || surname.indexOf(q) !== -1
+                || name.indexOf(q) !== -1
+                || phone.indexOf(q) !== -1;
+        });
+
+        if (matches.length === 0) {
+            var li = document.createElement('li');
+            li.className = 'list-group-item text-muted';
+            li.textContent = 'Нічого не знайдено';
+            customerResults.appendChild(li);
+        } else {
+            matches.slice(0, 10).forEach(function(c) {
+                var li = document.createElement('li');
+                li.className = 'list-group-item list-group-item-action';
+                li.style.cursor = 'pointer';
+                li.textContent = (c.cardNumber || '') + ' · ' + (c.custSurname || '') + ' ' + (c.custName || '') + ' · ' + (c.phoneNumber || '') + ' · ' + (c.percent || 0) + '%';
+                li.addEventListener('click', function() {
+                    selectedCard.value = c.cardNumber || '';
+                    selectedCustomerDiv.textContent = 'Обрано: ' + (c.custSurname || '') + ' ' + (c.custName || '') + ' (' + (c.cardNumber || '') + ', ' + (c.percent || 0) + '%)';
+                    customerSearch.value = '';
+                    customerResults.style.display = 'none';
+                });
+                customerResults.appendChild(li);
+            });
+        }
+        customerResults.style.display = 'block';
+    });
+
+    customerSearch.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            customerResults.style.display = 'none';
+        }
+    });
+
+    document.addEventListener('click', function(e) {
+        if (!e.target.closest('#customerSearch') && !e.target.closest('#customerResults')) {
+            customerResults.style.display = 'none';
+        }
+    });
+
+    /* ===== Product search ===== */
+    var productSearch = document.getElementById('productSearch');
+    var clearBtn = document.getElementById('clearProductSearch');
+    var rows = document.querySelectorAll('.zl-product-row');
+    var noSearch = document.getElementById('noSearchResults');
+
+    productSearch.addEventListener('input', function() {
+        var q = this.value.trim().toLowerCase();
+        var anyVisible = false;
+
+        rows.forEach(function(row) {
+            var upc = (row.getAttribute('data-upc') || '').toLowerCase();
+            var name = (row.getAttribute('data-name') || '').toLowerCase();
+            var match = !q || upc.indexOf(q) !== -1 || name.indexOf(q) !== -1;
+            row.style.display = match ? '' : 'none';
+            if (match) anyVisible = true;
+        });
+
+        noSearch.style.display = (!anyVisible && q) ? '' : 'none';
+    });
+
+    clearBtn.addEventListener('click', function() {
+        productSearch.value = '';
+        productSearch.dispatchEvent(new Event('input'));
+    });
+
+    // Keyboard shortcut: focus product search with /
+    document.addEventListener('keydown', function(e) {
+        if (e.key === '/' && document.activeElement && document.activeElement.tagName !== 'INPUT' && document.activeElement.tagName !== 'TEXTAREA') {
+            e.preventDefault();
+            productSearch.focus();
+        }
+    });
+
+})();
+/*]]>*/
+</script>
 </body>
 </html>
