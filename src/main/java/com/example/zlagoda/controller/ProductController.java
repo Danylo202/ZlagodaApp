@@ -73,8 +73,15 @@ public class ProductController {
     }
 
     @GetMapping("/products/delete/{id}")
-    public String delete(@PathVariable Integer id) {
-        productRepository.delete(id);
+    public String delete(@PathVariable Integer id, RedirectAttributes redirectAttributes) {
+        try {
+            productRepository.delete(id);
+            redirectAttributes.addFlashAttribute("success", "Категорію видалено.");
+        }
+        catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", 
+                "Неможливо видалити товар! Спочатку видаліть усі підтовари, що до неї належать.");
+        }
         return "redirect:/products";
     }
 

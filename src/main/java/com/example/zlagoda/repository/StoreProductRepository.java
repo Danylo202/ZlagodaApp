@@ -27,7 +27,12 @@ public class StoreProductRepository {
     }
 
     public StoreProduct findByUPC(String UPC) {
-        String sql = "SELECT * FROM Store_Product WHERE UPC = ?";
+        String sql = """
+                SELECT SP.*, P.product_name FROM Store_Product AS SP
+                INNER JOIN Product AS P ON SP.id_product = P.id_product
+                WHERE UPC = ?
+                """;
+    
         return jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<>(StoreProduct.class), UPC);
     }
 
@@ -35,25 +40,55 @@ public class StoreProductRepository {
         if (!sp.isValid()) {
             throw new IllegalArgumentException("Помилка логіки: акційний статус не збігається з наявністю UPCProm!");
         }
-        if (sp.isPromotional()) {
+        if (sp.isPromotionalProduct()) {
             StoreProduct parent = findByUPC(sp.getUPCProm());
 
             // акція на акцію - заборонено
-            if (parent.isPromotional()) {
-                throw new RuntimeException("Не можна створювати акцію на акційний товар!");
+            if (parent.isPromotionalProduct()) {
+                throw new IllegalArgumentException("Не можна створювати акцію на акційний товар!");
             }
 
             // перевірка випадку, коли "батько" посилається на інший ID товару
             if (!parent.getIdProduct().equals(sp.getIdProduct())) {
-                throw new RuntimeException("Акція має посилатися на той самий вид товару!");
+                throw new IllegalArgumentException("Акція має посилатися на той самий вид товару!");
             }
         }
         
-        String sql = "INSERT INTO Store_Product (UPC, UPC_prom, id_product, selling_price, products_number, promotional) " +
+        String sql = "INSERT INTO Store_Product (UPC, UPC_prom, id_product, selling_price, products_number, promotional_product) " +
                      "VALUES (?, ?, ?, ?, ?, ?)";
         jdbcTemplate.update(sql, sp.getUPC(), sp.getUPCProm(), sp.getIdProduct(), sp.getSellingPrice(), 
-                    sp.getProductsNumber(), sp.isPromotional());
-}
+                    sp.getProductsNumber(), sp.isPromotionalProduct());
+    }
+
+    public List<StoreProduct> findWithFilters(String upc, Boolean isPromo, String sortBy) {
+        StringBuilder sql = new StringBuilder(
+            "SELECT SP.*, P.product_name FROM Store_Product AS SP " +
+            "INNER JOIN Product AS P ON SP.id_product = P.id_product WHERE 1=1 "
+        );
+
+        // фільтр за UPC (якщо введено)
+        if (upc != null && !upc.isEmpty()) {
+            sql.append(" AND SP.UPC = '").append(upc).append("'");
+        }
+
+        // беремо акційні або неакційні товари
+        if (isPromo != null) {
+            sql.append(" AND SP.promotional_product = ").append(isPromo);
+        }
+
+        // сортування
+        if ("name".equals(sortBy)) {
+            sql.append(" ORDER BY P.product_name ASC");
+        }
+        else if ("quantity".equals(sortBy)) {
+            sql.append(" ORDER BY SP.products_number DESC");
+        }
+        else {
+            sql.append("ORDER BY SP.UPC ASC");
+        }
+
+        return jdbcTemplate.query(sql.toString(), new BeanPropertyRowMapper<>(StoreProduct.class));
+    }
 
     public void update(StoreProduct sp) {
         String sql = """

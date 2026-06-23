@@ -1,5 +1,6 @@
 package com.example.zlagoda.controller;
 
+import com.example.zlagoda.model.Product;
 import com.example.zlagoda.model.StoreProduct;
 import com.example.zlagoda.repository.StoreProductRepository;
 import com.example.zlagoda.repository.ProductRepository;
@@ -24,21 +25,13 @@ public class StoreProductController {
     }
 
     @GetMapping
-    public String list(@RequestParam(required = false) String searchUPC, Model model, Authentication auth) {
-        List<StoreProduct> list;
-        if (searchUPC != null && !searchUPC.trim().isEmpty()) {
-            try {
-                list = List.of(storeProductRepository.findByUPC(searchUPC));
-            }
-            catch (Exception e) {
-                list = List.of();
-            }
-        }
-        else {
-            list = storeProductRepository.findAll();
-        }
+    public String list(
+        @RequestParam(required = false) String upc,
+        @RequestParam(required = false) Boolean promo,
+        @RequestParam(required = false, defaultValue = "name") String sort,
+        Model model, Authentication auth) {
 
-        model.addAttribute("storeProducts", list);
+        model.addAttribute("storeProducts", storeProductRepository.findWithFilters(upc, promo, sort));
         model.addAttribute("employeeId", auth.getName());
         return "store-products/list";
     }
@@ -49,7 +42,7 @@ public class StoreProductController {
         model.addAttribute("allBaseProducts", productRepository.findAll());
         
         List<StoreProduct> nonPromotional = storeProductRepository.findAll().stream()
-                .filter(sp -> !sp.isPromotional())
+                .filter(sp -> !sp.isPromotionalProduct())
                 .toList();
         model.addAttribute("baseStoreProducts", nonPromotional);
         
@@ -82,6 +75,12 @@ public class StoreProductController {
         model.addAttribute("storeProduct", sp);
         model.addAttribute("mode", "edit");
         return "store-products/form";
+    }
+
+    @PostMapping("/store-products/update")
+    public String update(@ModelAttribute StoreProduct sp) {
+        storeProductRepository.update(sp);
+        return "redirect:/store-products";
     }
 
     @PostMapping("/delete/{upc}")

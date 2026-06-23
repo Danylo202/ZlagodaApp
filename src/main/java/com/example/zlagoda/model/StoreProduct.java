@@ -10,16 +10,18 @@ public class StoreProduct {
     private Integer idProduct;
     private Double sellingPrice;
     private Integer productsNumber;
-    private boolean promotional;
+    private boolean promotionalProduct;
 
-    public StoreProduct(String UPC, String UPCProm, Integer idProduct, Double sellingPrice, Integer productsNumber, boolean promotional) {
-        if((UPCProm==null && promotional==false) || (UPCProm!=null && promotional==true)) {
+    private String productName; // joined data
+
+    public StoreProduct(String UPC, String UPCProm, Integer idProduct, Double sellingPrice, Integer productsNumber, boolean promotionalProduct) {
+        if((UPCProm==null && promotionalProduct==false) || (UPCProm!=null && promotionalProduct==true)) {
             this.UPC = UPC;
             this.UPCProm = UPCProm;
             this.idProduct = idProduct;
             this.sellingPrice = sellingPrice;
             this.productsNumber = productsNumber;
-            this.promotional = promotional;
+            this.promotionalProduct = promotionalProduct;
         }
         else {
             throw new IllegalArgumentException("Логічна помилка: акційний статус не збігається з наявністю UPCProm!");
@@ -27,6 +29,6 @@ public class StoreProduct {
     }
 
     public boolean isValid() {
-        return (UPCProm==null && promotional==false) || (UPCProm!=null && promotional==true);
+        return (UPCProm==null && promotionalProduct==false) || (UPCProm!=null && promotionalProduct==true);
     }
 }

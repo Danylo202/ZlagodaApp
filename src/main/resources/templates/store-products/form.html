@@ -7,23 +7,93 @@
 <main class="zl-main container">
     <div class="row justify-content-center">
         <div class="col-md-7">
-            <div class="card zl-card">
-                <div class="card-header">Картка товару у магазині</div>
+            <div class="card zl-card shadow-sm">
+
+                <div class="card-header fw-bold" 
+                     th:text="${mode == 'edit' ? 'Редагування товару на полиці' : 'Додавання товару на полицю'}">
+                    Картка товару
+                </div>
+                
                 <div class="card-body">
                     <div class="zl-title">
-                        <h1>Новий товар у магазині</h1>
-                        <p>Введіть відомості про товар у магазині.</p>
+                        <h1 th:text="${mode == 'edit' ? 'Редагувати дані' : 'Новий товар у магазині'}">Товар</h1>
+                        <p th:text="${mode == 'edit' ? 'Зміна ціни та кількості залишків.' : 'Введіть відомості для виставлення товару на продаж.'}"></p>
                     </div>
 
                     <div th:replace="~{fragments/layout :: placeholder-banner('ПДВ складає 20% від ціни. Акційна ціна = ціна × 0,8.')}"></div>
 
-                    <form>
-                        <div class="mb-3"><label class="form-label">UPC</label><input class="form-control" disabled placeholder="UPC товару"></div>
-                        <div class="mb-3"><label class="form-label">Товар</label><select class="form-select" disabled><option>Оберіть товар...</option></select></div>
-                        <div class="mb-3"><label class="form-label">Ціна продажу (з ПДВ)</label><input class="form-control" disabled placeholder="0.00"></div>
-                        <div class="mb-3"><label class="form-label">Кількість одиниць</label><input class="form-control" disabled placeholder="0"></div>
-                        <div class="mb-3"><label class="form-label">Тип товару</label><select class="form-select" disabled><option>Звичайний</option><option>Акційний</option></select></div>
-                        <div th:replace="~{fragments/layout :: form-actions('Зберегти', @{/store-products}, true)}"></div>
+                    <form th:action="@{/store-products/save}" th:object="${storeProduct}" method="post">
+    
+                        <div class="mb-3">
+                            <label class="form-label text-muted small fw-bold">UPC (штрих-код)</label>
+                            <input type="text" th:field="*{UPC}" class="form-control" 
+                                   th:readonly="${mode == 'edit'}" 
+                                   placeholder="Введіть унікальний штрих-код" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label text-muted small fw-bold">Товар із каталогу</label>
+                            
+                            <select th:if="${mode == 'create'}" th:field="*{idProduct}" class="form-select" required>
+                                <option value="">-- Оберіть товар --</option>
+                                <option th:each="p : ${allBaseProducts}" 
+                                        th:value="${p.idProduct}" 
+                                        th:text="${p.productName}"></option>
+                            </select>
+
+                            <div th:if="${mode == 'edit'}">
+                                <input type="text" class="form-control bg-light" th:value="${storeProduct.productName}" readonly>
+                                <input type="hidden" th:field="*{idProduct}">
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label text-muted small fw-bold">Ціна продажу (з ПДВ)</label>
+                            <input type="number" step="0.01" th:field="*{sellingPrice}" class="form-control" placeholder="0.00" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label text-muted small fw-bold">Кількість одиниць на складі</label>
+                            <input type="number" th:field="*{productsNumber}" class="form-control" placeholder="0" required>
+                        </div>
+
+                        <div class="mb-3" th:if="${mode == 'create'}">
+                            <div class="form-check form-switch">
+                                <input type="checkbox" th:field="*{promotionalProduct}" class="form-check-input" id="isPromo">
+                                <label class="form-check-label fw-bold text-danger" for="isPromo">Це акційний товар?</label>
+                            </div>
+                        </div>
+                        <input type="hidden" th:if="${mode == 'edit'}" th:field="*{promotionalProduct}">
+
+                        <div class="mb-3" id="promoSelection" th:if="${mode == 'create'}">
+                            <label class="form-label text-muted small fw-bold">Базовий товар (якщо робимо акцію)</label>
+                            <select th:field="*{UPCProm}" class="form-select">
+                                <option value="">-- Немає (звичайний товар) --</option>
+                                <option th:each="base : ${baseStoreProducts}" 
+                                        th:value="${base.UPC}" 
+                                        th:text="${base.productName + ' (' + base.UPC + ')'}"></option>
+                            </select>
+                            <div class="form-text">Оберіть товар, від якого буде розраховано знижку 20%.</div>
+                        </div>
+                        
+                        <input type="hidden" th:if="${mode == 'edit'}" th:field="*{UPCProm}">
+
+                        <hr class="my-4">
+
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-primary px-4" 
+                                    th:text="${mode == 'edit' ? 'Оновити дані' : 'Створити запис'}">Зберегти</button>
+                            <a th:href="@{/store-products}" class="btn btn-outline-secondary">Скасувати</a>
+                        </div>
+
+                        <div th:if="${error}" class="alert alert-danger alert-dismissible fade show mb-3" role="alert">
+                            <strong th:text="${error}">Помилка!</strong>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                        <div th:if="${success}" class="alert alert-success alert-dismissible fade show mb-3" role="alert">
+                            <span th:text="${success}">Готово!</span>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
                     </form>
                 </div>
             </div>

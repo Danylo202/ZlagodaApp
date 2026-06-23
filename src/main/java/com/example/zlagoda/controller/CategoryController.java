@@ -60,8 +60,14 @@ public class CategoryController {
 
     @GetMapping("/categories/{id}/delete")
     public String deleteCategory(@PathVariable Integer id, RedirectAttributes redirectAttributes) {
-        categoryRepository.deleteById(id);
-        redirectAttributes.addFlashAttribute("success", "Категорію видалено.");
+        try {
+            categoryRepository.deleteById(id);
+            redirectAttributes.addFlashAttribute("success", "Категорію видалено.");
+        }
+        catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", 
+                "Неможливо видалити категорію! Спочатку видаліть усі товари, що до неї належать.");
+        }
         return "redirect:/categories";
     }
 }

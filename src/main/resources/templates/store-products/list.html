@@ -21,12 +21,41 @@
 
                     <div th:replace="~{fragments/layout :: placeholder-banner('Поля: UPC, ціна продажу (з ПДВ), кількість, акційний товар. Акційна ціна = ціна × 0,8.')}"></div>
 
+                    <form th:action="@{/store-products}" method="get" class="row g-3 mb-4 p-3 bg-white shadow-sm rounded">
+                        <div class="col-md-3">
+                            <label class="form-label small fw-bold">Пошук за UPC</label>
+                            <input type="text" name="upc" class="form-control" placeholder="Введіть штрих-код..." th:value="${param.upc}">
+                        </div>
+
+                        <div class="col-md-3">
+                            <label class="form-label small fw-bold">Тип товару</label>
+                            <select name="promo" class="form-select">
+                                <option value="">Усі товари</option>
+                                <option value="true" th:selected="${param.promo == 'true'}">Тільки Акційні</option>
+                                <option value="false" th:selected="${param.promo == 'false'}">Тільки Звичайні</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-3">
+                            <label class="form-label small fw-bold">Сортувати за</label>
+                            <select name="sort" class="form-select">
+                                <option value="name" th:selected="${param.sort == 'name'}">Назвою (А-Я)</option>
+                                <option value="quantity" th:selected="${param.sort == 'quantity'}">Кількістю (max)</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-3 d-flex align-items-end gap-2">
+                            <button type="submit" class="btn btn-primary w-100">Застосувати</button>
+                            <a th:href="@{/store-products}" class="btn btn-outline-secondary">❌</a>
+                        </div>
+                    </form>
+
                     <div class="table-responsive">
                         <table class="table table-hover align-middle mb-0 zl-table">
                             <thead>
                             <tr>
-                                <th>UPC</th>
-                                <th>Товар</th>
+                                <th>UPC (штрих-код)</th>
+                                <th>Назва товару</th>
                                 <th>Ціна</th>
                                 <th>К-сть</th>
                                 <th>Тип</th>
@@ -34,7 +63,29 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr><td colspan="6" class="zl-empty">Дані з'являться після реалізації</td></tr>
+                                <tr th:each="sp : ${storeProducts}">
+                                    <td th:text="${sp.UPC}">000111222</td>
+                                    
+                                    <td th:text="${sp.productName}" class="fw-bold">Назва товару</td>
+                                    
+                                    <td th:text="${sp.sellingPrice + ' ₴'}">0.00</td>
+                                    <td th:text="${sp.productsNumber}">0</td>
+                                    <td>
+                                        <span th:if="${sp.promotionalProduct}" class="badge bg-danger">Акція</span>
+                                        <span th:unless="${sp.promotionalProduct}" class="badge bg-secondary">Звичайний</span>
+                                    </td>
+                                    <td sec:authorize="hasRole('MANAGER')">
+                                        <div class="btn-group">
+                                            <a th:href="@{'/store-products/edit/' + ${sp.UPC}}"
+                                            class="btn btn-sm btn-warning">Редагувати</a>
+                                            <a th:href="@{'/store-products/delete/' + ${sp.UPC}}"
+                                            class="btn btn-sm btn-danger"
+                                            data-zl-confirm="Ви впевнені, що хочете видалити цей товар?"
+                                            data-zl-confirm-title="Видалити товар"
+                                            data-zl-confirm-ok="Видалити">Видалити</a>
+                                        </div>
+                                    </td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>
