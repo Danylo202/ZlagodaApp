@@ -19,12 +19,12 @@
 
         <form th:action="@{/login}" method="post" class="zl-login-form">
             <div class="mb-3">
-                <label for="username" class="form-label">ID працівника</label>
+                <label for="username" class="form-label zl-required">ID працівника</label>
                 <input type="text" id="username" name="username"
                        class="form-control" placeholder="Наприклад: E01" required autofocus>
             </div>
             <div class="mb-3">
-                <label for="password" class="form-label">Пароль</label>
+                <label for="password" class="form-label zl-required">Пароль</label>
                 <input type="password" id="password" name="password"
                        class="form-control" placeholder="••••••••" required>
             </div>

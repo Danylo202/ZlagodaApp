@@ -371,6 +371,11 @@ h1, h2, h3, h4, h5, h6 {
   margin: 0 0 4px;
 }
 .zl-login-sub { color: var(--zl-muted); margin: 0 0 1.5rem; font-size: 0.92rem; }
+.zl-required::after {
+  content: " *";
+  color: var(--zl-danger);
+  font-weight: 700;
+}
 .zl-login-form { text-align: left; }
 .zl-login-form .form-label { font-size: 0.85rem; }
 .zl-login-form .btn-primary { padding: 0.6rem 1rem; font-size: 0.95rem; margin-top: 0.5rem; }

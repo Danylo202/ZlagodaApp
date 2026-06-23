@@ -22,19 +22,19 @@
                         <input type="hidden" th:field="*{idProduct}">
 
                         <div class="mb-3">
-                            <label class="form-label">Назва товару</label>
+                            <label class="form-label zl-required">Назва товару</label>
                             <input type="text" th:field="*{productName}" class="form-control"
                                    placeholder="Наприклад: Молоко 2.5%" required>
                         </div>
 
                         <div class="mb-3">
-                            <label class="form-label">Виробник</label>
+                            <label class="form-label zl-required">Виробник</label>
                             <input type="text" th:field="*{producer}" class="form-control"
                                    placeholder="Наприклад: Галичина" required>
                         </div>
 
                         <div class="mb-3">
-                            <label class="form-label">Категорія</label>
+                            <label class="form-label zl-required">Категорія</label>
                             <select th:field="*{categoryNumber}" class="form-select" required>
                                 <option value="" th:disabled="${mode != 'create'}">Оберіть категорію...</option>
                                 <option th:each="cat : ${categories}"
