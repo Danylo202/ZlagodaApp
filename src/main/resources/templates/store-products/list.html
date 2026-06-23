@@ -19,7 +19,6 @@
                         <a sec:authorize="hasRole('MANAGER')" th:href="@{/store-products/new}" class="btn btn-primary">Додати товар у магазині</a>
                     </div>
 
-                    <div th:replace="~{fragments/layout :: placeholder-banner('Поля: UPC, ціна продажу (з ПДВ), кількість, акційний товар. Акційна ціна = ціна × 0,8.')}"></div>
 
                     <form th:action="@{/store-products}" method="get" class="row g-3 mb-4 p-3 bg-white shadow-sm rounded">
                         <div class="col-md-3">
