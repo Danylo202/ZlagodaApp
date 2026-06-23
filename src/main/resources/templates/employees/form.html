@@ -20,7 +20,7 @@
                         </ul>
                     </div>
 
-                    <form th:object="${employee}" th:action="@{/employees/save}" method="post">
+                    <form th:object="${employee}" th:action="${formAction}" th:method="${formMethod}">
                         <input type="hidden" name="mode" th:value="${mode}">
 
                         <div class="row g-3">
@@ -87,7 +87,9 @@
                             </div>
                         </div>
 
-                        <div th:if="${mode != 'view'}" th:replace="~{fragments/layout :: form-actions('Зберегти', @{/employees}, false)}"></div>
+                        <th:block th:if="${mode != 'view'}">
+                            <div th:replace="~{fragments/layout :: form-actions('Зберегти', @{/employees}, false)}"></div>
+                        </th:block>
                         <div th:if="${mode == 'view'}" class="d-flex gap-2 mt-4">
                             <a th:href="@{/}" class="btn btn-outline-secondary">Назад</a>
                         </div>

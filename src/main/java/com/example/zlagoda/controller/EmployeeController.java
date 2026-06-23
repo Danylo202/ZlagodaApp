@@ -39,6 +39,10 @@ public class EmployeeController {
                        @RequestParam(required = false) String surname,
                        Model model,
                        Authentication authentication) {
+        if (hasRole(authentication, "ROLE_CASHIER") && !hasRole(authentication, "ROLE_MANAGER")) {
+            return "redirect:/employees/me";
+        }
+
         List<Employee> employees;
         if (surname != null && !surname.trim().isEmpty()) {
             employees = employeeRepository.findBySurname(surname.trim());
@@ -178,10 +182,17 @@ public class EmployeeController {
         model.addAttribute("mode", mode);
         model.addAttribute("roleOptions", ROLE_OPTIONS);
         model.addAttribute("maxBirthDate", maxBirthDate());
+        model.addAttribute("formAction", MODE_VIEW.equals(mode) ? "/employees/me" : "/employees/save");
+        model.addAttribute("formMethod", MODE_VIEW.equals(mode) ? "get" : "post");
     }
 
     private boolean isBlank(String value) {
         return value == null || value.trim().isEmpty();
+    }
+
+    private boolean hasRole(Authentication authentication, String role) {
+        return authentication != null && authentication.getAuthorities().stream()
+                .anyMatch(authority -> role.equals(authority.getAuthority()));
     }
 
     private String normalizeRoleForForm(String role) {
