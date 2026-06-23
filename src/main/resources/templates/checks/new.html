@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/extras/spring-security">
 <head th:replace="~{fragments/layout :: head('ZLAGODA - Новий чек')}"></head>
 <body>
-<nav th:replace="~{fragments/layout :: navbar-back(@{/receipts}, 'Назад до списку')}"></nav>
+<nav th:replace="~{fragments/layout :: navbar-back(@{/checks}, 'Назад до списку')}"></nav>
 
 <main class="zl-main container">
     <div class="row justify-content-center">
@@ -25,7 +25,7 @@
                                 <tbody><tr><td colspan="4" class="zl-empty">Товари з'являться після реалізації</td></tr></tbody>
                             </table>
                         </div>
-                        <div th:replace="~{fragments/layout :: form-actions('Оформити чек', @{/receipts}, true)}"></div>
+                        <div th:replace="~{fragments/layout :: form-actions('Оформити чек', @{/checks}, true)}"></div>
                     </form>
                 </div>
             </div>

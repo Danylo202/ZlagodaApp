@@ -106,6 +106,15 @@ public class StoreProductRepository {
         return (count != null && count > 0);
     }
 
+    public void decreaseQuantity(String UPC, Integer number) {
+        String sql = "UPDATE Store_Product SET products_number = products_number - ? WHERE UPC = ?";
+        try {
+            jdbcTemplate.update(sql, number, UPC);
+        }
+        catch(Exception e) {
+            throw new IllegalArgumentException("Нема стільки товару!");
+        }
+    }
 
     public void delete(String UPC) {
         jdbcTemplate.update("DELETE FROM Store_Product WHERE UPC = ?", UPC);

@@ -6,7 +6,7 @@
 
 <main class="zl-main container-fluid">
     <div class="zl-layout">
-        <div th:replace="~{fragments/layout :: sidebar('receipts')}"></div>
+        <div th:replace="~{fragments/layout :: sidebar('checks')}"></div>
 
         <section>
             <div class="card zl-card">
@@ -16,7 +16,7 @@
                             <h1>Чеки</h1>
                             <p>Історія продажів. Касир створює чеки, менеджер може їх видаляти.</p>
                         </div>
-                        <a th:href="@{/receipts/new}" class="btn btn-primary" sec:authorize="hasRole('CASHIER')">Новий чек</a>
+                        <a th:href="@{/checks/new}" class="btn btn-primary" sec:authorize="hasRole('CASHIER')">Новий чек</a>
                     </div>
 
                     <div th:replace="~{fragments/layout :: placeholder-banner('Поля: номер, дата, загальна сума, ПДВ. Можливий перегляд товарів у чеку (назва, к-сть, ціна). Зберігаються 3 роки.')}"></div>

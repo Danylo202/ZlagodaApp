@@ -1,6 +1,5 @@
 package com.example.zlagoda.controller;
 
-import com.example.zlagoda.model.Product;
 import com.example.zlagoda.model.StoreProduct;
 import com.example.zlagoda.repository.StoreProductRepository;
 import com.example.zlagoda.repository.ProductRepository;
