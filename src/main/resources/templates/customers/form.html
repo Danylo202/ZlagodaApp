@@ -1,29 +1,71 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments/layout :: head('ZLAGODA - Клієнт')}"></head>
+<head th:replace="~{fragments/layout :: head(${mode == 'edit' ? 'ZLAGODA - Редагувати клієнта' : 'ZLAGODA - Новий клієнт'})}"></head>
 <body>
 <nav th:replace="~{fragments/layout :: navbar-back(@{/customers}, 'Назад до списку')}"></nav>
 
 <main class="zl-main container">
     <div class="row justify-content-center">
-        <div class="col-md-7">
+        <div class="col-lg-8">
             <div class="card zl-card">
-                <div class="card-header">Карта клієнта</div>
                 <div class="card-body">
                     <div class="zl-title">
-                        <h1>Новий клієнт</h1>
-                        <p>Введіть відомості про постійного клієнта.</p>
+                        <h1 th:text="${mode == 'edit' ? 'Редагувати клієнта' : 'Новий клієнт'}">Клієнт</h1>
+                        <p>Введіть відомості про постійного клієнта. Телефон — до 13 символів, відсоток не може бути від'ємним.</p>
                     </div>
 
-                    <div th:replace="~{fragments/layout :: placeholder-banner('')}"></div>
+                    <div th:if="${errors}" class="alert alert-danger" role="alert">
+                        <ul class="mb-0">
+                            <li th:each="err : ${errors}" th:text="${err}">Помилка</li>
+                        </ul>
+                    </div>
 
-                    <form>
-                        <div class="mb-3"><label class="form-label">Номер карти</label><input class="form-control" disabled placeholder="Номер"></div>
-                        <div class="mb-3"><label class="form-label">ПІБ</label><input class="form-control" disabled placeholder="Прізвище Ім'я По батькові"></div>
-                        <div class="mb-3"><label class="form-label">Телефон</label><input class="form-control" disabled placeholder="+380..."></div>
-                        <div class="mb-3"><label class="form-label">Адреса (необов'язково)</label><input class="form-control" disabled placeholder="Місто, вулиця, індекс"></div>
-                        <div class="mb-3"><label class="form-label">Відсоток знижки</label><input class="form-control" disabled placeholder="0"></div>
-                        <div th:replace="~{fragments/layout :: form-actions('Зберегти', @{/customers}, true)}"></div>
+                    <form th:object="${customer}" th:action="@{/customers/save}" method="post">
+                        <input type="hidden" name="mode" th:value="${mode}">
+
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label for="cardNumber" class="form-label zl-required">Номер карти</label>
+                                <input id="cardNumber" th:field="*{cardNumber}" type="text" maxlength="13" class="form-control"
+                                       th:readonly="${mode == 'edit'}" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="percent" class="form-label zl-required">Відсоток знижки</label>
+                                <input id="percent" th:field="*{percent}" type="number" min="0" class="form-control" required>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label for="custSurname" class="form-label zl-required">Прізвище</label>
+                                <input id="custSurname" th:field="*{custSurname}" type="text" maxlength="50" class="form-control" required>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="custName" class="form-label zl-required">Ім'я</label>
+                                <input id="custName" th:field="*{custName}" type="text" maxlength="50" class="form-control" required>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="custPatronymic" class="form-label">По батькові</label>
+                                <input id="custPatronymic" th:field="*{custPatronymic}" type="text" maxlength="50" class="form-control">
+                            </div>
+
+                            <div class="col-md-4">
+                                <label for="phoneNumber" class="form-label zl-required">Телефон</label>
+                                <input id="phoneNumber" th:field="*{phoneNumber}" type="tel" maxlength="13" class="form-control" placeholder="+380..." required>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="city" class="form-label">Місто</label>
+                                <input id="city" th:field="*{city}" type="text" maxlength="50" class="form-control">
+                            </div>
+                            <div class="col-md-4">
+                                <label for="zipCode" class="form-label">Індекс</label>
+                                <input id="zipCode" th:field="*{zipCode}" type="text" maxlength="10" class="form-control">
+                            </div>
+                            <div class="col-12">
+                                <label for="street" class="form-label">Вулиця</label>
+                                <input id="street" th:field="*{street}" type="text" maxlength="100" class="form-control">
+                            </div>
+                        </div>
+
+                        <div th:replace="~{fragments/layout :: form-actions('Зберегти', @{/customers}, false)}"></div>
                     </form>
                 </div>
             </div>
